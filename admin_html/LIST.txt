@@ -2,5 +2,8 @@
 index.html
 completed-orders.html
 user-profile.html
+coupons.html
 
 //Jafry
+edit-menu.html
+expired-coupons.html
