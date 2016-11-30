@@ -218,16 +218,16 @@
 	<div class="col-md-4">
 		<div class="info-tile tile-orange">
 			<div class="tile-icon"><i class="ti ti-gift"></i></div>
-			<div class="tile-heading"><span>Active Coupons</span></div>
-			<div class="tile-body"><span>2</span></div>
-			<div class="tile-footer"><span class="text-default">Are Running</span></div>
+			<div class="tile-heading"><span>Expired Coupons</span></div>
+			<div class="tile-body"><span>30</span></div>
+			<div class="tile-footer"></div>
 		</div>
 	</div>
 	<div class="col-md-4">
 		<div class="info-tile tile-orange">
 			<div class="tile-icon"><i class="ti ti-check-box"></i></div>
 			<div class="tile-heading"><span>Usage Count</span></div>
-			<div class="tile-body"><span>13</span></div>
+			<div class="tile-body"><span>18</span></div>
 			<div class="tile-footer"><span class="text-default">Coupons Used</span></div>
 		</div>
 	</div>	
@@ -235,7 +235,7 @@
 		<div class="info-tile tile-green">
 			<div class="tile-icon"><i class="ti ti-wallet"></i></div>
 			<div class="tile-heading"><span>Total Sales</span></div>
-			<div class="tile-body"><span><i class="fa fa-inr"></i> 13,000</span></div>
+			<div class="tile-body"><span><i class="fa fa-inr"></i> 23,000</span></div>
 			<div class="tile-footer"><span class="text-default">With Coupons</span></div>
 		</div>
 	</div>	
@@ -243,10 +243,10 @@
 
 <div data-widget-group="group1">
 	<div class="row">
-		<div class="col-md-6">
+		<div class="col-md-12">
 			<div class="panel panel-teal" data-widget='{"draggable": "false"}'>
 				<div class="panel-heading">
-					<h2>Active Coupons</h2>
+					<h2>Expired Coupons</h2>
 					<div class="panel-ctrls button-icon-bg" 
 						data-actions-container="" 
 						data-action-refresh-demo='{"type": "circular"}'
@@ -260,9 +260,9 @@
 							<tr>
 								<td>#</td>
 								<td>Coupon</td>
-								<td>Used</td>								
-								<td>Limit</td>
-								<td>Expiry</td>
+								<td>Description</td>								
+								<td>Total Sales</td>
+								<td>Expired On</td>
 							</tr>
 						</thead>
 						<tbody>
@@ -270,74 +270,21 @@
 								<td>1</td>
 								<td>GET20</td>
 								<td>8</td>
-								<td>100</td>
+								<td><i class="fa fa-inr"></i> 100</td>
 								<td>05-12-2016</td>
 							</tr>
 							<tr>
 								<td>2</td>
 								<td>BUY1GET2</td>
 								<td>5</td>
-								<td>10</td>
+								<td><i class="fa fa-inr"></i> 10</td>
 								<td>06-01-2017</td>
 							</tr>							
 						</tbody>
 					</table>
 				</div>
 			</div>
-			<a href="expired-coupons.html" style="color: grey; font-size: 12px; text-decoration: underline;">Show expired coupons.</a>
-		</div>
-
-		<div class="col-md-6">
-			<div class="panel panel-bluegray" data-widget='{"draggable": "false"}'>
-				<div class="panel-heading">
-					<h2>GET20</h2>
-				</div>
-				<div class="panel-body">
-					<div class="row">
-						<div class="col-md-12">
-							<form class="form-horizontal tabular-form">
-										<div class="form-group">
-											<label class="col-sm-3 control-label">Description</label>
-											<div class="col-sm-8">
-												<textarea class="form-control">Get 20% off on Cart when you purchase above Rs. 400</textarea>												
-											</div>
-										</div>
-										<div class="form-group">
-											<label for="form-name" class="col-sm-3 control-label">Limit Usage</label>
-											<div class="col-sm-8">
-												<input type="text" value="8" class="form-control">
-											</div>
-										</div>
-										<div class="form-group">
-											<label for="form-name" class="col-sm-3 control-label">Expiry Date</label>
-											<div class="col-sm-8">
-												<input type="text" value="05-12-2016" class="form-control">
-											</div>
-										</div>
-										<div class="form-group">
-											<label for="selector1" class="col-sm-3 control-label">Type</label>
-											<div class="col-sm-8"><select name="selector1" id="selector1" class="form-control">
-												<option value="1">Get P% off on minimum off Rs. X and maximum off Rs. Y only.</option>
-												<option value="2">Get P% off on X, Y, Z.</option>
-												<option value="3">Buy N units of X and get P% off on Y.</option>
-												<option value="4">Buy N units of X and get M units of Y at P% off.</option>								
-											</select></div>
-										</div>
-							</form>
-						</div>
-					</div>
-				
-				</div>
-				<div class="panel-footer">
-							<div class="row">
-								<div class="col-sm-8 col-sm-offset-2">
-									<button class="btn-primary btn">Save</button>
-									<button class="btn-default btn">Reset</button>
-									<button class="btn-danger btn pull-right">Deactivate</button>
-								</div>
-							</div>
-				</div>
-			</div>
+			<a href="coupons.html" style="color: grey; font-size: 12px; text-decoration: underline;">Show Active Coupons.</a>
 		</div>
 
 	</div>
