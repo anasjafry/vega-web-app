@@ -2,6 +2,54 @@ jQuery(document).ready(function() {
 
     $(function() {
 
+
+
+        // data
+    var datax = [
+        { label: "Velacheri",  data: 10, color: Utility.getBrandColor('danger')},
+        { label: "Adyar",  data: 30, color: Utility.getBrandColor('warning')},
+        { label: "Nungambackam",  data: 90, color: Utility.getBrandColor('midnightblue')},
+        { label: "IIT Campus",  data: 70, color: Utility.getBrandColor('info')},
+        { label: "Royappettah",  data: 80, color: Utility.getBrandColor('success')},
+        { label: "JP Nagar",  data: 110, color: Utility.getBrandColor('inverse')}
+    ];
+
+
+
+
+    // INTERACTIVE
+        $.plot($("#interactive"), datax,
+            {
+                series: {
+                        pie: {
+                                show: true
+                        }
+                },
+                grid: {
+                        hoverable: true,
+                        clickable: true
+                },
+                legend: {
+                    show: false
+                },
+                tooltip: true,
+                tooltipOpts: {
+                    content: "%p.0%, %s"
+                }
+
+            });
+            $("#interactive").bind("plothover", pieHover);
+
+
+    function pieHover(event, pos, obj)
+    {
+            if (!obj)
+                    return;
+            percent = parseFloat(obj.series.percent).toFixed(2);
+            $("#hover").html('<span style="font-weight: bold; color: '+obj.series.color+'">'+obj.series.label+' ('+percent+'%)</span>');
+    }
+
+
     //Switchery
         Switchery(document.querySelector('.js-switch-success'), {color: Utility.getBrandColor('success')});
 
