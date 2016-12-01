@@ -7,3 +7,7 @@ coupons.html
 //Jafry
 edit-menu.html
 expired-coupons.html
+user-privileges.html
+member-details.html
+promo-sms.html
+feedback.html
