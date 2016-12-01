@@ -208,51 +208,18 @@
                             <ol class="breadcrumb">
                                 
 <li class=""><a href="index.html">Home</a></li>
-<li class="active"><a href="index.html">Order Dashboard</a></li>
+<li class="active"><a href="coupons.html">Coupon Management</a></li>
 
                             </ol>
-                            <div class="container-fluid">
-                                
+<div class="container-fluid">
 
-<div class="row">
-	<a href="#">
-	<div class="col-md-4">
-		<div class="info-tile tile-orange">
-			<div class="tile-icon"><i class="ti ti-shopping-cart-full"></i></div>
-			<div class="tile-heading"><span>Pending Orders</span></div>
-			<div class="tile-body"><span>2</span></div>
-			<div class="tile-footer"><span class="text-default">To be Billed</span></div>
-		</div>
-	</div>
-	</a>
-	<a href="#">
-	<div class="col-md-4">
-		<div class="info-tile tile-orange">
-			<div class="tile-icon"><i class="ti ti-loop"></i></div>
-			<div class="tile-heading"><span>Confirmed Orders</span></div>
-			<div class="tile-body"><span>13</span></div>
-			<div class="tile-footer"><span class="text-default">To be Delivered</span></div>
-		</div>
-	</div>	
-	</a>
-	<a href="#">
-	<div class="col-md-4">
-		<div class="info-tile tile-green">
-			<div class="tile-icon"><i class="ti ti-wallet"></i></div>
-			<div class="tile-heading"><span>Total Sales</span></div>
-			<div class="tile-body"><span>Rs. 13,000</span></div>
-			<div class="tile-footer"><span class="text-default">Collected Today</span></div>
-		</div>
-	</div>	
-	</a>	
-</div>
 
 <div data-widget-group="group1">
 	<div class="row">
 		<div class="col-md-4">
 			<div class="panel panel-teal" data-widget='{"draggable": "false"}'>
 				<div class="panel-heading">
-					<h2>Pending Orders</h2>
+					<h2>Usage</h2>
 					<div class="panel-ctrls button-icon-bg" 
 						data-actions-container="" 
 						data-action-refresh-demo='{"type": "circular"}'
@@ -261,25 +228,18 @@
 				</div>
 				<div class="panel-body no-padding">
 					<table class="table m-n">
+
+						<thead>
+							<tr>
+								<th>SMS Sent</t>
+								<th>SMS Remaining</th>
+							</tr>
+						</thead>
 						<tbody>
 							<tr>
-								<td>1</td>
-								<td>10007</td>
-								<td>9043960876</td>
-								<td>Rs. 456</td>
-							</tr>
-							<tr>
-								<td>2</td>
-								<td>10005</td>
-								<td>9884179675</td>
-								<td>Rs. 136</td>
-							</tr>
-							<tr>
-								<td>3</td>
-								<td>10003</td>
-								<td>9003824036</td>
-								<td>Rs. 690</td>
-							</tr>
+								<td>8</td>
+								<td>100</td>
+							</tr>							
 						</tbody>
 					</table>
 				</div>
@@ -289,54 +249,38 @@
 		<div class="col-md-8">
 			<div class="panel panel-bluegray" data-widget='{"draggable": "false"}'>
 				<div class="panel-heading">
-					<h2>Order #10007</h2>
+					<h2>GET20</h2>
 				</div>
 				<div class="panel-body">
-					<div id="earnings" style="height: 272px;" class="mt-sm mb-sm">
-
-						<!-- Order Data -->					
-		                <div class="table-responsive">
-		                    <table class="table">
-		                        <thead>
-		                            <tr>
-		                                <th>#</th>
-		                                <th>Item Name</th>
-		                                <th>Quantity</th>
-		                                <th>Unit Price</th>
-		                                <th>Sub Total</th>
-		                            </tr>
-		                        </thead>
-		                        <tbody>
-		                            <tr>
-		                                <td align="left">1</td>
-		                                <td>Chicken Biriyani <span class="text-warning" style="font-size: 11px;">Biriyani & Rices</span></td>
-		                                <td>3</td>
-		                                <td>100</td>
-		                                <td>300</td>
-		                            </tr>
-
-		                        </tbody>
-		                    </table>
-		                </div>
-
-
+					<div class="row">
+						<div class="col-md-12">
+							<form class="form-horizontal tabular-form">
+										<div class="form-group">
+											<label class="col-sm-3 control-label">Content</label>
+											<div class="col-sm-8">
+												<textarea class="form-control">Get 20% off on Cart when you purchase above Rs. 400</textarea>			
+											</div>
+										</div>
+										<div class="form-group">
+											<label for="selector1" class="col-sm-3 control-label">Recipient</label>
+											<div class="col-sm-8">
+												<input type="checkbox" value="1">All<br>
+												<input type="checkbox" value="2">Platinum Members<br>
+												<input type="checkbox" value="3">Gold Members<br>
+												<input type="checkbox" value="4">Silver Members<br>
+											</select></div>
+										</div>
+							</form>
+						</div>
 					</div>
-						<div class="row">
-							<a href="#">
-							<div class="col-md-6">
-								<div class="alert alert-info">
-									<h3>Delivery Details</h3>
-									<p>Abhijith C S<br>9043960876<br>404 Alakananda<br>IIT Madras<br>Chennai - 36</p>
-								</div>	
+				
+				</div>
+				<div class="panel-footer">
+							<div class="row">
+								<div class="col-sm-8 col-sm-offset-2">
+									<button class="btn-success btn">Send</button>
+								</div>
 							</div>
-							</a>
-							<div class="col-md-3">
-								<a class="btn btn-danger-alt btn-label pull-right" href="#"><i class="ti ti-close"></i> Reject</a>
-							</div>	
-							<div class="col-md-3">
-								<a class="btn btn-success-alt btn-label" href="#"><i class="ti ti-check"></i> Confirm</a>
-							</div>								
-						</div>					
 				</div>
 			</div>
 		</div>
