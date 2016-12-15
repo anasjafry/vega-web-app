@@ -3,7 +3,7 @@
 
 <head>
     <meta http-equiv="content-type" content="text/html;charset=utf-8" />
-    <title>bs-docs - Getting started</title>
+    <title>Zaitoon-Online Order</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -27,8 +27,91 @@
     <link rel="apple-touch-icon-precomposed" href="/rb/layouts/bs-docs/ico/apple-touch-icon-57-precomposed.png">
     <link rel="shortcut icon" href="/rb/layouts/bs-docs/ico/favicon.png">
 
+    <script src="controllers/menu.js"></script>
+    <script type="text/javascript" charset="utf-8" src="assets/js/angular.min.js"></script>
+    <script type="text/javascript">
 
+        // var items = [];
+        // items.push({"itemCode":1001,"itemName":"Paneer Butter Masala","itemQuantity": 4,"itemPrice":90});
+        // items.push({"itemCode":1002,"itemName":"Channa Butter Masala","itemQuantity": 1,"itemPrice":70});
+        // items.push({"itemCode":1003,"itemName":"Gobi Masala","itemQuantity": 3,"itemPrice":80});
+        // localStorage.setItem('itemsInfo', JSON.stringify(items));
 
+        function deleteFromCart(code) {
+            var info = JSON.parse(localStorage.getItem("itemsInfo"));
+            //var x = info[0].itemQuantity +1
+            var i = 0;
+            var flag = -1;
+            while(i<info.length)
+            {
+                //checks if item aldready in cart and returns the position of that object if exists
+                if(info[i].itemCode==code)
+                {
+                    flag = i;
+                    break;
+                }
+                i++; 
+            }
+            var item = JSON.parse(localStorage.itemsInfo);  
+            item.splice(flag, 1);
+            localStorage.setItem("itemsInfo", JSON.stringify(item));
+            console.log((JSON.parse(localStorage.getItem("itemsInfo")))[0]);    
+        }
+        function minusFunction(code) {
+            //document.getElementById("item_count_12").innerHTML  = "red";
+            var info = JSON.parse(localStorage.getItem("itemsInfo"));
+            //var x = info[0].itemQuantity +1
+            var i = 0;
+            var flag = -1;
+            while(i<info.length)
+            {
+                //checks if item aldready in cart and returns the position of that object if exists
+                if(info[i].itemCode==code)
+                {
+                    flag = i;
+                    break;
+                }
+                i++; 
+            } 
+            var item = JSON.parse(localStorage.itemsInfo);  
+            if(item[flag].itemQuantity > 1){
+                //console.log(item[flag].itemQuantity);
+                item[flag].itemQuantity -=1;
+                localStorage.setItem("itemsInfo", JSON.stringify(item));
+                console.log((JSON.parse(localStorage.getItem("itemsInfo")))[0]);
+            }
+            else{
+                item.splice(flag, 1);
+                localStorage.setItem("itemsInfo", JSON.stringify(item));
+                console.log((JSON.parse(localStorage.getItem("itemsInfo")))[0]);    
+            }
+             
+            //document.getElementById("item_count_12").innerHTML  = "red";
+            console.log(info.length) ;
+        }
+        function addFunction(code) {
+            var info = JSON.parse(localStorage.getItem("itemsInfo"));
+            //var x = info[0].itemQuantity +1
+            var i = 0;
+            var flag = -1;
+            while(i<info.length)
+            {
+                //checks if item aldready in cart and returns the position of that object if exists
+                if(info[i].itemCode==code)
+                {
+                    flag = i;
+                    break;
+                }
+                i++; 
+            } 
+            var item = JSON.parse(localStorage.itemsInfo);  
+            //console.log(item[flag].itemQuantity);
+            item[flag].itemQuantity +=1;
+            localStorage.setItem("itemsInfo", JSON.stringify(item));
+            console.log((JSON.parse(localStorage.getItem("itemsInfo")))[0]);
+            
+        }
+        </script>
 
 
     <link type="text/css" rel="stylesheet" charset="utf-8" href="/rb/layouts/bs-docs/_main.css?nFlag=201611" />
@@ -53,7 +136,7 @@
     <link href="dist/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet">
 </head>
  
-<body>
+<body ng-app="FullMenu">
     <a class="sr-only" href="#content">Skip navigation</a>
 
     <!-- Docs master nav -->
@@ -193,43 +276,43 @@
 
 
 
-            <div class="col-md-3">
-                <div class="bs-sidebar hidden-print" role="complementary">
+            <div class="col-md-3" ng-controller="CartController">
+                <!-- <div id="cartArea"></div> -->
+                <div class="bs-sidebar hidden-print" role="complementary" id="cartArea">
                     <ul class="nav bs-sidenav">
-                    <h3 style="padding-left: 20px;">Your Cart</h3>
+                    <h3 style="padding-left: 20px;">{{title}}</h3>
                     <hr></hr>
                         <table class="table table-condensed" style="margin-bottom: 0px; margin-top: -16px;">
         <tbody></tbody>
         <colgroup>
             <col width="2%">
             <col width="55%">
-            <col width="20%">
             <col width="23%">
+            <col width="20%">
         </colgroup>
         <tbody>
+                
             <tr>
                 <td class="cart_delete_new">
-                    <div onclick="deleteFromCart(10000238)"><i class="fa fa-times"></i></div>
+                    <div onclick="deleteFromCart(1001)"><i class="fa fa-times-circle"></i></div>
                 </td>
                 <td class="cart_description">
-                    <p style="font-size: 14px; color: #2980b9">Egg Masala</p>
-                    <p style="font-size: 9px; color: grey; margin-top: -10px;">Egg Varieties</p>
+                    <p style="font-size: 14px; color: #2980b9">Paneer Butter Masala</p>
+                    <p style="font-size: 9px; color: grey; margin-top: -10px;">Veg Curry</p>
                 </td> 
                 <td class="cart_quantity">
                     <div class="cart_quantity_button_new">
-                    <i class="fa fa-minus" aria-hidden="true"></i>
-                    2
-                    <i class="fa fa-plus" aria-hidden="true"></i>
+                    <i class="fa fa-minus-circle" aria-hidden="true" onclick="minusFunction(1001)"></i><span id="item_count_12"> 2 </span><i class="fa fa-plus-circle" aria-hidden="true" onclick="addFunction(1001)"></i>
                     </div>
                 </td>
                 <td class="cart_price">
-                    <p><i class="fa fa-inr"></i> 84</p>
+                    <p><i class="fa fa-inr"></i> <span id="item_price_12">84</span></p>
                 </td>
             </tr>
                         
             <tr>
                 <td class="cart_delete_new">
-                <div onclick="deleteFromCart(1000052)"><i class="fa fa-times"></i></div>
+                <div onclick="deleteFromCart(1000052)"><i class="fa fa-times-circle"></i></div>
                 </td>
                 <td class="cart_description">
                     <p style="font-size: 14px; color: #2980b9">BBQ Fish Boneless</p>
@@ -237,9 +320,9 @@
                 </td> 
                 <td class="cart_quantity">
                     <div class="cart_quantity_button_new">
-                    <i class="fa fa-minus" aria-hidden="true"></i>
+                    <i class="fa fa-minus-circle" aria-hidden="true"></i>
                     2
-                    <i class="fa fa-plus" aria-hidden="true"></i>
+                    <i class="fa fa-plus-circle" aria-hidden="true"></i>
                     </div>
                 </td>
                 <td class="cart_price">

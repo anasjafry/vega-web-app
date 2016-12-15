@@ -11,6 +11,22 @@ angular.module('FullMenu', [])
       	
 	})
 
+    .controller('MenuTypeController', function($scope, $http) {
+
+    $http.get("http://localhost:3001/menutype").then(function(response) {
+        $scope.menulist = response.data;
+    }); 
+ 
+  })
+
+    .controller('MenuController', function($scope, $http) {
+
+    $http.get("http://localhost:3001/menutype").then(function(response) {
+        $scope.menu = response.data;
+    }); 
+ 
+  })
+
     .controller('CartController', function($scope) {
        $scope.title = "My Cart";
 	})
