@@ -1,0 +1,72 @@
+[
+{
+	"title":"NonVeg",
+	"submenu":[
+		{
+			"category":"Rices",
+			"items":[
+				{
+					"itemCode":"2001",
+					"itemName":"BiriyaniRice",
+					"itemPrice":60
+				},
+				{
+					"itemCode":"2002",
+					"itemName":"Jeera Rice",
+					"itemPrice":80
+				}
+			]
+		},
+		{
+			"category":"Curry",
+			"items":[
+				{
+					"itemCode":"2001",
+					"itemName":"Chicken MS",
+					"itemPrice":70
+				},
+				{
+					"itemCode":"2002",
+					"itemName":"Mutton MS",
+					"itemPrice":90
+				}
+			]
+		}		
+	]
+},
+{
+	"title":"Desserts",
+	"submenu":[
+		{
+			"category":"Juices",
+			"items":[
+				{
+					"itemCode":"2001",
+					"itemName":"Orange Juice",
+					"itemPrice":60
+				},
+				{
+					"itemCode":"2002",
+					"itemName":"Mango Juice",
+					"itemPrice":80
+				}
+			]
+		},
+		{
+			"category":"Milkshake",
+			"items":[
+				{
+					"itemCode":"2001",
+					"itemName":"Apple MS",
+					"itemPrice":70
+				},
+				{
+					"itemCode":"2002",
+					"itemName":"Mango MS",
+					"itemPrice":90
+				}
+			]
+		}		
+	]
+}
+]
