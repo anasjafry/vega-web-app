@@ -1,7 +1,7 @@
 angular.module('FullMenu', [])
-   .controller('MenuController', function($scope) {
-       $scope.title = "My Menu Full";
-	})
+  
+  //var urlroot="http://localhost/zaitoononline/";
+
 
     .controller('SideMenuController', function($scope, $http) {
 		$http.get("http://localhost:3001/test").then(function(response) {
@@ -21,9 +21,13 @@ angular.module('FullMenu', [])
 
     .controller('MenuController', function($scope, $http) {
 
-    $http.get("http://localhost:3001/menutype").then(function(response) {
+    $http.get("http://localhost/zaitoononline/getmenu.php").then(function(response) {
         $scope.menu = response.data;
+        console.log(response.data);
+
     }); 
+
+    
  
   })
 

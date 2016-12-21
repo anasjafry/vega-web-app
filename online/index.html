@@ -212,8 +212,7 @@
     <script type="text/javascript" charset="utf-8" src="assets/js/angular.min.js"></script>
     <script src="controllers/menu.js"></script>
 
-</head>
- 
+</head> 
 <body ng-app="FullMenu" onload="renderCart()">
     <a class="sr-only" href="#content">Skip navigation</a>
 
@@ -268,26 +267,25 @@
     </strong> We've moved it to a new home while we push forward with Bootstrap 3. <a href="http://blog.getbootstrap.com/">Read the blog</a> for details.
         </div>
     </div>
-
+    
     <div class="container bs-docs-container">
         <div class="row">
-            <div class="col-md-3" ng-controller="MenuTypeController">
+            <div class="col-md-3" ng-controller="MenuController">
                 <div class="bs-sidebar hidden-print" role="complementary">
                     <ul class="nav bs-sidenav">
                     <h3 style="padding-left: 20px;">Quick Menu</h3>
                     <hr></hr>
-                        <li ng-repeat="item in menulist">
-                            <a href="#">{{item.mainName}}</a>
-                            <ul class="nav">
-                                <li><a href="#">Indian Breads</a>
+                        <li ng-repeat="item in menu">
+                            <a href="#{{item.mainType}}">{{item.mainName}}</a>
+                            <ul class="nav" ng-repeat="sub in item.submenu">
+                                <li><a href="#{{item.mainType}}-{{sub.subName}}">{{sub.subName}}</a>
                                 </li>
-                                
                             </ul>
                         </li>
                         <li>
                             <a href="#desserts">Desserts & Drinks</a>
                             <ul class="nav">
-                                <li><a href="#">Falooda</a>
+                                <li><a href="#desserts-falooda">Falooda</a>
                                 </li>
                                 <li><a href="#desserts-juices">Juices</a>
                                 </li>
@@ -309,150 +307,32 @@
                 </div>
             </div>
             <div class="col-md-6" role="main" ng-controller="MenuController">
-                <div class="bs-docs-section">
+                <div class="bs-docs-section" ng-repeat="item in menu">
                     
-                    <h2 id="breakfast">Breakfast</h2>
-                    <div class="table-responsive">
-                        <table class="table table-striped">
+                    <h2 id="{{item.mainType}}">{{ item.mainName }}</h2>
+                    <div class="table-responsive" ng-repeat="sub in item.submenu">
+                        <table class="table table-striped" id="{{ item.mainType }}-{{ sub.subType }}">
                             <thead>
                                 <tr>
-                                    <th>Breakfast</th>
-                                    <th></th>
-                                    <th></th>
+                                    <th>{{ sub.subName }}</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody ng-repeat="i in sub.items">
                                 <tr>
-                                    <td>Paneer Butter Masala</td>
+                                    <td>{{ i.itemName }}</td>
                                     <td>
                                     <strong>
                                         <i class="fa fa-inr"></i>
-                                        35
+                                        {{ i.itemPrice }}
                                     </strong>    
                                     </td>
                                     <td><span class="label label-default" onclick="addToCart(1001)">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Chicken Masala</td>
-                                    <td>
-                                    <strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>    
-                                    <td><span class="label label-default" onclick="addToCart(1004)">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Fluid container</td>
-                                    <td>
-                                    <strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>    
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Fluid row</td>
-                                    <td>
-                                    <strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>    
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Navbar inner</td>
-                                    <td>
-                                    <strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>    
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Dropdown submenu</td>
-                                    <td>
-                                    <strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>    
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Tab alignments</td>
-                                    <td>
-                                    <strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>    
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Search form</td>
-                                    <td>
-                                    <strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>    
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Fluid container</td>
-                                    <td>
-                                    <strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>    
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Fluid row</td>
-                                    <td><strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Navbar inner</td>
-                                    <td><strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Dropdown submenu</td>
-                                    <td><strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Tab alignments</td>
-                                    <td>
-                                    <strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>    
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
 
-                    <h2 id="desserts">Desserts & Drinks</h2>
+                    <!-- <h2 id="desserts">Desserts & Drinks</h2>
                     <div class="table-responsive">
                         <table class="table table-striped"  id="desserts-falooda">
                             <thead>
@@ -865,9 +745,9 @@
                                 </tr>
                             </tbody>
                         </table>
-                    </div>
+                    </div> -->
 
-                    <h2 id="maincourse">Main Course</h2>
+                    <!-- <h2 id="maincourse">Main Course</h2>
                     <div class="table-responsive">
                         <table class="table table-striped"  id="maincourse-breads">
                             <thead>
@@ -1280,7 +1160,7 @@
                                 </tr>
                             </tbody>
                         </table>
-                    </div>
+                    </div> -->
 
                 </div>
 
