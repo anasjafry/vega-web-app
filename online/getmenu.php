@@ -5,7 +5,7 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
 header('Access-Control-Allow-Credentials: true');
 
 define('INCLUDE_CHECK', true);
-//require 'connect.php';
+require 'connect.php';
 
 $_POST = json_decode(file_get_contents('php://input'), true);
 
@@ -14,31 +14,30 @@ $_POST = json_decode(file_get_contents('php://input'), true);
 
 //validate token
 
-$link = mysqli_connect("localhost", "root", "", "zaitoon");
+
 
 $query3 = "SELECT * FROM zaitoon_maintypes WHERE 1";
-$obj3 = $link->query($query3);
+$main = mysql_query($query3);
 $output = [];
 
-while($rows3 = $obj3->fetch_assoc())
+while($rows3 = mysql_fetch_assoc($main))
 {
 
 	$query = "SELECT * FROM zaitoon_menutypes WHERE mainType='{$rows3['type']}'";
-	$obj = $link->query($query);
+	$main2 = mysql_query($query);
 	
-
 	
 	$submenu=[];
 	$items=[];
 
 	//Iterate through complete menu types
-	while($rows = $obj->fetch_assoc()){
+	while($rows = mysql_fetch_assoc($main2)){
 	    
 	        $query2 = "SELECT * from zaitoon_menu WHERE type='{$rows['subType']}'";
-	        $obj2 = $link->query($query2);
+	        $main3 = mysql_query($query2);
 	        $items = [];
 
-	        while($rows2 = $obj2->fetch_assoc()){
+	        while($rows2 = mysql_fetch_assoc($main3)){
 	          $items[] = array(
 	          	"itemCode" => $rows2['code'],
 	            "itemName" => $rows2['name'],

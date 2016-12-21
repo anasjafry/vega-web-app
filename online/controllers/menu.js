@@ -21,7 +21,7 @@ angular.module('FullMenu', [])
 
     .controller('MenuController', function($scope, $http) {
 
-    $http.get("http://localhost/zaitoononline/getmenu.php").then(function(response) {
+    $http.get("http://localhost/vega-web-app/online/getmenu.php").then(function(response) {
         $scope.menu = response.data;
         console.log(response.data);
 
