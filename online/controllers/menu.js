@@ -54,7 +54,7 @@ angular.module('FullMenu', [])
                 console.log((JSON.parse(localStorage.getItem("itemsInfo")))[0]);
             }
             else if(flag == -1){
-                var oldItems = JSON.parse(localStorage.getItem('itemsInfo'));
+                var oldItems = JSON.parse(localStorage.getItem('itemsInfo')) || [];
                 var newItem = {"itemCode":code,"itemName":name,"itemQuantity": 1,"itemPrice":price,"itemVariety":variety};
                 oldItems.push(newItem);
                 var x = JSON.parse(localStorage.getItem("itemsInfo")) ;

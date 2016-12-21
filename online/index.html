@@ -32,6 +32,10 @@
     function renderCart(){
 
         var row = "";
+     
+        if (JSON.parse(localStorage.getItem("itemsInfo")).length != 0) // If the cart is not empty.
+        {
+        
         var info = JSON.parse(localStorage.getItem("itemsInfo"));
         var sub_total = 0;
         console.log(info);
@@ -42,18 +46,16 @@
              i++;
         }
         
-
-        document.getElementById("cartArea").innerHTML  = '<table class="table table-condensed" style="margin-bottom: 0px; margin-top: -16px;"> <tbody></tbody> <colgroup> <col width="2%"> <col width="55%"> <col width="23%"> <col width="20%"> </colgroup> <tbody> '+row+' </tbody> </table> <table class="table table-condensed" style="margin-bottom: -20px;"> <tbody> <tr> <td><grey>Cart Sub Total</grey></td> <td><grey><i class="fa fa-inr"></i> '+sub_total+'</grey></td> </tr> <tr class="shipping-cost"> <td><grey>Container Charges (7%)</grey></td> <td><grey><i class="fa fa-inr"></i>'+(Math.round(sub_total*.07))+'</grey></td> </tr> <tr> <td><red>Grand Total</red></td> <td><strong><red><span><i class="fa fa-inr"></i> '+(sub_total+(Math.round(sub_total*.07)))+'</span></red></strong></td> </tr> </tbody> </table>';
+        document.getElementById("cartArea").innerHTML  = '<table class="table table-condensed" style="margin-bottom: 0px; margin-top: -16px;"> <tbody></tbody> <colgroup> <col width="2%"> <col width="55%"> <col width="23%"> <col width="20%"> </colgroup> <tbody> '+row+' </tbody> </table> <table class="table table-condensed" style="margin-bottom: -20px;"> <tbody> <tr> <td><grey>Cart Sub Total</grey></td> <td><grey><i class="fa fa-inr"></i> '+sub_total+'</grey></td> </tr> <tr class="shipping-cost"> <td><grey>Container Charges (7%)</grey></td> <td><grey><i class="fa fa-inr"></i>'+(Math.round(sub_total*.07))+'</grey></td> </tr> <tr> <td><red>Grand Total</red></td> <td><strong><red><span><i class="fa fa-inr"></i> '+(sub_total+(Math.round(sub_total*.07)))+'</span></red></strong></td> </tr> </tbody> </table><br><br><a href="checkout.html"><button class="btn btn-success">Check Out</button></a>';
+    }
+    else{
+         document.getElementById("cartArea").innerHTML  = "Empty Cart.";
+    }
     }
     </script>
 
     <script type="text/javascript">
 
-        var items = [];
-        items.push({"itemCode":1001,"itemName":"Paneer Butter Masala","itemQuantity": 4,"itemPrice":90, "itemVariety":"Veg Curry"});
-        items.push({"itemCode":1002,"itemName":"Channa Butter Masala","itemQuantity": 1,"itemPrice":70, "itemVariety":"Veg Curry"});
-        items.push({"itemCode":1003,"itemName":"Gobi Masala","itemQuantity": 3,"itemPrice":80, "itemVariety":"Veg Dry"});
-        localStorage.setItem('itemsInfo', JSON.stringify(items));
 
         function deleteFromCart(code) {
             var info = JSON.parse(localStorage.getItem("itemsInfo"));
@@ -73,6 +75,7 @@
             var item = JSON.parse(localStorage.itemsInfo);  
             item.splice(flag, 1);
             localStorage.setItem("itemsInfo", JSON.stringify(item));
+            renderCart();
             console.log((JSON.parse(localStorage.getItem("itemsInfo")))[0]);    
         }
         function minusFunction(code) {
