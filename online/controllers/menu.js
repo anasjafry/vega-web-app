@@ -81,7 +81,7 @@ angular.module('FullMenu', [])
        $scope.title = "My Cart";
 	})
 
-    .controller('CheckoutController', function($scope, $http) {
+    .controller('CheckoutController', ['$scope','$http', function($scope, $http) {
       $scope.checkout = function(){ 
         var info = JSON.parse(localStorage.getItem("itemsInfo"));
         var i = 0;
@@ -104,26 +104,29 @@ angular.module('FullMenu', [])
             "cartCoupon": 0,
             "items": items
         });
-        console.log(cart);
-       // var parameter = JSON.stringify(cart);
+
+        var data = {}; 
+        data.user = "9043960876";
+        data.cart = JSON.stringify(cart);
+
         $http({
           method  : 'POST',
-          url     : 'http://localhost/vega-web-app/online/orderhistory.php',
-          data    : cart, //forms user object
+          url     : 'http://localhost/vega-web-app/online/createorder.php',
+          data    : data, //forms user object
           headers : {'Content-Type': 'application/x-www-form-urlencoded'} 
-         }).then(
-         function mySucces(response) {
-            //$scope.myWelcome = response.data;
-            console.log("Success");
-            console.log("*******"+response.data+"*******");
-        }, 
-        function myError(response) {
-            console.log("Error")
-            $scope.myWelcome = response.statusText;
-        }
-        );  
+         })
+          .then(function(response) {
+            if(response.data.status){
+              console.log("Success");
+              console.log(response.data.orderid);
+            }
+            else{
+              console.log("Error");
+            }          
+          });        
+
 
         }
-    });
+    }]);
 
     
