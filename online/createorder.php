@@ -13,11 +13,12 @@ $user = mysql_real_escape_string($_POST['user']);
 $cart = $_POST['cart'];
 
 date_default_timezone_set('Asia/Calcutta');
-$time = date("g:i a, j F, Y");
+$date = date("j F, Y");
+$time = date("g:i a");
 
 
 
-$query = "INSERT INTO `zaitoon_orderlist`(`timeStamp`, `userID`, `status`, `comments`, `cart`) VALUES ('{$time}','{$user}',0,'None','{$cart}')";
+$query = "INSERT INTO `zaitoon_orderlist`(`date`,`timePlace`, `userID`, `status`, `comments`, `cart`) VALUES ('{$date}','{$time}','{$user}',0,'None','{$cart}')";
 mysql_query($query);
 $getID = "SELECT orderID FROM zaitoon_orderlist ORDER BY orderID DESC LIMIT 1";
 $id = mysql_fetch_assoc(mysql_query($getID));
