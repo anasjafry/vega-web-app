@@ -81,12 +81,58 @@ angular.module('FullMenu', [])
        $scope.title = "My Cart";
 	})
 
+    .controller('DetailsController', ['$scope','$http', function($scope, $http) {
+      $scope.init = function(){ 
+        $scope.item=null;
+        $scope.cart=null;
+        var data = {}; 
+        data.orderID = "10013053";
+
+        $http({
+          method  : 'POST',
+          url     : 'http://localhost/vega-web-app/online/orderinfo.php',
+          data    : data, //forms user object
+          headers : {'Content-Type': 'application/x-www-form-urlencoded'} 
+         })
+          .then(function(response) {
+              $scope.item = response.data;
+              $scope.cart = response.data.cart;
+              console.log($scope.cart);   
+          }); 
+
+        }
+        $scope.init();
+    }])
+
+    .controller('HistoryController', ['$scope','$http', function($scope, $http) {
+      $scope.init = function(){ 
+        $scope.item=null;
+        $scope.cart=null;
+        var data = {}; 
+        data.user = "9043960876";
+
+        $http({
+          method  : 'POST',
+          url     : 'http://localhost/vega-web-app/online/orderhistory.php',
+          data    : data, //forms user object
+          headers : {'Content-Type': 'application/x-www-form-urlencoded'} 
+         })
+          .then(function(response) {
+              $scope.item = response.data;
+              $scope.cart = response.data.cart;
+              console.log(response);   
+          }); 
+
+        }
+        $scope.init();
+    }])
+
     .controller('CheckoutController', ['$scope','$http', function($scope, $http) {
       $scope.checkout = function(){ 
         var info = JSON.parse(localStorage.getItem("itemsInfo"));
         var i = 0;
         var items=[];
-        var cart=[];
+        var cart;
         var sub_total=0;
         while(i<info.length)   {
             sub_total += (info[i].itemQuantity*info[i].itemPrice);
@@ -99,11 +145,12 @@ angular.module('FullMenu', [])
             });
             i++;
         }
-        cart.push({
+        cart = {
             "cartTotal": sub_total,
             "cartCoupon": 0,
             "items": items
-        });
+        };
+
 
         var data = {}; 
         data.user = "9043960876";
