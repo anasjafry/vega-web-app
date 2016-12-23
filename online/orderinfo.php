@@ -12,9 +12,9 @@ require 'connect.php';
 
 $_POST = json_decode(file_get_contents('php://input'), true);
 
-$user =mysql_real_escape_string($_POST['user']);
+$oid = "10013052";//mysql_real_escape_string($_POST['orderid']);
 
-$query = "SELECT `date`, `timePlace`, `timeConfirm`, `timeDeliver`, `orderID`,`status`, `cart` FROM `zaitoon_orderlist` WHERE `userID`='{$user}'";
+$query = "SELECT `date`, `timePlace`, `timeConfirm`, `timeDeliver`, `orderID`,`status`, `cart`,`comments` FROM `zaitoon_orderlist` WHERE `orderID`='{$oid}'";
 $all = mysql_query($query);
 
 $list = array();
@@ -25,6 +25,7 @@ while($order = mysql_fetch_assoc($all))
 	$list[] = array(
 		'orderID' => $order['orderID'], 
 		'status' => $order['status'], 
+		'comment' => $order['comments'], 
 		'cart' => $cart,
 		'date' => $order['date'], 
 		'timePlace' => $order['timePlace'], 
