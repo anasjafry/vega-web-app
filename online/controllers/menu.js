@@ -29,7 +29,10 @@ angular.module('FullMenu', [])
 
     $scope.addToCart = function(code, name, price, variety){
 
-      
+            if(localStorage.getItem("itemsInfo") === null){
+                var temp = [];
+                localStorage.setItem("itemsInfo", JSON.stringify(temp));
+            }
             var info = JSON.parse(localStorage.getItem("itemsInfo")); //getting items from localStorage
             var i = 0;
             var flag = -1;
@@ -78,5 +81,49 @@ angular.module('FullMenu', [])
        $scope.title = "My Cart";
 	})
 
+    .controller('CheckoutController', function($scope, $http) {
+      $scope.checkout = function(){ 
+        var info = JSON.parse(localStorage.getItem("itemsInfo"));
+        var i = 0;
+        var items=[];
+        var cart=[];
+        var sub_total=0;
+        while(i<info.length)   {
+            sub_total += (info[i].itemQuantity*info[i].itemPrice);
+            items.push({
+                "itemCode": info[i].itemCode,
+                "itemName": info[i].itemName,
+                "itemQuantity": info[i].itemQuantity,
+                "itemPrice": info[i].itemPrice,
+                "itemVariety": info[i].itemVariety
+            });
+            i++;
+        }
+        cart.push({
+            "cartTotal": sub_total,
+            "cartCoupon": 0,
+            "items": items
+        });
+        console.log(cart);
+       // var parameter = JSON.stringify(cart);
+        $http({
+          method  : 'POST',
+          url     : 'http://localhost/vega-web-app/online/orderhistory.php',
+          data    : cart, //forms user object
+          headers : {'Content-Type': 'application/x-www-form-urlencoded'} 
+         }).then(
+         function mySucces(response) {
+            //$scope.myWelcome = response.data;
+            console.log("Success");
+            console.log("*******"+response.data+"*******");
+        }, 
+        function myError(response) {
+            console.log("Error")
+            $scope.myWelcome = response.statusText;
+        }
+        );  
 
-   ;
+        }
+    });
+
+    
