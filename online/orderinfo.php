@@ -12,17 +12,15 @@ require 'connect.php';
 
 $_POST = json_decode(file_get_contents('php://input'), true);
 
-$oid = "10013052";//mysql_real_escape_string($_POST['orderid']);
+$oid = $_POST['orderID'];//"10013052";
 
 $query = "SELECT `date`, `timePlace`, `timeConfirm`, `timeDeliver`, `orderID`,`status`, `cart`,`comments` FROM `zaitoon_orderlist` WHERE `orderID`='{$oid}'";
 $all = mysql_query($query);
 
-$list = array();
-
 while($order = mysql_fetch_assoc($all))
 {
 	$cart = json_decode($order['cart']);
-	$list[] = array(
+	$list = array(
 		'orderID' => $order['orderID'], 
 		'status' => $order['status'], 
 		'comment' => $order['comments'], 

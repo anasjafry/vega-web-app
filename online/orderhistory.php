@@ -12,7 +12,7 @@ require 'connect.php';
 
 $_POST = json_decode(file_get_contents('php://input'), true);
 
-$user =mysql_real_escape_string($_POST['user']);
+$user ="9043960876";//mysql_real_escape_string($_POST['user']);
 
 $query = "SELECT `date`, `timePlace`, `timeConfirm`, `timeDeliver`, `orderID`,`status`, `cart` FROM `zaitoon_orderlist` WHERE `userID`='{$user}'";
 $all = mysql_query($query);

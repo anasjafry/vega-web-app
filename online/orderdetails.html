@@ -19,7 +19,8 @@
 	  <script src="assets/js/html5shiv.js"></script>
 	  <script src="assets/js/respond.min.js"></script>
 	<![endif]-->
-
+    <script type="text/javascript" charset="utf-8" src="assets/js/angular.min.js"></script>
+    <script src="controllers/menu.js"></script>
     <!-- Favicons -->
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/rb/layouts/bs-docs/ico/apple-touch-icon-144-precomposed.png">
     <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/rb/layouts/bs-docs/ico/apple-touch-icon-114-precomposed.png">
@@ -31,87 +32,7 @@
     <script type="text/javascript" charset="utf-8" src="assets/js/angular.min.js"></script>
     <script type="text/javascript">
 
-        // var items = [];
-        // items.push({"itemCode":1001,"itemName":"Paneer Butter Masala","itemQuantity": 4,"itemPrice":90});
-        // items.push({"itemCode":1002,"itemName":"Channa Butter Masala","itemQuantity": 1,"itemPrice":70});
-        // items.push({"itemCode":1003,"itemName":"Gobi Masala","itemQuantity": 3,"itemPrice":80});
-        // localStorage.setItem('itemsInfo', JSON.stringify(items));
-
-        function deleteFromCart(code) {
-            var info = JSON.parse(localStorage.getItem("itemsInfo"));
-            //var x = info[0].itemQuantity +1
-            var i = 0;
-            var flag = -1;
-            while(i<info.length)
-            {
-                //checks if item aldready in cart and returns the position of that object if exists
-                if(info[i].itemCode==code)
-                {
-                    flag = i;
-                    break;
-                }
-                i++; 
-            }
-            var item = JSON.parse(localStorage.itemsInfo);  
-            item.splice(flag, 1);
-            localStorage.setItem("itemsInfo", JSON.stringify(item));
-            console.log((JSON.parse(localStorage.getItem("itemsInfo")))[0]);    
-        }
-        function minusFunction(code) {
-            //document.getElementById("item_count_12").innerHTML  = "red";
-            var info = JSON.parse(localStorage.getItem("itemsInfo"));
-            //var x = info[0].itemQuantity +1
-            var i = 0;
-            var flag = -1;
-            while(i<info.length)
-            {
-                //checks if item aldready in cart and returns the position of that object if exists
-                if(info[i].itemCode==code)
-                {
-                    flag = i;
-                    break;
-                }
-                i++; 
-            } 
-            var item = JSON.parse(localStorage.itemsInfo);  
-            if(item[flag].itemQuantity > 1){
-                //console.log(item[flag].itemQuantity);
-                item[flag].itemQuantity -=1;
-                localStorage.setItem("itemsInfo", JSON.stringify(item));
-                console.log((JSON.parse(localStorage.getItem("itemsInfo")))[0]);
-            }
-            else{
-                item.splice(flag, 1);
-                localStorage.setItem("itemsInfo", JSON.stringify(item));
-                console.log((JSON.parse(localStorage.getItem("itemsInfo")))[0]);    
-            }
-             
-            //document.getElementById("item_count_12").innerHTML  = "red";
-            console.log(info.length) ;
-        }
-        function addFunction(code) {
-            var info = JSON.parse(localStorage.getItem("itemsInfo"));
-            //var x = info[0].itemQuantity +1
-            var i = 0;
-            var flag = -1;
-            while(i<info.length)
-            {
-                //checks if item aldready in cart and returns the position of that object if exists
-                if(info[i].itemCode==code)
-                {
-                    flag = i;
-                    break;
-                }
-                i++; 
-            } 
-            var item = JSON.parse(localStorage.itemsInfo);  
-            //console.log(item[flag].itemQuantity);
-            item[flag].itemQuantity +=1;
-            localStorage.setItem("itemsInfo", JSON.stringify(item));
-            console.log((JSON.parse(localStorage.getItem("itemsInfo")))[0]);
-            
-        }
-        </script>
+        
 
 
     <link type="text/css" rel="stylesheet" charset="utf-8" href="/rb/layouts/bs-docs/_main.css?nFlag=201611" />
@@ -136,7 +57,7 @@
     <link href="dist/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet">
 </head>
  
-<body ng-app="FullMenu">
+<body ng-app="FullMenu" ng-controller="DetailsController" >
     <a class="sr-only" href="#content">Skip navigation</a>
 
     <!-- Docs master nav -->
@@ -193,7 +114,7 @@
 
     <div class="container bs-docs-container">
         <div class="row">
-            <div class="col-md-9" role="main">
+            <div class="col-md-9" role="main" ng-init="init()">
                 <div class="bs-docs-section">
                     
                     <h2>Order Details</h2>
@@ -204,16 +125,16 @@
                                 <div class="col-sm-10">
                         <div class="post-meta pull-left">
                             <ul>
-                                <li><i class="fa fa-calendar"></i> 15,Nov 2016</li>
-                                <li><i class="fa fa-clock-o"></i><orderReceived>Order Placed</orderReceived> at 10:49</li>
-                                <li><i class="fa fa-refresh"></i><orderConfirmed>Confirmed</orderConfirmed> at 10.50</li>
-                                <li class=""><i class="fa fa-flag"></i><orderDelivered>Out for Delivery</orderDelivered> at 10:55</li>
+                                <li><i class="fa fa-calendar"></i> {{item.date}}</li>
+                                <li><i class="fa fa-clock-o"></i><orderReceived>Order Placed</orderReceived> {{item.timePlace}}</li>
+                                <li><i class="fa fa-refresh"></i><orderConfirmed>Confirmed</orderConfirmed>{{item.timeConfirm}}</li>
+                                <li class=""><i class="fa fa-flag"></i><orderDelivered>Out for Delivery</orderDelivered>{{item.timeDeliver}}</li>
                                 <!-- <li class=""><strong><red><i class="fa fa-exclamation-triangle"></i>Order Cancelled by Zaitoon</red></strong> at </li> -->                                               
                             </ul>
                         </div>
                     </div>
                     <div class="col-sm-2">
-                        <h40><b> #1112233</b></h40>
+                        <h40><b> #{{item.orderID}}</b></h40>
                     </div>
                             </tr>
                         </tbody>
@@ -230,102 +151,29 @@
                             <th>Sub Total</th>
                         </thead>
                         <tbody>
-                        <tr border-bottom: solid;>
+                        <tr border-bottom: solid; ng-repeat="i in cart.items">
                             <td><price>1</price></td>
-                            <td>Chicken Lesuni Kebab</td>
-                            <td><strong>1</strong></td>
-                            <td><i class="fa fa-inr"></i> 105</td>
+                            <td>{{i.itemName}}</td>
+                            <td><strong>{{i.itemQuantity}}</strong></td>
+                            <td><i class="fa fa-inr"></i> {{i.itemPrice}}</td>
                             <td><strong><i class="fa fa-inr"></i> 105</strong></td>
                         </tr>
-                        <tr border-bottom: solid;>
+                        <!-- <tr border-bottom: solid;>
                             <td><price>1</price></td>
                             <td>Chicken Malai Kebab</td>
                             <td><strong>1</strong></td>
                             <td><i class="fa fa-inr"></i> 110</td>
                             <td><strong><i class="fa fa-inr"></i> 110</strong></td>
-                        </tr>
+                        </tr> -->
                     </table>
                     </div>
 
                     <div class="col-sm-12" style="border-top: 2px dotted #34495e; border-bottom: 1px solid #34495e;">
-                            <p class="pull-right" style="padding-right: 65px; padding-top: 10px;">Container Charges (7%) : <i class="fa fa-inr"></i>15.75</p>
+                            <p class="pull-right" style="padding-right: 65px; padding-top: 10px;">Container Charges (7%) : <i class="fa fa-inr"></i>{{cart.cartTotal}}</p>
                         </div>
                         <div class="col-sm-12" style="border-bottom: 1px solid #34495e;">
                             <h4 class="pull-right" style="padding-right: 60px;">Grand Total : <red><i class="fa fa-inr"></i>230.75</red></h4>
                         </div>
-
-                    <!-- <div class="table-responsive">
-                        <table class="table table-striped">
-                            <colgroup>
-                                <col width="2%">
-                                <col width="98%">
-                            </colgroup>
-                            <thead>
-                                <tr>
-                                    <th>
-                                        <i class="fa fa-chevron-right" aria-hidden="true"></i>
-                                        
-                                    </th>
-                                    <th>Delivery Details</th>
-
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td></td>
-                                    <td><b>Delivery Address</b>
-                                        <textarea rows="3" maxlength="100" class="form-control ng-pristine ng-untouched ng-valid ng-empty ng-valid-maxlength" placeholder="Enter address"></textarea>
-                                    <h5><b>Choose from saved addresses</b></h5>
-                                    <input type="radio" name="address" value="add1" checked> 123, Mandak, IIT Madras<br>
-                                    <input type="radio" name="address" value="add2"> 404, Alak, IIT Madras<br>
-                                    <input type="radio" name="address" value="add3"> 310, Mandak, IIT Madras
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                    <td>Coupon Code<br>
-                                        <input type="text" id="order-coupon" name="coupon_code" placeholder="Enter Coupon Code">
-                                        <input type="submit" name="submit" class="btn btn-default check_out" style="margin-left: 40px;" value="Apply">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                    <td>Comments
-                                        <textarea rows="3" maxlength="100" class="form-control ng-pristine ng-untouched ng-valid ng-empty ng-valid-maxlength" placeholder="More sugar, less spice? Your preferences go here." ng-model="vm.orderComments" ng-change="vm.commentsChanged()" ng-model-options="{ debounce: 300 }"></textarea>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <table class="table table-striped">
-                            <colgroup>
-                                <col width="2%">
-                                <col width="98%">
-                            </colgroup>
-                            <thead>
-                                <tr>
-                                    <th>
-                                        <i class="fa fa-chevron-right" aria-hidden="true"></i>
-                                        
-                                    </th>
-                                    <th>Payment</th>
-
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td></td>
-                                    <td><b>How would youlike to pay?</b><br>
-                                    <input type="radio" name="pay" value="pay1"> COD<br>
-                                    <input type="radio" name="pay" value="pay2"> Paytm Wallet<br>
-                                    <input type="radio" name="pay" value="pay3"> Net Banking
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <h5 class="pull-right">
-                            <input type="submit" name="submit" class="btn btn-default check_out" style="margin-left: 40px;" value="Proceed">
-                        </h5>
-                    </div> -->
 
                 </div>
 
@@ -333,93 +181,8 @@
 
 
 
-            <div class="col-md-3" ng-controller="CartController">
-                <!-- <div id="cartArea"></div> -->
-                <div class="bs-sidebar hidden-print" role="complementary" id="cartArea">
-                    <ul class="nav bs-sidenav">
-                    <h3 style="padding-left: 20px;">Your Profile</h3>
-                    <div style="padding: 20px;">
-                    
-                                <h45><b>Abhijith C S</b></h45> 
-                                <p><br><b>Mobile:</b><br> 9884179675</p>
-                                <p><b>Default Delivery Address:</b><br>404, Alakananda Hostel</p>
-
-                                <a href="account.php?options=edit" style="color: #bdc3c7; text-decoration:underline; font-size: 10px;">Update Details</a>
-                                <a href="account.php?options=password" style="color: #f39c12; text-decoration:underline; font-size: 10px;">Change Password</a>  
-                        
-                    </div>
-                    <hr></hr>
-                                
-                        <!-- <table class="table table-condensed" style="margin-bottom: 0px; margin-top: -16px;">
-        <tbody></tbody>
-        <colgroup>
-            <col width="2%">
-            <col width="55%">
-            <col width="23%">
-            <col width="20%">
-        </colgroup>
-        <tbody>
-                
-            <tr>
-                <td class="cart_delete_new">
-                    <div onclick="deleteFromCart(1001)"><i class="fa fa-times-circle"></i></div>
-                </td>
-                <td class="cart_description">
-                    <p style="font-size: 14px; color: #2980b9">Paneer Butter Masala</p>
-                    <p style="font-size: 9px; color: grey; margin-top: -10px;">Veg Curry</p>
-                </td> 
-                <td class="cart_quantity">
-                    <div class="cart_quantity_button_new">
-                    <i class="fa fa-minus-circle" aria-hidden="true" onclick="minusFunction(1001)"></i><span id="item_count_12"> 2 </span><i class="fa fa-plus-circle" aria-hidden="true" onclick="addFunction(1001)"></i>
-                    </div>
-                </td>
-                <td class="cart_price">
-                    <p><i class="fa fa-inr"></i> <span id="item_price_12">84</span></p>
-                </td>
-            </tr>
-                        
-            <tr>
-                <td class="cart_delete_new">
-                <div onclick="deleteFromCart(1000052)"><i class="fa fa-times-circle"></i></div>
-                </td>
-                <td class="cart_description">
-                    <p style="font-size: 14px; color: #2980b9">BBQ Fish Boneless</p>
-                    <p style="font-size: 9px; color: grey; margin-top: -10px;">Fish Varieties</p>
-                </td> 
-                <td class="cart_quantity">
-                    <div class="cart_quantity_button_new">
-                    <i class="fa fa-minus-circle" aria-hidden="true"></i>
-                    2
-                    <i class="fa fa-plus-circle" aria-hidden="true"></i>
-                    </div>
-                </td>
-                <td class="cart_price">
-                    <p><i class="fa fa-inr"></i> 220</p>
-                </td>
-
-            </tr>
-        </tbody>
-    </table>
-
-
-    <table class="table table-condensed" style="margin-bottom: -20px;">
-        <tbody>
-            <tr>
-                <td><grey>Cart Sub Total</grey></td>
-                <td><grey><i class="fa fa-inr"></i> 304</grey></td>
-            </tr>
-            <tr class="shipping-cost">
-                <td><grey>Container Charges (7%)</grey></td>
-                <td><grey><i class="fa fa-inr"></i>22</grey></td>                                        
-            </tr>
-            <tr>
-                <td><red>Grand Total</red></td>
-                <td><strong><red><span><i class="fa fa-inr"></i> 326</span></red></strong></td>
-            </tr>
-        </tbody>
-    </table> -->
-                    </ul>
-                </div>
+            <div class="col-md-3">
+       
             </div>
         </div>
 

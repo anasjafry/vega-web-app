@@ -6,6 +6,9 @@
     <title>Zaitoon-Online Order</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Angular -->
+    <script type="text/javascript" charset="utf-8" src="assets/js/angular.min.js"></script>
+    <script src="controllers/menu.js"></script>
 
     <!-- Bootstrap core CSS -->
     <link href="dist/css/bootstrap.css" rel="stylesheet">
@@ -30,6 +33,7 @@
     <script src="controllers/menu.js"></script>
     <script type="text/javascript" charset="utf-8" src="assets/js/angular.min.js"></script>
     <script type="text/javascript">
+
 
 
 
@@ -113,7 +117,7 @@
 
     <div class="container bs-docs-container">
         <div class="row">
-            <div class="col-md-9" role="main">
+            <div class="col-md-9" role="main" ng-controller="HistoryController">
                 <div class="bs-docs-section">
                     
                     <h2>Your Orders</h2>
@@ -126,37 +130,13 @@
                         <col width="10%" />
                         <col width="20%" />
                         <tbody>
-                            <tr>
+                            <tr ng-repeat="i in item">
                                 <td>#1</td>
-                                <td>10012047</td>
-                                <td>15 Nov, 2016</td>
-                                <td>BBQ Fish Boneless (1) , Aloo Gobi (1) , Butter Naan (3)</td>
-                                <td><i class="fa fa-inr"></i> 348</td>
+                                <td>{{i.orderID}}</td>
+                                <td>{{i.date}}</td>
+                                <td><span ng-repeat="x in i.cart.items">{{x.itemName}} ({{x.itemQuantity}}), </span></td>
+                                <td><i class="fa fa-inr"></i> {{i.cart.cartTotal}}</td>
                                 <td><a href="#" class="btn btn-default cancelled add-to-cart"><i class="fa fa-exclamation-triangle"></i>Cancelled</a></td>
-                            </tr>
-                            <tr>
-                                <td>#1</td>
-                                <td>10012047</td>
-                                <td>15 Nov, 2016</td>
-                                <td>BBQ Fish Boneless (1) , Aloo Gobi (1) , Butter Naan (3)</td>
-                                <td><i class="fa fa-inr"></i> 348</td>
-                                <td><a href="#" class="btn btn-default cancelled add-to-cart"><i class="fa fa-exclamation-triangle"></i>Cancelled</a></td>
-                            </tr>
-                            <tr>
-                                <td>#1</td>
-                                <td>10012047</td>
-                                <td>15 Nov, 2016</td>
-                                <td>BBQ Fish Boneless (1) , Aloo Gobi (1) , Butter Naan (3)</td>
-                                <td><i class="fa fa-inr"></i> 348</td>
-                                <td><a href="#" class="btn btn-default cancelled add-to-cart"><i class="fa fa-flag"></i>Completed</a></td>
-                            </tr>
-                            <tr>
-                                <td>#1</td>
-                                <td>10012047</td>
-                                <td>15 Nov, 2016</td>
-                                <td>BBQ Fish Boneless (1) , Aloo Gobi (1) , Butter Naan (3)</td>
-                                <td><i class="fa fa-inr"></i> 348</td>
-                                <td><a href="#" class="btn btn-default cancelled add-to-cart"><i class="fa fa-flag"></i>Completed</a></td>
                             </tr>
                         </tbody>
                     </table>
