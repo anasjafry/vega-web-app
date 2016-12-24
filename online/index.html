@@ -14,6 +14,9 @@
     <link href="assets/css/docs.css" rel="stylesheet">
     <link href="assets/css/art.css" rel="stylesheet">
 
+    <!-- Custom CSS -->
+    <link href="assets/css/custom.css" rel="stylesheet">
+
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
 	  <script src="assets/js/html5shiv.js"></script>
@@ -40,16 +43,24 @@
         var sub_total = 0;
         console.log(info);
         var i = 0;
+
         while(i<info.length)   {
-             row = row +'<tr><td class="cart_delete_new"> <div onclick="deleteFromCart('+info[i].itemCode+')"><i class="fa fa-times-circle"></i></div> </td> <td class="cart_description"> <p style="font-size: 14px; color: #2980b9">'+info[i].itemName+'</p> <p style="font-size: 9px; color: grey; margin-top: -10px;">'+info[i].itemVariety+'</p> </td> <td class="cart_quantity"> <div class="cart_quantity_button_new"> <i class="fa fa-minus-circle" aria-hidden="true" onclick="minusFunction('+info[i].itemCode+')"></i><span id="item_count_12"> '+info[i].itemQuantity+' </span><i class="fa fa-plus-circle" aria-hidden="true" onclick="addFunction('+info[i].itemCode+')"></i> </div> </td> <td class="cart_price"> <p><i class="fa fa-inr"></i> <span id="item_price_12">'+info[i].itemPrice+'</span></p> </td> </tr>';
+
+            //Jugaad to hide border in the first row.
+            var noBorder = "";
+            if(i == 0){noBorder = 'style="border-top:none;"'}
+
+             row = row +'<tr><td class="crossIcon" '+noBorder+'> <div onclick="deleteFromCart('+info[i].itemCode+')"><i class="fa fa-times-circle"></i></div> </td> <td class="cartDescription" '+noBorder+'> <p style="font-size: 14px; color: #2980b9">'+info[i].itemName+'</p> <p style="font-size: 9px; color: grey; margin-top: -10px;">'+info[i].itemVariety+'</p> </td> <td class="cart_quantity" '+noBorder+'> <div class="cartButtons"> <i class="fa fa-minus-circle zaitoonCartMenuMinus" aria-hidden="true" onclick="minusFunction('+info[i].itemCode+')"></i><span id="item_count_12"> '+info[i].itemQuantity+' </span><i class="fa fa-plus-circle zaitoonCartMenuPlus" aria-hidden="true" onclick="addFunction('+info[i].itemCode+')"></i> </div> </td> <td class="cart_price" '+noBorder+'> <p><i class="fa fa-inr"></i> <span id="item_price_12">'+info[i].itemPrice+'</span></p> </td> </tr>';
              sub_total += (info[i].itemQuantity*info[i].itemPrice);
              i++;
         }
         
-        document.getElementById("cartArea").innerHTML  = '<table class="table table-condensed" style="margin-bottom: 0px; margin-top: -16px;"> <tbody></tbody> <colgroup> <col width="2%"> <col width="55%"> <col width="23%"> <col width="20%"> </colgroup> <tbody> '+row+' </tbody> </table> <table class="table table-condensed" style="margin-bottom: -20px;"> <tbody> <tr> <td><grey>Cart Sub Total</grey></td> <td><grey><i class="fa fa-inr"></i> '+sub_total+'</grey></td> </tr> <tr class="shipping-cost"> <td><grey>Container Charges (7%)</grey></td> <td><grey><i class="fa fa-inr"></i>'+(Math.round(sub_total*.07))+'</grey></td> </tr> <tr> <td><red>Grand Total</red></td> <td><strong><red><span><i class="fa fa-inr"></i> '+(sub_total+(Math.round(sub_total*.07)))+'</span></red></strong></td> </tr> </tbody> </table><br><br><a href="checkout.html"><button class="btn btn-success">Check Out</button></a>';
+        document.getElementById("cartArea").innerHTML  = '<table class="table table-condensed" style="margin-bottom: 0px; margin-top: -16px;"> <tbody></tbody> <colgroup> <col width="2%"> <col width="55%"> <col width="25%"> <col width="18%"> </colgroup> <tbody> '+row+' </tbody> </table> <table class="table table-condensed" style="margin-bottom: -20px;"> <tbody> <tr> <td><grey>Cart Sub Total</grey></td> <td><grey><i class="fa fa-inr"></i> '+sub_total+'</grey></td> </tr> <tr class="shipping-cost"> <td><grey>Container Charges (7%)</grey></td> <td><grey><i class="fa fa-inr"></i>'+(Math.round(sub_total*.07))+'</grey></td> </tr> <tr> <td><red>Grand Total</red></td> <td><strong><red><span><i class="fa fa-inr"></i> '+(sub_total+(Math.round(sub_total*.07)))+'</span></red></strong></td> </tr> </tbody> </table><hr><a href="checkout.html" style="text-decoration: none"><button class="btn btn-success btn-block">Check Out</button></a>';
+        document.getElementById("fullCartArea").innerHTML = "";
     }
     else{
-         document.getElementById("cartArea").innerHTML  = "Empty Cart.";
+        document.getElementById("cartArea").innerHTML = '<center> <img src="assets/images/elements/emptycart.png" width="50%"> <p style="color: #bdc3c7">Your Cart is Empty.</p> </center>';
+        document.getElementById("fullCartArea").innerHTML  = '<p style="color: #bdc3c7; padding-top: 5px; font-size: 11px;">Add items to the cart to place a fresh order. You can quickly <a class="label label-default greyLabel" href="account.html" style="font-size: 10px;">Repeat an Order</a> you made with Zaitoon before.</p>';
     }
     }
     </script>
@@ -134,82 +145,6 @@
             
         }
 
-
-        // function addToCart(code,name,price) {
-        //     var info = JSON.parse(localStorage.getItem("itemsInfo")); //getting items from localStorage
-        //     var i = 0;
-        //     var flag = -1;
-
-        //     console.log(info.length) ;
-        //     while(i<info.length)
-        //     {
-        //         //checks if item aldready in cart and returns the position of that object if exists
-        //         if(info[i].itemCode==code)
-        //         {
-        //             flag = i;
-        //             break;
-        //         }
-        //         i++; 
-        //     }   
-        //     if(flag != -1){
-        //         var item = JSON.parse(localStorage.itemsInfo);
-        //         //var info = JSON.parse(localStorage.getItem("itemsInfo"))[x];
-        //         item[flag].itemQuantity +=1;
-        //         localStorage.setItem("itemsInfo", JSON.stringify(item));
-        //         //console.log(info.itemQuantity);
-        //         console.log((JSON.parse(localStorage.getItem("itemsInfo")))[0]);
-        //     }
-        //     else if(flag == -1){
-        //         var oldItems = JSON.parse(localStorage.getItem('itemsInfo')) || [];
-        //         var newItem = {"itemCode":code,"itemName":name,"itemQuantity": 1,"itemPrice":price};
-        //         oldItems.push(newItem);
-        //         var x = JSON.parse(localStorage.getItem("itemsInfo")) ;
-        //         //console.log(x.itemQuantity);
-        //         localStorage.setItem('itemsInfo', JSON.stringify(oldItems));
-        //         console.log((JSON.parse(localStorage.getItem("itemsInfo")))[3]);
-                
-        //     }
-               
-        //         //var l = JSON.parse(localStorage.getItem("itemsInfo"))
-        //         //localStorage.setItem('itemsInfo', JSON.stringify(items));
-        //         //var j =0;
-        //         //console.log(l);
-                
-        //         renderCart();
-        // }
-        //function addToCart(id) {
-
-        //}
-        // function loadcart(){
-        //                 $.get("cart.html",
-        //                 function(data, status){
-        //                 document.getElementById("cartArea").innerHTML = data;
-                   
-        //                 });
-        // }
-    //     function addItemToCart(id){
-    //         $.post("addToCart.php",
-    //         {
-    //           itemCode: id
-    //         },
-    //         function(data, status){
-    //             //alert("Data: " + data + "\nStatus: " + status);
-    //                 loadcart();
-    //         });
-
-    // loadcart();
-    // }
-        // function renderCart() {       
-        //     var xhr= new XMLHttpRequest();
-        //     xhr.open('GET', 'cart.html', true);
-        //     xhr.onreadystatechange= function() {
-        //     if (this.readyState!==4) return;
-        //     if (this.status!==200) return; // or whatever error handling you want
-        //     document.getElementById('cartArea').innerHTML= this.responseText;
-        //     };
-        //     xhr.send();
-        // }
-
     </script>
 
 
@@ -254,7 +189,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a href="index.html" class="navbar-brand">Zaitoon</a>
+                <a href="index.html" class="navbar-brand"><img src="assets/images/common/logo_small.png"></a>
             </div>
             <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
                 <ul class="nav navbar-nav">
@@ -275,8 +210,7 @@
     <!-- Docs page layout -->
     <div class="bs-header" id="content">
         <div class="container">
-            <h1>Zaitoon</h1>
-            <p>Order Now</p>
+            <img src="assets/images/elements/designer_logo.png">
         </div>
     </div>
 
@@ -296,8 +230,8 @@
         <div class="row">
             <div class="col-md-3" ng-controller="MenuController">
                 <div class="bs-sidebar hidden-print" role="complementary">
-                    <ul class="nav bs-sidenav">
-                    <h3 style="padding-left: 20px;">Quick Menu</h3>
+                    <ul class="nav bs-sidenav quickMenu">
+                    <h3 class="quickMenuHead">Quick Menu</h3>
                     <hr></hr>
                         <li ng-repeat="item in menu">
                             <a href="#{{item.mainType}}">{{item.mainName}}</a>
@@ -310,861 +244,40 @@
                     </ul>
                 </div>
             </div>
-            <div class="col-md-6" role="main" ng-controller="MenuController">
+            <div class="col-md-6" role="main" ng-controller="MenuController" style="margin-top: 10px;">
+        
                 <div class="bs-docs-section" ng-repeat="item in menu">
                     
-                    <h2 id="{{item.mainType}}">{{ item.mainName }}</h2>
+                    <h2 id="{{item.mainType}}" class="zaitoonMenuHead">{{ item.mainName }}</h2>
+                    <hr style="border-top: 1px dashed #e74c3c; margin-top: 5px;">
+
                     <div class="table-responsive" ng-repeat="sub in item.submenu">
-                        <table class="table table-striped" id="{{ item.mainType }}-{{ sub.subType }}">
+                        <table class="table table-hover zaitoonMenuTable" id="{{ item.mainType }}-{{ sub.subType }}">
+                            <col width="60%">
+                            <col width="20%">
+                            <col width="20%">
+
                             <thead>
                                 <tr>
-                                    <th>{{ sub.subName }}</th>
+                                    <th class="zaitoonSubMenuHead">{{ sub.subName }}</th>
+                                    <th></th>
+                                    <th></th>
                                 </tr>
                             </thead>
-                            <tbody ng-repeat="i in sub.items">
-                                <tr>
-                                    <td>{{ i.itemName }}</td>
-                                    <td>
-                                    <strong>
-                                        <i class="fa fa-inr"></i>
-                                        {{ i.itemPrice }}
-                                    </strong>    
+                            <tbody>                    
+                                <tr ng-repeat="i in sub.items">
+                                    <td style="vertical-align: middle;">{{ i.itemName }}</td>
+                                    <td style="vertical-align: middle;">
+                                        <strong><i class="fa fa-inr"></i>{{ i.itemPrice }}</strong>    
                                     </td>
-                                    <td><span class="label label-default" ng-click="addToCart(i.itemCode, i.itemName, i.itemPrice, sub.subName)">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
+                                    <td style="vertical-align: middle;">
+                                        <button type="button" class="btn btn-sm zaitoonAdd" ng-click="addToCart(i.itemCode, i.itemName, i.itemPrice, sub.subName)"> <span class="fa fa-plus-circle"></span> Add </button>
+                                    </td>
+                                </tr>                                
                             </tbody>
                         </table>
                     </div>
 
-                    <!-- <h2 id="desserts">Desserts & Drinks</h2>
-                    <div class="table-responsive">
-                        <table class="table table-striped"  id="desserts-falooda">
-                            <thead>
-                                <tr>
-                                    <th>Falooda</th>
-                                    <th></th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Appam(2 Nos)</td>
-                                    <td>
-                                    <strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>    
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Search form</td>
-                                    <td>
-                                    <strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>    
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Fluid container</td>
-                                    <td>
-                                    <strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>    
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Fluid row</td>
-                                    <td>
-                                    <strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>    
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Navbar inner</td>
-                                    <td>
-                                    <strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>    
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Dropdown submenu</td>
-                                    <td>
-                                    <strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>    
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Tab alignments</td>
-                                    <td>
-                                    <strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>    
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Search form</td>
-                                    <td>
-                                    <strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>    
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Fluid container</td>
-                                    <td>
-                                    <strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>    
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Fluid row</td>
-                                    <td><strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Navbar inner</td>
-                                    <td><strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Dropdown submenu</td>
-                                    <td><strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Tab alignments</td>
-                                    <td>
-                                    <strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>    
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <table class="table table-striped"  id="desserts-juices">
-                            <thead>
-                                <tr>
-                                    <th>Juices</th>
-                                    <th></th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Appam(2 Nos)</td>
-                                    <td>
-                                    <strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>    
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Search form</td>
-                                    <td>
-                                    <strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>    
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Fluid container</td>
-                                    <td>
-                                    <strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>    
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Fluid row</td>
-                                    <td>
-                                    <strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>    
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Navbar inner</td>
-                                    <td>
-                                    <strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>    
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Dropdown submenu</td>
-                                    <td>
-                                    <strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>    
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Tab alignments</td>
-                                    <td>
-                                    <strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>    
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Search form</td>
-                                    <td>
-                                    <strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>    
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Fluid container</td>
-                                    <td>
-                                    <strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>    
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Fluid row</td>
-                                    <td><strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Navbar inner</td>
-                                    <td><strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Dropdown submenu</td>
-                                    <td><strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Tab alignments</td>
-                                    <td>
-                                    <strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>    
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                            </tbody>
-                        </table>    
-                        <table class="table table-striped" id="desserts-icecreams">
-                            <thead>
-                                <tr>
-                                    <th>Ice Creams</th>
-                                    <th></th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Appam(2 Nos)</td>
-                                    <td>
-                                    <strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>    
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Search form</td>
-                                    <td>
-                                    <strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>    
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Fluid container</td>
-                                    <td>
-                                    <strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>    
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Fluid row</td>
-                                    <td>
-                                    <strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>    
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Navbar inner</td>
-                                    <td>
-                                    <strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>    
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Dropdown submenu</td>
-                                    <td>
-                                    <strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>    
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Tab alignments</td>
-                                    <td>
-                                    <strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>    
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Search form</td>
-                                    <td>
-                                    <strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>    
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Fluid container</td>
-                                    <td>
-                                    <strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>    
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Fluid row</td>
-                                    <td><strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Navbar inner</td>
-                                    <td><strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Dropdown submenu</td>
-                                    <td><strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Tab alignments</td>
-                                    <td>
-                                    <strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>    
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div> -->
-
-                    <!-- <h2 id="maincourse">Main Course</h2>
-                    <div class="table-responsive">
-                        <table class="table table-striped"  id="maincourse-breads">
-                            <thead>
-                                <tr>
-                                    <th>Indian Breads</th>
-                                    <th></th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Appam(2 Nos)</td>
-                                    <td>
-                                    <strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>    
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Search form</td>
-                                    <td>
-                                    <strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>    
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Fluid container</td>
-                                    <td>
-                                    <strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>    
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Fluid row</td>
-                                    <td>
-                                    <strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>    
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Navbar inner</td>
-                                    <td>
-                                    <strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>    
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Dropdown submenu</td>
-                                    <td>
-                                    <strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>    
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Tab alignments</td>
-                                    <td>
-                                    <strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>    
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Search form</td>
-                                    <td>
-                                    <strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>    
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Fluid container</td>
-                                    <td>
-                                    <strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>    
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Fluid row</td>
-                                    <td><strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Navbar inner</td>
-                                    <td><strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Dropdown submenu</td>
-                                    <td><strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Tab alignments</td>
-                                    <td>
-                                    <strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>    
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <table class="table table-striped"  id="maincourse-rice">
-                            <thead>
-                                <tr>
-                                    <th>Rice and Noodles</th>
-                                    <th></th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Appam(2 Nos)</td>
-                                    <td>
-                                    <strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>    
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Search form</td>
-                                    <td>
-                                    <strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>    
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Fluid container</td>
-                                    <td>
-                                    <strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>    
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Fluid row</td>
-                                    <td>
-                                    <strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>    
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Navbar inner</td>
-                                    <td>
-                                    <strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>    
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Dropdown submenu</td>
-                                    <td>
-                                    <strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>    
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Tab alignments</td>
-                                    <td>
-                                    <strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>    
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Search form</td>
-                                    <td>
-                                    <strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>    
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Fluid container</td>
-                                    <td>
-                                    <strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>    
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Fluid row</td>
-                                    <td><strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Navbar inner</td>
-                                    <td><strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Dropdown submenu</td>
-                                    <td><strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Tab alignments</td>
-                                    <td>
-                                    <strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>    
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                            </tbody>
-                        </table>    
-                        <table class="table table-striped" id="maincourse-biriyani">
-                            <thead>
-                                <tr>
-                                    <th>Biriryani and Pulao</th>
-                                    <th></th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Appam(2 Nos)</td>
-                                    <td>
-                                    <strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>    
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Search form</td>
-                                    <td>
-                                    <strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>    
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Fluid container</td>
-                                    <td>
-                                    <strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>    
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Fluid row</td>
-                                    <td>
-                                    <strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>    
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Navbar inner</td>
-                                    <td>
-                                    <strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>    
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Dropdown submenu</td>
-                                    <td>
-                                    <strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>    
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Tab alignments</td>
-                                    <td>
-                                    <strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>    
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Search form</td>
-                                    <td>
-                                    <strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>    
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Fluid container</td>
-                                    <td>
-                                    <strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>    
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Fluid row</td>
-                                    <td><strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Navbar inner</td>
-                                    <td><strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Dropdown submenu</td>
-                                    <td><strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Tab alignments</td>
-                                    <td>
-                                    <strong>
-                                        <i class="fa fa-inr"></i>
-                                        35
-                                    </strong>    
-                                    </td>
-                                    <td><span class="label label-default">Add <i class="fa fa-plus-circle" aria-hidden="true"></i></span></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div> -->
 
                 </div>
 
@@ -1172,65 +285,18 @@
 
 
 
-            <div class="col-md-3" ng-controller="CartController">
-                
+            <div class="col-md-3" ng-controller="CartController">                        
                 <div class="bs-sidebar hidden-print" role="complementary">
-                    <ul class="nav bs-sidenav">
+                    <ul class="nav bs-sidenav myCartMain">
                     <h3 style="padding-left: 20px;">Cart</h3>
-                    <hr></hr>
-
-<div id="cartArea">                       
-<!--                         <table class="table table-condensed" style="margin-bottom: 0px; margin-top: -16px;">
-        <tbody></tbody>
-        <colgroup>
-            <col width="2%">
-            <col width="55%">
-            <col width="23%">
-            <col width="20%">
-        </colgroup>
-        <tbody>
-                 
-            <tr>
-                <td class="cart_delete_new">
-                    <div onclick="deleteFromCart(1001)"><i class="fa fa-times-circle"></i></div>
-                </td>
-                <td class="cart_description">
-                    <p style="font-size: 14px; color: #2980b9">Paneer Butter Masala</p>
-                    <p style="font-size: 9px; color: grey; margin-top: -10px;">Veg Curry</p>
-                </td> 
-                <td class="cart_quantity">
-                    <div class="cart_quantity_button_new">
-                    <i class="fa fa-minus-circle" aria-hidden="true" onclick="minusFunction(1001)"></i><span id="item_count_12"> 2 </span><i class="fa fa-plus-circle" aria-hidden="true" onclick="addFunction(1001)"></i>
-                    </div>
-                </td>
-                <td class="cart_price">
-                    <p><i class="fa fa-inr"></i> <span id="item_price_12">84</span></p>
-                </td>
-            </tr> 
-        </tbody>
-    </table>
-
-
-    <table class="table table-condensed" style="margin-bottom: -20px;">
-        <tbody>
-            <tr>
-                <td><grey>Cart Sub Total</grey></td>
-                <td><grey><i class="fa fa-inr"></i> 304</grey></td>
-            </tr>
-            <tr class="shipping-cost">
-                <td><grey>Container Charges (7%)</grey></td>
-                <td><grey><i class="fa fa-inr"></i>22</grey></td>                                        
-            </tr>
-            <tr>
-                <td><red>Grand Total</red></td>
-                <td><strong><red><span><i class="fa fa-inr"></i> 326</span></red></strong></td>
-            </tr>
-        </tbody>
-    </table> -->
-</div> <!-- Closing cart area -->
-
+                    <hr></hr>                        
+                        <div id="cartArea" class="mycartArea">                             
+                        </div>  <!-- Closing cart area --> 
                     </ul>
+                    <div id="fullCartArea">                        
+                    </div>
                 </div>
+                
             </div>
         </div> 
 
