@@ -40,7 +40,55 @@
 	color: #2c3e50;
 }
 
-
 .zaitoonMenuTable > thead > tr > th{
     border:none;
+}
+
+
+/*Cart in Menu Page*/
+.crossIcon .fa{
+	color: #bdc3c7;
+}
+
+.crossIcon .fa:hover{
+	color: #c0392b;
+}
+
+.cartButtons .zaitoonCartMenuMinus{
+	color: #7E7E7E;
+}
+
+.cartButtons .zaitoonCartMenuMinus:hover{
+	color: #e74c3c;
+}
+
+.cartButtons .zaitoonCartMenuPlus{
+	color: #7E7E7E;
+}
+
+.cartButtons .zaitoonCartMenuPlus:hover{
+	color: #16a085;
+}
+
+.mycartArea{
+	padding: 5px;
+}
+
+.myCartMain{
+	background: #FAFAF2;
+	text-shadow: none;
+}
+
+.quickMenuHead{
+	padding-left: 20px; 
+	color: #2c3e50;
+}
+
+.greyLabel{
+	background: #ecf0f1;
+	color: #7f8c8d;
+}
+
+.greyLabel:hover{
+	color: yellow;
 }
