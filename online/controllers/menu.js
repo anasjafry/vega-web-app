@@ -78,7 +78,8 @@ angular.module('FullMenu', [])
   })
 
     .controller('CartController', function($scope) {
-       $scope.title = "My Cart";
+       $scope.cartNotEmpty = true;
+       $scope.cartCount = 10;
 	})
 
     .controller('DetailsController', ['$scope','$http', function($scope, $http) {
