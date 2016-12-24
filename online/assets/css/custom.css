@@ -1,0 +1,46 @@
+/*For Index Page*/
+
+.zaitoonAdd { 
+	border: none; 
+	border-radius: 0px; 
+	background: #7f8c8d;
+	color: white;
+}
+
+.zaitoonAdd:hover
+{
+	background-color:#c0392b !important;
+	color: white;
+}
+
+.zaitoonAdd:active
+{
+	outline: #00FF00 dotted thick;
+	background-color:#c0392b !important;
+	color: white;
+}
+
+.zaitoonAdd:focus
+{
+	border: none;
+	outline: none;
+	box-shadow: none;
+	color: white;
+}
+
+
+/*Titles in Menu Page*/
+
+.zaitoonMenuHead{
+	color: #e74c3c;
+}
+
+.zaitoonSubMenuHead{
+	font-size: 18px;
+	color: #2c3e50;
+}
+
+
+.zaitoonMenuTable > thead > tr > th{
+    border:none;
+}
