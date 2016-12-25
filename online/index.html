@@ -247,14 +247,16 @@
                     </ul> 
                     <!-- Search in Menu -->
                      <div ng-controller="SearchMenuCtrl" style="margin-top: 30px;">
-                        <input ng-if='!resultFound' class='typeahead' placeholder="Search an Item" type="text" sf-typeahead options="exampleOptions" datasets="numbersDataset" ng-model="selectedNumber">
+
+                        <input ng-if='1' class='typeahead' placeholder="Search an Item" type="text" sf-typeahead options="exampleOptions" datasets="numbersDataset" ng-model="selectedNumber">
+
                         <div ng-if='resultFound' style="margin-top: 20px;">
                             <div class="alert alert-default alert-dismissible" role="alert" style="border-radius: 0px; border: 1px dashed #e74c3c;">
                               <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true" ng-click="revertSearch()">&times;</span></button>
-                              <p style="color: #e74c3c; font-size: 16px; font-weight: bold;"><i class="fa fa-inr"></i>140</p>
-                              <p style="color: #2980b9; font-size: 18px;">Aloo Porotta</p>
-                              <p style="color: #bdc3c7; font-size: 11px; margin-top: -3px;">Indian Breads</p><br>                              
-                              <button class="btn btn-success btn-sm zaitoonAdd">Add to Cart</button>
+                              <p style="color: #e74c3c; font-size: 16px; font-weight: bold;"><i class="fa fa-inr"></i>{{result_price}}</p>
+                              <p style="color: #2980b9; font-size: 18px;">{{result_name}}</p>
+                              <p style="color: #bdc3c7; font-size: 11px; margin-top: -3px;">{{result_variety}}</p><br>                              
+                              <button class="btn btn-success btn-sm zaitoonAdd" ng-click="addToCart(result_code, result_name, result_price, result_variety)">Add to Cart</button>
                             </div>                            
                         </div>
                     </div>   

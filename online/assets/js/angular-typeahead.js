@@ -84,6 +84,7 @@ angular.module('siyfion.sfTypeahead', [])
           $typeahead(element, 'val', fromModel);
         }
         return fromModel;
+
       });
 
       function watchDatasets() {
@@ -146,11 +147,6 @@ angular.module('siyfion.sfTypeahead', [])
         scope.$apply(function () {
           ngModel.$setViewValue(suggestion);
           scope.msg = suggestion;
-          
-          if(localStorage.getItem("searchItem") === null){
-            localStorage.setItem("searchItem") = scope.msg.id;
-          }
-          console.log(localStorage.getItem("searchItem"));
         });
       }
 
