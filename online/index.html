@@ -185,7 +185,7 @@
 
 
 </head> 
-<body onload="renderCart()" ng-app="FullMenu">
+<body onload="renderCart()" ng-app="FullMenu" data-spy="scroll" data-target=".bs-sidebar">
     <a class="sr-only" href="#content">Skip navigation</a>
 
     <!-- Docs master nav -->
@@ -239,11 +239,11 @@
 
             <div class="col-md-3" ng-controller="MenuController">  
 
-                <div class="bs-sidebar affix-top">
+                <div class="bs-sidebar hidden-print affix-top" role="complementary">
                     <ul class="nav bs-sidenav">
                     <h3 class="quickMenuHead">Quick Menu</h3>
                     <hr></hr>                          
-                        <li ng-repeat="item in menu" class="">
+                        <li ng-repeat="item in menu">
                             <a href="#{{item.mainType}}">{{item.mainName}}</a>
                             <ul class="nav">
                                 <li ng-repeat="sub in item.submenu" class="">
@@ -305,7 +305,7 @@
 
 
             <div class="col-md-3" ng-controller="CartController">                        
-                <div class="bs-sidebar">
+                <div class="bs-sidebar" role="complementary">
                     <ul class="nav bs-sidenav myCartMain">
                     <h3 style="padding-left: 20px;">Your Cart</h3>
                     <hr style="margin-bottom: 0px">                      
