@@ -162,7 +162,7 @@
   margin: 12px 0;
   padding: 8px 0;
   background-color: #fff;
-  /*max-height:200px;*/
+  max-height:150px;
   overflow-y:auto;
   border:1px solid #e74c3c;
   color: #e74c3c;

@@ -430,6 +430,7 @@ body {
 .bs-sidebar .nav > li > a:hover,
 .bs-sidebar .nav > li > a:focus {
   text-decoration: none;
+  color: #e74c3c;
   background-color: #e5e3e9;
   border-right: 1px solid #dbd8e0;
 }
@@ -437,9 +438,9 @@ body {
 .bs-sidebar .nav > .active:hover > a,
 .bs-sidebar .nav > .active:focus > a {
   font-weight: bold;
-  color: #563d7c;
+  color: #e74c3c;
   background-color: transparent;
-  border-right: 1px solid #563d7c;
+  border-left: 2px solid #e74c3c;
 }
 
 /* Nav: second level (shown on .active) */
