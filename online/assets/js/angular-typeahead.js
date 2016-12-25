@@ -104,6 +104,8 @@ angular.module('siyfion.sfTypeahead', [])
       }
 
       function initialize() {
+
+        console.log('initialized function');
         if (scope.datasets == null) {
           throw new Error('The datasets parameter is mandatory!');
         }
@@ -136,9 +138,15 @@ angular.module('siyfion.sfTypeahead', [])
         return scope.allowCustom === undefined || !!scope.allowCustom;
       }
 
+      function getStatus(){
+        return true;
+      }
+
       function updateScope (suggestion) {
         scope.$apply(function () {
           ngModel.$setViewValue(suggestion);
+          scope.msg = suggestion;
+          console.log(scope.msg.id);
         });
       }
 
@@ -150,12 +158,14 @@ angular.module('siyfion.sfTypeahead', [])
 
       // Update the value binding when a value is manually selected from the dropdown.
       element.bind('typeahead:select', function(evt, suggestion, dataset) {
+        console.log('Yes');
         updateScope(suggestion);
-        scope.$emit('typeahead:select', suggestion, dataset);
+        //scope.$emit('typeahead:select', suggestion, dataset);
       });
 
       // Update the value binding when a query is autocompleted.
       element.bind('typeahead:autocomplete', function(evt, suggestion, dataset) {
+        console.log('Yes Woaah');
         updateScope(suggestion);
         scope.$emit('typeahead:autocomplete', suggestion, dataset);
       });

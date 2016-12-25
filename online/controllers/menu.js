@@ -3,9 +3,13 @@ angular.module('FullMenu', ['siyfion.sfTypeahead'])
   //var urlroot="http://localhost/zaitoononline/";
 
 
+
+
   //Search Menu
   .controller('SearchMenuCtrl', function($scope) {
   
+  
+
   $scope.selectedNumber = null;
   
   // instantiate the bloodhound suggestion engine
@@ -13,21 +17,15 @@ angular.module('FullMenu', ['siyfion.sfTypeahead'])
     datumTokenizer: function(d) { return Bloodhound.tokenizers.whitespace(d.num); },
     queryTokenizer: Bloodhound.tokenizers.whitespace,
     local: [
-      { num: 'Alooo Porata Mixed Curry and Rice Combo' },
-      { num: 'Aloo Bonda Veg Mix' },
-      { num: 'Alternate Curry' },
-      { num: 'Aam Lessi' },
-      { num: 'five' },
-      { num: 'six' },
-      { num: 'seven' },
-      { num: 'eight' },
-      { num: 'nine' },
-      { num: 'ten' }
+      { num: 'Alooo Porata Mixed Curry and Rice Combo', id:1001 },
+      { num: 'Aloo Bonda Veg Mix', id:1002 },
+      { num: 'Alternate Curry', id:1003 },
+      { num: 'Aam Lessi', id: 1004 }
     ]
   });
    
   // initialize the bloodhound suggestion engine
-  numbers.initialize();
+  numbers.initialize('hello');
 
   $scope.numbersDataset = {
     displayKey: 'num',
@@ -35,17 +33,28 @@ angular.module('FullMenu', ['siyfion.sfTypeahead'])
     templates: {
       empty: [
         '<div class="tt-error">',
-        '<tag style="color: #e74c3c">No results found.</tag>',
+        '<tag style="color: #e74c3c;">No results found.</tag>',
         '</div>'
       ].join('\n'),
     }
   };  
   
+  //$scope.test();
+
   // Typeahead options object
   $scope.exampleOptions = {
     displayKey: 'title'
   };
-  
+
+  $scope.finds = '0 results';
+  $scope.resultFound = true;//getStatus();
+  console.log('Calling get status from Menu:');
+
+  $scope.revertSearch = function(){
+    $scope.resultFound = !($scope.resultFound);
+  }
+
+
 })
 
 

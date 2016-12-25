@@ -173,9 +173,11 @@
     <script src="assets/js/jquery.js"></script>
     <script type="text/javascript" charset="utf-8" src="assets/js/angular.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="assets/js/typeahead.bundle.js"></script>
-    <script data-require="bloodhound.js@*" data-semver="0.10.0" src="http://twitter.github.com/typeahead.js/releases/latest/bloodhound.js"></script>
+    <script type="text/javascript" charset="utf-8" src="assets/js/bloodhound.js"></script>
     <script type="text/javascript" charset="utf-8" src="assets/js/angular-typeahead.js"></script>
     <script src="controllers/menu.js"></script>
+
+
 
 </head> 
 <body onload="renderCart()" ng-app="FullMenu" >
@@ -188,9 +190,7 @@
             <div class="navbar-header" >
                 <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
                     <span class="sr-only">Toggle Navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
+                    <i class="fa fa-bars"></i>
                 </button>
                 <a href="index.html" class="navbar-brand"><img src="assets/images/common/logo_small.png"></a>
             </div>
@@ -245,10 +245,18 @@
                             </ul>
                         </li> 
                     </ul> 
-                    <hr>
                     <!-- Search in Menu -->
-                     <div ng-controller="SearchMenuCtrl" style="width: 100%">
-                        <input class='typeahead' placeholder="Search an Item" type="text" sf-typeahead options="exampleOptions" datasets="numbersDataset" ng-model="selectedNumber">
+                     <div ng-controller="SearchMenuCtrl" style="margin-top: 30px;">
+                        <input ng-if='!resultFound' class='typeahead' placeholder="Search an Item" type="text" sf-typeahead options="exampleOptions" datasets="numbersDataset" ng-model="selectedNumber">
+                        <div ng-if='resultFound' style="margin-top: 20px;">
+                            <div class="alert alert-default alert-dismissible" role="alert" style="border-radius: 0px; border: 1px dashed #e74c3c;">
+                              <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true" ng-click="revertSearch()">&times;</span></button>
+                              <p style="color: #e74c3c; font-size: 16px; font-weight: bold;"><i class="fa fa-inr"></i>140</p>
+                              <p style="color: #2980b9; font-size: 18px;">Aloo Porotta</p>
+                              <p style="color: #bdc3c7; font-size: 11px; margin-top: -3px;">Indian Breads</p><br>                              
+                              <button class="btn btn-success btn-sm zaitoonAdd">Add to Cart</button>
+                            </div>                            
+                        </div>
                     </div>   
 
                 </div>
@@ -325,10 +333,6 @@
     <script src="assets/js/holder.js"></script>
 
     <script src="assets/js/application.js"></script>
-
-
-
-
 
     <div id="_box_layer_"></div>
     <div id="_action_layer_"></div>
