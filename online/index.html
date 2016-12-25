@@ -41,7 +41,6 @@
         
         var info = JSON.parse(localStorage.getItem("itemsInfo"));
         var sub_total = 0;
-        console.log(info);
         var i = 0;
 
         while(i<info.length)   {
@@ -171,8 +170,14 @@
     <link href="dist/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
     <!-- Angular -->
+    <script src="assets/js/jquery.js"></script>
     <script type="text/javascript" charset="utf-8" src="assets/js/angular.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="assets/js/typeahead.bundle.js"></script>
+    <script type="text/javascript" charset="utf-8" src="assets/js/bloodhound.js"></script>
+    <script type="text/javascript" charset="utf-8" src="assets/js/angular-typeahead.js"></script>
     <script src="controllers/menu.js"></script>
+
+
 
 </head> 
 <body onload="renderCart()" ng-app="FullMenu" >
@@ -181,13 +186,11 @@
     <!-- Docs master nav -->
 
     <header class="navbar navbar-fixed-top bs-docs-nav" role="banner">
-        <div class="container" ng-controller="SideMenuController">
+        <div class="container">
             <div class="navbar-header" >
                 <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
                     <span class="sr-only">Toggle Navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
+                    <i class="fa fa-bars"></i>
                 </button>
                 <a href="index.html" class="navbar-brand"><img src="assets/images/common/logo_small.png"></a>
             </div>
@@ -228,11 +231,11 @@
     
     <div class="container bs-docs-container">
         <div class="row">
-            <div class="col-md-3" ng-controller="MenuController">
+            <div class="col-md-3" ng-controller="MenuController">               
                 <div class="bs-sidebar hidden-print" role="complementary">
                     <ul class="nav bs-sidenav quickMenu">
                     <h3 class="quickMenuHead">Quick Menu</h3>
-                    <hr></hr>
+                    <hr></hr>                                
                         <li ng-repeat="item in menu">
                             <a href="#{{item.mainType}}">{{item.mainName}}</a>
                             <ul class="nav" ng-repeat="sub in item.submenu">
@@ -241,11 +244,20 @@
                                 </li>
                             </ul>
                         </li> 
-                    </ul>
+                    </ul> 
+                    <!-- Search in Menu -->
+                    <p style="margin-top: 30px; font-size: 12px; color: #e74c3c">Just type in your taste and add it to the cart with a single click.</p>
+                    <hr style="padding: 0px; margin: 0px; margin-top: -3px; border-bottom: 1px dashed #e74c3c;">
+                     <div ng-controller="SearchMenuCtrl" style="margin-top: 20px;">
+
+                        <input class='typeahead' placeholder="Search and Quick Add" type="text" sf-typeahead options="exampleOptions" datasets="numbersDataset" ng-model="selectedNumber">
+                        <p style="color: #64B171; margin-top: 5px; font-size: 12px;">{{searchMsg}}</p>                        
+                    </div>   
+
                 </div>
             </div>
             <div class="col-md-6" role="main" ng-controller="MenuController" style="margin-top: 10px;">
-        
+       
                 <div class="bs-docs-section" ng-repeat="item in menu">
                     
                     <h2 id="{{item.mainType}}" class="zaitoonMenuHead">{{ item.mainName }}</h2>
@@ -310,17 +322,12 @@
     <!-- Bootstrap core JavaScript
 ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="assets/js/jquery.js"></script>
     <script src="assets/js/bootstrap.js"></script>
 
     <script src="http://platform.twitter.com/widgets.js"></script>
     <script src="assets/js/holder.js"></script>
 
     <script src="assets/js/application.js"></script>
-
-
-
-
 
     <div id="_box_layer_"></div>
     <div id="_action_layer_"></div>
