@@ -64,13 +64,6 @@ angular.module('FullMenu', ['siyfion.sfTypeahead'])
     displayKey: 'title'
   };
 
-  $scope.resultFound = false;
-
-  $scope.revertSearch = function(){
-    $scope.resultFound = !($scope.resultFound);
-  }
-
-
   //Replica of Add to Cart Function
   $scope.addToCart = function(code, name, price, variety){
 
@@ -117,17 +110,14 @@ angular.module('FullMenu', ['siyfion.sfTypeahead'])
                 renderCart();
     }  
 
+
   //User selects from the suggestions and this fires...
   $scope.$on('typeahead:select', function(evt, suggestion) {
-
     console.log('Found : '+suggestion.name);
+    $scope.addToCart(suggestion.id, suggestion.name, suggestion.price, suggestion.variety);
 
-    $scope.resultFound = true;
-
-    $scope.result_name = suggestion.name;
-    $scope.result_price = suggestion.price;
-    $scope.result_variety = suggestion.variety;
-    $scope.result_code = suggestion.id;
+    $scope.searchMsg = 'Recently added '+suggestion.name;
+    $scope.selectedNumber = null;
   })
 
 })

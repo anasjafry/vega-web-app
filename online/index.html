@@ -246,19 +246,12 @@
                         </li> 
                     </ul> 
                     <!-- Search in Menu -->
-                     <div ng-controller="SearchMenuCtrl" style="margin-top: 30px;">
+                    <p style="margin-top: 30px; font-size: 12px; color: #e74c3c">Just type in your taste and add it to the cart with a single click.</p>
+                    <hr style="padding: 0px; margin: 0px; margin-top: -3px; border-bottom: 1px dashed #e74c3c;">
+                     <div ng-controller="SearchMenuCtrl" style="margin-top: 20px;">
 
-                        <input ng-if='1' class='typeahead' placeholder="Search an Item" type="text" sf-typeahead options="exampleOptions" datasets="numbersDataset" ng-model="selectedNumber">
-
-                        <div ng-if='resultFound' style="margin-top: 20px;">
-                            <div class="alert alert-default alert-dismissible" role="alert" style="border-radius: 0px; border: 1px dashed #e74c3c;">
-                              <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true" ng-click="revertSearch()">&times;</span></button>
-                              <p style="color: #e74c3c; font-size: 16px; font-weight: bold;"><i class="fa fa-inr"></i>{{result_price}}</p>
-                              <p style="color: #2980b9; font-size: 18px;">{{result_name}}</p>
-                              <p style="color: #bdc3c7; font-size: 11px; margin-top: -3px;">{{result_variety}}</p><br>                              
-                              <button class="btn btn-success btn-sm zaitoonAdd" ng-click="addToCart(result_code, result_name, result_price, result_variety)">Add to Cart</button>
-                            </div>                            
-                        </div>
+                        <input class='typeahead' placeholder="Search and Quick Add" type="text" sf-typeahead options="exampleOptions" datasets="numbersDataset" ng-model="selectedNumber">
+                        <p style="color: #64B171; margin-top: 5px; font-size: 12px;">{{searchMsg}}</p>                        
                     </div>   
 
                 </div>
