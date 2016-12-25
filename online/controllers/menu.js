@@ -1,15 +1,54 @@
-angular.module('FullMenu', [])
+angular.module('FullMenu', ['siyfion.sfTypeahead'])
   
   //var urlroot="http://localhost/zaitoononline/";
 
 
-    .controller('SideMenuController', function($scope, $http) {
-		$http.get("http://localhost:3001/test").then(function(response) {
-        $scope.title = response.data.name;
-       	console.log($scope.title);
-    });    	
-      	
-	})
+  //Search Menu
+  .controller('SearchMenuCtrl', function($scope) {
+  
+  $scope.selectedNumber = null;
+  
+  // instantiate the bloodhound suggestion engine
+  var numbers = new Bloodhound({
+    datumTokenizer: function(d) { return Bloodhound.tokenizers.whitespace(d.num); },
+    queryTokenizer: Bloodhound.tokenizers.whitespace,
+    local: [
+      { num: 'Alooo Porata Mixed Curry and Rice Combo' },
+      { num: 'Aloo Bonda Veg Mix' },
+      { num: 'Alternate Curry' },
+      { num: 'Aam Lessi' },
+      { num: 'five' },
+      { num: 'six' },
+      { num: 'seven' },
+      { num: 'eight' },
+      { num: 'nine' },
+      { num: 'ten' }
+    ]
+  });
+   
+  // initialize the bloodhound suggestion engine
+  numbers.initialize();
+
+  $scope.numbersDataset = {
+    displayKey: 'num',
+    source: numbers.ttAdapter(),
+    templates: {
+      empty: [
+        '<div class="tt-error">',
+        '<tag style="color: #e74c3c">No results found.</tag>',
+        '</div>'
+      ].join('\n'),
+    }
+  };  
+  
+  // Typeahead options object
+  $scope.exampleOptions = {
+    displayKey: 'title'
+  };
+  
+})
+
+
 
     .controller('MenuTypeController', function($scope, $http) {
 
@@ -23,8 +62,6 @@ angular.module('FullMenu', [])
 
     $http.get("http://localhost/vega-web-app/online/getmenu.php").then(function(response) {
         $scope.menu = response.data;
-        console.log(response.data);
-
     }); 
 
     $scope.addToCart = function(code, name, price, variety){

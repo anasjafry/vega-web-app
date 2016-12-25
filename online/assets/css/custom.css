@@ -111,3 +111,84 @@
 {
 	background-color: rgba(37,36,36, 0.5);
 }
+
+
+
+
+/*Search in Menu page*/
+
+.tt-dropdown-menu,
+.gist {
+  text-align: left;
+}
+
+.ng-invalid {
+  border-color: red !important; /* just for visual */
+}
+
+.typeahead,
+.tt-query,
+.tt-hint {
+  width: 100%;
+  height: 30px;
+  font-size: 16px;
+  outline: none;
+}
+
+.typeahead {
+  background-color: #fff;
+  border:none;
+  border-radius: 0px;
+  border-bottom: 1px solid #95a5a6;
+}
+
+.typeahead:focus {
+  border-radius: 0px;
+  border-bottom: 2px solid #27ae60;
+}
+
+.tt-query {
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+     -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+          box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+}
+
+.tt-hint {
+  color: #999
+}
+
+.tt-menu {
+  width: 100%;
+  margin: 12px 0;
+  padding: 8px 0;
+  background-color: #fff;
+  border: 1px solid #ccc;
+}
+
+.tt-suggestion {
+  padding: 3px 20px;
+  font-size: 18px;
+  border-bottom: 1px dashed #ccc;
+  line-height: 24px;
+}
+
+.tt-suggestion:hover {
+  cursor: pointer;
+  color: #fff;
+  background-color: #e74c3c;
+}
+
+.tt-suggestion.tt-cursor {
+  color: #fff;
+  background-color: #0097cf;
+
+}
+
+.tt-suggestion p {
+  margin: 0;
+}
+
+.tt-error {
+	border: none;
+	text-align: center;
+}

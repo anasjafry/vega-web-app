@@ -41,7 +41,6 @@
         
         var info = JSON.parse(localStorage.getItem("itemsInfo"));
         var sub_total = 0;
-        console.log(info);
         var i = 0;
 
         while(i<info.length)   {
@@ -171,7 +170,11 @@
     <link href="dist/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
     <!-- Angular -->
+    <script src="assets/js/jquery.js"></script>
     <script type="text/javascript" charset="utf-8" src="assets/js/angular.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="assets/js/typeahead.bundle.js"></script>
+    <script data-require="bloodhound.js@*" data-semver="0.10.0" src="http://twitter.github.com/typeahead.js/releases/latest/bloodhound.js"></script>
+    <script type="text/javascript" charset="utf-8" src="assets/js/angular-typeahead.js"></script>
     <script src="controllers/menu.js"></script>
 
 </head> 
@@ -181,7 +184,7 @@
     <!-- Docs master nav -->
 
     <header class="navbar navbar-fixed-top bs-docs-nav" role="banner">
-        <div class="container" ng-controller="SideMenuController">
+        <div class="container">
             <div class="navbar-header" >
                 <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
                     <span class="sr-only">Toggle Navigation</span>
@@ -228,11 +231,11 @@
     
     <div class="container bs-docs-container">
         <div class="row">
-            <div class="col-md-3" ng-controller="MenuController">
+            <div class="col-md-3" ng-controller="MenuController">               
                 <div class="bs-sidebar hidden-print" role="complementary">
                     <ul class="nav bs-sidenav quickMenu">
                     <h3 class="quickMenuHead">Quick Menu</h3>
-                    <hr></hr>
+                    <hr></hr>                                
                         <li ng-repeat="item in menu">
                             <a href="#{{item.mainType}}">{{item.mainName}}</a>
                             <ul class="nav" ng-repeat="sub in item.submenu">
@@ -241,11 +244,17 @@
                                 </li>
                             </ul>
                         </li> 
-                    </ul>
+                    </ul> 
+                    <hr>
+                    <!-- Search in Menu -->
+                     <div ng-controller="SearchMenuCtrl" style="width: 100%">
+                        <input class='typeahead' placeholder="Search an Item" type="text" sf-typeahead options="exampleOptions" datasets="numbersDataset" ng-model="selectedNumber">
+                    </div>   
+
                 </div>
             </div>
             <div class="col-md-6" role="main" ng-controller="MenuController" style="margin-top: 10px;">
-        
+       
                 <div class="bs-docs-section" ng-repeat="item in menu">
                     
                     <h2 id="{{item.mainType}}" class="zaitoonMenuHead">{{ item.mainName }}</h2>
@@ -310,7 +319,6 @@
     <!-- Bootstrap core JavaScript
 ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="assets/js/jquery.js"></script>
     <script src="assets/js/bootstrap.js"></script>
 
     <script src="http://platform.twitter.com/widgets.js"></script>
