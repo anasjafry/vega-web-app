@@ -11,10 +11,16 @@
 
     var navHeight = $('.navbar').outerHeight(true) + 10
 
-    $body.scrollspy({
-      target: '.bs-sidebar',
-      offset: navHeight
+    // $body.scrollspy({
+    //   target: '.bs-sidebar',
+    //   offset: navHeight
+    // })
+
+    setTimeout(function () {
+    $('[data-spy="scroll"]').each(function () {
+        $(this).scrollspy('refresh');
     })
+    }, 3000)
 
     $window.on('load', function () {
       $body.scrollspy('refresh')

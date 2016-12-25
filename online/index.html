@@ -24,11 +24,11 @@
 	<![endif]-->
 
     <!-- Favicons -->
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/rb/layouts/bs-docs/ico/apple-touch-icon-144-precomposed.png">
+<!--     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/rb/layouts/bs-docs/ico/apple-touch-icon-144-precomposed.png">
     <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/rb/layouts/bs-docs/ico/apple-touch-icon-114-precomposed.png">
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/rb/layouts/bs-docs/ico/apple-touch-icon-72-precomposed.png">
     <link rel="apple-touch-icon-precomposed" href="/rb/layouts/bs-docs/ico/apple-touch-icon-57-precomposed.png">
-    <link rel="shortcut icon" href="/rb/layouts/bs-docs/ico/favicon.png">
+    <link rel="shortcut icon" href="/rb/layouts/bs-docs/ico/favicon.png"> -->
 
     <script>
 
@@ -149,7 +149,7 @@
 
 
    <!--  <link type="text/css" rel="stylesheet" charset="utf-8" href="/rb/layouts/bs-docs/_main.css?nFlag=201611" /> -->
-    <script type="text/javascript">
+<!--     <script type="text/javascript">
         //<![CDATA[
         var mbrclick = false;
         var rooturl = 'http://redblock.co.kr/rb';
@@ -162,8 +162,8 @@
         var neednum = '숫자만 입력해 주세요.';
         var myagent = navigator.appName.indexOf('Explorer') != -1 ? 'ie' : 'ns';
         //]]>
-    </script>
-    <script type="text/javascript" charset="utf-8" src="assets/js/sys.js?nFlag=201611"></script>
+    </script> -->
+    <!-- <script type="text/javascript" charset="utf-8" src="assets/js/sys.js?nFlag=201611"></script> -->
 <!--     <script type="text/javascript" charset="utf-8" src="/rb/layouts/bs-docs/_main.js?nFlag=201611"></script>
     <link type="text/css" rel="stylesheet" charset="utf-8" href="/rb/pages/_main.css?nFlag=201611" />
     <script type="text/javascript" charset="utf-8" src="/rb/pages/_main.js?nFlag=201611"></script> -->
@@ -178,9 +178,14 @@
     <script src="controllers/menu.js"></script>
 
 
+    
+
+
+
+
 
 </head> 
-<body onload="renderCart()" ng-app="FullMenu" >
+<body onload="renderCart()" ng-app="FullMenu" data-spy="scroll" data-target=".bs-sidebar">
     <a class="sr-only" href="#content">Skip navigation</a>
 
     <!-- Docs master nav -->
@@ -231,15 +236,17 @@
     
     <div class="container bs-docs-container">
         <div class="row">
-            <div class="col-md-3" ng-controller="MenuController">               
-                <div class="bs-sidebar hidden-print" role="complementary">
-                    <ul class="nav bs-sidenav quickMenu">
+
+            <div class="col-md-3" ng-controller="MenuController">  
+
+                <div class="bs-sidebar hidden-print affix-top" role="complementary">
+                    <ul class="nav bs-sidenav">
                     <h3 class="quickMenuHead">Quick Menu</h3>
-                    <hr></hr>                                
+                    <hr></hr>                          
                         <li ng-repeat="item in menu">
                             <a href="#{{item.mainType}}">{{item.mainName}}</a>
-                            <ul class="nav" ng-repeat="sub in item.submenu">
-                                <li>
+                            <ul class="nav">
+                                <li ng-repeat="sub in item.submenu" class="">
                                     <a href="#{{item.mainType}}-{{sub.subType}}">{{sub.subName}}</a>
                                 </li>
                             </ul>
@@ -248,7 +255,7 @@
                     <!-- Search in Menu -->
                     <p style="margin-top: 30px; font-size: 12px; color: #e74c3c">Just type in your taste and add it to the cart with a single click.</p>
                     <hr style="padding: 0px; margin: 0px; margin-top: -3px; border-bottom: 1px dashed #e74c3c;">
-                     <div ng-controller="SearchMenuCtrl" style="margin-top: 20px;">
+                    <div ng-controller="SearchMenuCtrl" style="margin-top: 20px;">
 
                         <input class='typeahead' placeholder="Search and Quick Add" type="text" sf-typeahead options="exampleOptions" datasets="numbersDataset" ng-model="selectedNumber">
                         <p style="color: #64B171; margin-top: 5px; font-size: 12px;">{{searchMsg}}</p>                        
@@ -264,7 +271,7 @@
                     <hr style="border-top: 1px dashed #e74c3c; margin-top: 5px;">
 
                     <div class="table-responsive" ng-repeat="sub in item.submenu">
-                        <table class="table table-hover zaitoonMenuTable" id="{{ item.mainType }}-{{ sub.subType }}">
+                        <table class="table table-hover zaitoonMenuTable" id="{{item.mainType}}-{{sub.subType}}">
                             <col width="60%">
                             <col width="20%">
                             <col width="20%">
@@ -298,7 +305,7 @@
 
 
             <div class="col-md-3" ng-controller="CartController">                        
-                <div class="bs-sidebar hidden-print" role="complementary">
+                <div class="bs-sidebar" role="complementary">
                     <ul class="nav bs-sidenav myCartMain">
                     <h3 style="padding-left: 20px;">Your Cart</h3>
                     <hr style="margin-bottom: 0px">                      
@@ -322,6 +329,7 @@
     <!-- Bootstrap core JavaScript
 ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
+ 
     <script src="assets/js/bootstrap.js"></script>
 
     <script src="http://platform.twitter.com/widgets.js"></script>
