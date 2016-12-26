@@ -1,4 +1,4 @@
-angular.module('OrderHistory', [])
+angular.module('OrderInfo',['ngRoute'])
 
 
 .controller('DetailsController', ['$scope','$http', function($scope, $http) {
