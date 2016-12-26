@@ -361,3 +361,23 @@
 	font-size: 14px;
 	background: none
 }
+
+/*Order Details page*/
+.orderTimeStamps{
+	background: #e74c3c;
+	border: none;
+	box-shadow: none;
+	border-radius: 0px;
+	color: white;
+	margin: 1px;
+	width: 80%;
+	text-align: left;
+}
+
+.orderTimeStamps:hover{
+	background: #e74c3c;
+	border: none;
+	box-shadow: none;
+	border-radius: 0px;
+	color: white;
+}

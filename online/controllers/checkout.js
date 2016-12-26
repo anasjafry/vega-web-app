@@ -37,8 +37,7 @@ angular.module('CheckOut', ['ngRoute'])
          })
           .then(function(response) {
             if(response.data.status){
-              console.log("Success");
-              console.log(response.data.orderid);
+              console.log("Success");                    
             }
             else{
               console.log("Error");

@@ -9,6 +9,9 @@
 
     <!-- Bootstrap core CSS -->
     <link href="dist/css/bootstrap.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="assets/css/custom.css" rel="stylesheet">    
     
     <!-- Documentation extras -->
     <link href="assets/css/docs.css" rel="stylesheet">
@@ -20,17 +23,19 @@
 	  <script src="assets/js/respond.min.js"></script>
 	<![endif]-->
     <script type="text/javascript" charset="utf-8" src="assets/js/angular.min.js"></script>
-    <script src="controllers/menu.js"></script>
+    <script src="controllers/orderinfo.js"></script>
+    <script type="text/javascript" charset="utf-8" src="assets/js/angular-route.js"></script>
     <!-- Favicons -->
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/rb/layouts/bs-docs/ico/apple-touch-icon-144-precomposed.png">
+    <!-- <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/rb/layouts/bs-docs/ico/apple-touch-icon-144-precomposed.png">
     <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/rb/layouts/bs-docs/ico/apple-touch-icon-114-precomposed.png">
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/rb/layouts/bs-docs/ico/apple-touch-icon-72-precomposed.png">
     <link rel="apple-touch-icon-precomposed" href="/rb/layouts/bs-docs/ico/apple-touch-icon-57-precomposed.png">
-    <link rel="shortcut icon" href="/rb/layouts/bs-docs/ico/favicon.png">
+    <link rel="shortcut icon" href="/rb/layouts/bs-docs/ico/favicon.png"> -->
 
     <script src="controllers/menu.js"></script>
     <script type="text/javascript" charset="utf-8" src="assets/js/angular.min.js"></script>
-    <script type="text/javascript">
+    <script type="text/javascript" charset="utf-8" src="controllers/orderinfo.js"></script>
+    <script type="text/javascript" charset="utf-8" src="assets/js/angular-route.js"></script>
 
         
 
@@ -51,44 +56,36 @@
         //]]>
     </script>
     <script type="text/javascript" charset="utf-8" src="assets/js/sys.js?nFlag=201611"></script>
-    <script type="text/javascript" charset="utf-8" src="/rb/layouts/bs-docs/_main.js?nFlag=201611"></script>
+    <!-- <script type="text/javascript" charset="utf-8" src="/rb/layouts/bs-docs/_main.js?nFlag=201611"></script>
     <link type="text/css" rel="stylesheet" charset="utf-8" href="/rb/pages/_main.css?nFlag=201611" />
-    <script type="text/javascript" charset="utf-8" src="/rb/pages/_main.js?nFlag=201611"></script>
+    <script type="text/javascript" charset="utf-8" src="/rb/pages/_main.js?nFlag=201611"></script> -->
     <link href="dist/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet">
 </head>
  
-<body ng-app="FullMenu" ng-controller="DetailsController" >
+<body ng-app="OrderInfo" ng-controller="DetailsController" >
     <a class="sr-only" href="#content">Skip navigation</a>
 
     <!-- Docs master nav -->
 
-    <header class="navbar navbar-inverse navbar-fixed-top bs-docs-nav" role="banner">
+    <header class="navbar navbar-fixed-top bs-docs-nav" role="banner">
         <div class="container">
-            <div class="navbar-header">
+            <div class="navbar-header" >
                 <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
+                    <span class="sr-only">Toggle Navigation</span>
+                    <i class="fa fa-bars"></i>
                 </button>
-                <a href="/rb/bs-docs" class="navbar-brand">Bootstrap</a>
+                <a href="index.html" class="navbar-brand"><img src="assets/images/common/logo_small.png"></a>
             </div>
             <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
                 <ul class="nav navbar-nav">
+                    <li>
+                        <a href="index.html">Order Now</a>
+                    </li>
                     <li class="active">
-                        <a href="/rb/bs-docs/c/getting-started">Getting started</a>
+                        <a href="account.html">My Account</a>
                     </li>
                     <li>
-                        <a href="/rb/bs-docs/c/css">CSS</a>
-                    </li>
-                    <li>
-                        <a href="/rb/bs-docs/c/Components">Components</a>
-                    </li>
-                    <li>
-                        <a href="/rb/bs-docs/c/js">JavaScript</a>
-                    </li>
-                    <li>
-                        <a href="/rb/bs-docs/c/customize">Customize</a>
+                        <a href="logout.html">Logout</a>
                     </li>
                 </ul>
             </nav>
@@ -98,46 +95,42 @@
     <!-- Docs page layout -->
     <div class="bs-header" id="content">
         <div class="container">
-            <h1>Zaitoon</h1>
-            <p>Order Now</p>
-        </div>
-    </div>
-
-    <!-- Callout for the old docs link -->
-    <div class="bs-old-docs">
-        <div class="container">
-            <strong>
-      <a href="{{ page.base_url }}2.3.2/">Looking for Bootstrap 2.3.2 docs?</a>
-    </strong> We've moved it to a new home while we push forward with Bootstrap 3. <a href="http://blog.getbootstrap.com/">Read the blog</a> for details.
+            <img src="assets/images/elements/designer_logo.png">
         </div>
     </div>
 
     <div class="container bs-docs-container">
         <div class="row">
+            <div class="col-sm-12">
+            <h2 class="zaitoonMenuHead"><high style="font-size: 18px;">{{item.date}}</high><tag class="pull-right">#{{item.orderID}}</tag></h2>
+            <hr style="border-top: 1px dashed #e74c3c; margin-top: 5px;">
+            </div>
+
+            <div class="col-md-3">   
+
+                <h6 class="zaitoonMenuHead">ORDER STATUS</h6>
+                
+                    <div class="btn orderTimeStamps"> <span class="fa fa-clock-o"></span> Placed at {{item.timePlace}} </div>   
+
+                    <div class="btn orderTimeStamps"> <span class="fa fa-check"></span> Confirmed at {{item.timePlace}} </div>
+
+                    <div class="btn orderTimeStamps"> <span class="fa fa-truck"></span> Dipatched at {{item.timePlace}} </div>
+
+                    <div class="btn orderTimeStamps"> <span class="fa fa-flag-checkered"></span> Delivered at {{item.timePlace}} </div>
+
+                <div style="margin-top: 20px"></div>
+                 
+                <h6 class="zaitoonMenuHead">DELIVERY TO</h6>
+                <p style="margin-top: -5px;"><b>KK Villa, Calicut</b><br>
+                <tag class="fa fa-phone"> 9884179675</tag></p>
+            </div>
+
             <div class="col-md-9" role="main" ng-init="init()">
                 <div class="bs-docs-section">
-                    
-                    <h2>Order Details</h2>
+                                    
                     <div class="table-responsive">
                     <table class="table table-hover" style="margin: 0px;">
-                        <tbody>
-                            <tr>
-                                <div class="col-sm-10">
-                        <div class="post-meta pull-left">
-                            <ul>
-                                <li><i class="fa fa-calendar"></i> {{item.date}}</li>
-                                <li><i class="fa fa-clock-o"></i><orderReceived>Order Placed</orderReceived> {{item.timePlace}}</li>
-                                <li><i class="fa fa-refresh"></i><orderConfirmed>Confirmed</orderConfirmed>{{item.timeConfirm}}</li>
-                                <li class=""><i class="fa fa-flag"></i><orderDelivered>Out for Delivery</orderDelivered>{{item.timeDeliver}}</li>
-                                <!-- <li class=""><strong><red><i class="fa fa-exclamation-triangle"></i>Order Cancelled by Zaitoon</red></strong> at </li> -->                                               
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-sm-2">
-                        <h40><b> #{{item.orderID}}</b></h40>
-                    </div>
-                            </tr>
-                        </tbody>
+
                         <col width="10%" />
                         <col width="50%" />
                         <col width="10%" />
@@ -168,7 +161,7 @@
                     </table>
                     </div>
 
-                    <div class="col-sm-12" style="border-top: 2px dotted #34495e; border-bottom: 1px solid #34495e;">
+                    <div class="col-sm-12" style="border-top: 1px dashed #34495e; border-bottom: 1px solid #34495e;">
                             <p class="pull-right" style="padding-right: 65px; padding-top: 10px;">Container Charges (7%) : <i class="fa fa-inr"></i>{{cart.cartTotal}}</p>
                         </div>
                         <div class="col-sm-12" style="border-bottom: 1px solid #34495e;">
