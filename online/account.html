@@ -8,10 +8,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Angular -->
     <script type="text/javascript" charset="utf-8" src="assets/js/angular.min.js"></script>
-    <script src="controllers/menu.js"></script>
+    <script src="controllers/account.js"></script>
+    <script type="text/javascript" charset="utf-8" src="assets/js/angular-route.js"></script>
 
     <!-- Bootstrap core CSS -->
     <link href="dist/css/bootstrap.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="assets/css/custom.css" rel="stylesheet">
     
     <!-- Documentation extras -->
     <link href="assets/css/docs.css" rel="stylesheet">
@@ -51,44 +55,36 @@
         //]]>
     </script>
     <script type="text/javascript" charset="utf-8" src="assets/js/sys.js?nFlag=201611"></script>
-    <script type="text/javascript" charset="utf-8" src="/rb/layouts/bs-docs/_main.js?nFlag=201611"></script>
+    <!-- <script type="text/javascript" charset="utf-8" src="/rb/layouts/bs-docs/_main.js?nFlag=201611"></script>
     <link type="text/css" rel="stylesheet" charset="utf-8" href="/rb/pages/_main.css?nFlag=201611" />
-    <script type="text/javascript" charset="utf-8" src="/rb/pages/_main.js?nFlag=201611"></script>
+    <script type="text/javascript" charset="utf-8" src="/rb/pages/_main.js?nFlag=201611"></script> -->
     <link href="dist/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet">
 </head>
  
-<body ng-app="FullMenu">
+<body ng-app="Account">
     <a class="sr-only" href="#content">Skip navigation</a>
 
     <!-- Docs master nav -->
 
-    <header class="navbar navbar-inverse navbar-fixed-top bs-docs-nav" role="banner">
+    <header class="navbar navbar-fixed-top bs-docs-nav" role="banner">
         <div class="container">
-            <div class="navbar-header">
+            <div class="navbar-header" >
                 <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
+                    <span class="sr-only">Toggle Navigation</span>
+                    <i class="fa fa-bars"></i>
                 </button>
-                <a href="/rb/bs-docs" class="navbar-brand">Bootstrap</a>
+                <a href="index.html" class="navbar-brand"><img src="assets/images/common/logo_small.png"></a>
             </div>
             <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
                 <ul class="nav navbar-nav">
+                    <li>
+                        <a href="index.html">Order Now</a>
+                    </li>
                     <li class="active">
-                        <a href="/rb/bs-docs/c/getting-started">Getting started</a>
+                        <a href="account.html">My Account</a>
                     </li>
                     <li>
-                        <a href="/rb/bs-docs/c/css">CSS</a>
-                    </li>
-                    <li>
-                        <a href="/rb/bs-docs/c/Components">Components</a>
-                    </li>
-                    <li>
-                        <a href="/rb/bs-docs/c/js">JavaScript</a>
-                    </li>
-                    <li>
-                        <a href="/rb/bs-docs/c/customize">Customize</a>
+                        <a href="logout.html">Logout</a>
                     </li>
                 </ul>
             </nav>
@@ -98,119 +94,39 @@
     <!-- Docs page layout -->
     <div class="bs-header" id="content">
         <div class="container">
-            <h1>Zaitoon</h1>
-            <p>Order Now</p>
+            <img src="assets/images/elements/designer_logo.png">
         </div>
     </div>
 
-    <!-- Callout for the old docs link -->
-    <div class="bs-old-docs">
-        <div class="container">
-            <strong>
-      <a href="{{ page.base_url }}2.3.2/">Looking for Bootstrap 2.3.2 docs?</a>
-    </strong> We've moved it to a new home while we push forward with Bootstrap 3. <a href="http://blog.getbootstrap.com/">Read the blog</a> for details.
-        </div>
-    </div>
 
     <div class="container bs-docs-container">
         <div class="row">
-            <div class="col-md-9" role="main" ng-controller="HistoryController">
+            <div class="col-md-8" role="main" ng-controller="HistoryController">
                 <div class="bs-docs-section">
                     
-                    <h2>Your Orders</h2>
+                    <h2 class="zaitoonMenuHead">Your Orders</h2>
+                    <hr style="border-top: 1px dashed #e74c3c; margin-top: 5px;">
+
                     <div class="table-responsive">
                     <table class="table table-hover" style="margin: 0px;">
                         <col width="5%" />
-                        <col width="8%" />
-                        <col width="12%" />
-                        <col width="45%" />
+                        <col width="13%" />
+                        <col width="22%" />
+                        <col width="50%" />
                         <col width="10%" />
-                        <col width="20%" />
                         <tbody>
-                            <tr ng-repeat="i in item">
-                                <td>#1</td>
-                                <td>{{i.orderID}}</td>
-                                <td>{{i.date}}</td>
-                                <td><span ng-repeat="x in i.cart.items">{{x.itemName}} ({{x.itemQuantity}}), </span></td>
-                                <td><i class="fa fa-inr"></i> {{i.cart.cartTotal}}</td>
-                                <td><a href="#" class="btn btn-default cancelled add-to-cart"><i class="fa fa-exclamation-triangle"></i>Cancelled</a></td>
-                            </tr>
+                            <tr ng-repeat="i in item" ng-init="current=1">
+
+                                <td>#{{current + $index}}</td>
+                                <td>{{i.orderID}}<tag ng-if="i.status == 5"><br><span class="label label-danger">Cancelled</span></tag><tag ng-if="i.status == 1"><br><span class="label label-success">Processing</span></tag></td>
+                                <td>{{i.date}}<br><tag style="color: #95a5a6; font-size: 12px;">{{i.timePlace}}</tag></td>
+                                <td><span ng-repeat="x in i.cart.items">{{x.itemName}} ({{x.itemQuantity}}). </span></td>
+                                <td><b><i class="fa fa-inr"></i> {{i.cart.cartTotal}}</b></td>                                
+                            </tr>                            
                         </tbody>
                     </table>
+                    <hr style="margin-top: 0px">
                     </div>
-
-                    <!-- <div class="table-responsive">
-                        <table class="table table-striped">
-                            <colgroup>
-                                <col width="2%">
-                                <col width="98%">
-                            </colgroup>
-                            <thead>
-                                <tr>
-                                    <th>
-                                        <i class="fa fa-chevron-right" aria-hidden="true"></i>
-                                        
-                                    </th>
-                                    <th>Delivery Details</th>
-
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td></td>
-                                    <td><b>Delivery Address</b>
-                                        <textarea rows="3" maxlength="100" class="form-control ng-pristine ng-untouched ng-valid ng-empty ng-valid-maxlength" placeholder="Enter address"></textarea>
-                                    <h5><b>Choose from saved addresses</b></h5>
-                                    <input type="radio" name="address" value="add1" checked> 123, Mandak, IIT Madras<br>
-                                    <input type="radio" name="address" value="add2"> 404, Alak, IIT Madras<br>
-                                    <input type="radio" name="address" value="add3"> 310, Mandak, IIT Madras
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                    <td>Coupon Code<br>
-                                        <input type="text" id="order-coupon" name="coupon_code" placeholder="Enter Coupon Code">
-                                        <input type="submit" name="submit" class="btn btn-default check_out" style="margin-left: 40px;" value="Apply">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                    <td>Comments
-                                        <textarea rows="3" maxlength="100" class="form-control ng-pristine ng-untouched ng-valid ng-empty ng-valid-maxlength" placeholder="More sugar, less spice? Your preferences go here." ng-model="vm.orderComments" ng-change="vm.commentsChanged()" ng-model-options="{ debounce: 300 }"></textarea>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <table class="table table-striped">
-                            <colgroup>
-                                <col width="2%">
-                                <col width="98%">
-                            </colgroup>
-                            <thead>
-                                <tr>
-                                    <th>
-                                        <i class="fa fa-chevron-right" aria-hidden="true"></i>
-                                        
-                                    </th>
-                                    <th>Payment</th>
-
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td></td>
-                                    <td><b>How would youlike to pay?</b><br>
-                                    <input type="radio" name="pay" value="pay1"> COD<br>
-                                    <input type="radio" name="pay" value="pay2"> Paytm Wallet<br>
-                                    <input type="radio" name="pay" value="pay3"> Net Banking
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <h5 class="pull-right">
-                            <input type="submit" name="submit" class="btn btn-default check_out" style="margin-left: 40px;" value="Proceed">
-                        </h5>
-                    </div> -->
 
                 </div>
 
@@ -218,99 +134,69 @@
 
 
 
-            <div class="col-md-3" ng-controller="CartController">
+            <div class="col-md-4" ng-controller="UserProfileController">
                 <!-- <div id="cartArea"></div> -->
-                <div class="bs-sidebar hidden-print" role="complementary" id="cartArea">
+                <div class=" hidden-print">
                     <ul class="nav bs-sidenav">
-                    <h3 style="padding-left: 20px;">Your Profile</h3>
-                    <div style="padding: 20px;">
+                    <h3 style="padding-left: 20px; font-size: 12px; color: #34495e; margin-top: 5px;">YOUR PROFILE</h3>
+                    <hr style="border-top: 1px dashed #34495e; margin-top: 5px;">
+                    <div style="padding: 20px; margin-top: -15px;" ng-if="toggleFlag != 2">
                     
-                                <h45><b>Abhijith C S</b></h45> 
-                                <p><br><b>Mobile:</b><br> 9884179675</p>
-                                <p><b>Default Delivery Address:</b><br>404, Alakananda Hostel</p>
+                                <b class="profileTitle">{{userName}}</b>
+                                <p><br><tag class="profileSub">Mobile:</tag><br><b>{{userMobile}}</b> <i style="color: #1abc9c;" class="fa fa-check-circle" data-toggle="tooltip" data-placement="right" title="Verified Mobile Number"></i></p>
+                                <p><tag class="profileSub">Default Delivery Address:</tag><br><b>{{userAddress}}<b></p>  
 
-                                <a href="account.php?options=edit" style="color: #bdc3c7; text-decoration:underline; font-size: 10px;">Update Details</a>
-                                <a href="account.php?options=password" style="color: #f39c12; text-decoration:underline; font-size: 10px;">Change Password</a>  
-                        
                     </div>
-                    <hr></hr>
-                                
-                        <!-- <table class="table table-condensed" style="margin-bottom: 0px; margin-top: -16px;">
-        <tbody></tbody>
-        <colgroup>
-            <col width="2%">
-            <col width="55%">
-            <col width="23%">
-            <col width="20%">
-        </colgroup>
-        <tbody>
-                
-            <tr>
-                <td class="cart_delete_new">
-                    <div onclick="deleteFromCart(1001)"><i class="fa fa-times-circle"></i></div>
-                </td>
-                <td class="cart_description">
-                    <p style="font-size: 14px; color: #2980b9">Paneer Butter Masala</p>
-                    <p style="font-size: 9px; color: grey; margin-top: -10px;">Veg Curry</p>
-                </td> 
-                <td class="cart_quantity">
-                    <div class="cart_quantity_button_new">
-                    <i class="fa fa-minus-circle" aria-hidden="true" onclick="minusFunction(1001)"></i><span id="item_count_12"> 2 </span><i class="fa fa-plus-circle" aria-hidden="true" onclick="addFunction(1001)"></i>
-                    </div>
-                </td>
-                <td class="cart_price">
-                    <p><i class="fa fa-inr"></i> <span id="item_price_12">84</span></p>
-                </td>
-            </tr>
-                        
-            <tr>
-                <td class="cart_delete_new">
-                <div onclick="deleteFromCart(1000052)"><i class="fa fa-times-circle"></i></div>
-                </td>
-                <td class="cart_description">
-                    <p style="font-size: 14px; color: #2980b9">BBQ Fish Boneless</p>
-                    <p style="font-size: 9px; color: grey; margin-top: -10px;">Fish Varieties</p>
-                </td> 
-                <td class="cart_quantity">
-                    <div class="cart_quantity_button_new">
-                    <i class="fa fa-minus-circle" aria-hidden="true"></i>
-                    2
-                    <i class="fa fa-plus-circle" aria-hidden="true"></i>
-                    </div>
-                </td>
-                <td class="cart_price">
-                    <p><i class="fa fa-inr"></i> 220</p>
-                </td>
+                    <div style="padding: 20px; margin-top: -15px;" ng-if="toggleFlag == 2">
+                    
+                                <div class="form-group">
+                                    <input type="text" value="{{userName}}" class="form-control zaitoonModalIn" id="zaitoonProfileNameEdit" placeholder="Your Name">
+                                </div>
 
-            </tr>
-        </tbody>
-    </table>
+                                <p><br><tag class="profileSub">Mobile:</tag><br><b>{{userMobile}}</b> <i style="color: #1abc9c;" class="fa fa-check-circle" data-toggle="tooltip" data-placement="right" title="Verified Mobile Number"></i></p>
+                                <p><tag class="profileSub">Default Delivery Address:</tag></p> 
+                                <div class="form-group" style="margin-top: -15px;">
+                                    <input type="text" value="{{userAddress}}" class="form-control zaitoonModalIn" id="zaitoonProfileAddressEdit" placeholder="Your Default Address">
+                                </div>
 
+                                <hr>
+                                    <button type="button" class="btn btn-default zaitoonCancel" data-dismiss="modal" ng-click="swapFlag(0)">Cancel</button>
+                                    <button type="button" class="btn btn-default zaitoonSave" data-dismiss="modal">Save</button>                                   
 
-    <table class="table table-condensed" style="margin-bottom: -20px;">
-        <tbody>
-            <tr>
-                <td><grey>Cart Sub Total</grey></td>
-                <td><grey><i class="fa fa-inr"></i> 304</grey></td>
-            </tr>
-            <tr class="shipping-cost">
-                <td><grey>Container Charges (7%)</grey></td>
-                <td><grey><i class="fa fa-inr"></i>22</grey></td>                                        
-            </tr>
-            <tr>
-                <td><red>Grand Total</red></td>
-                <td><strong><red><span><i class="fa fa-inr"></i> 326</span></red></strong></td>
-            </tr>
-        </tbody>
-    </table> -->
+                    </div>                                                       
                     </ul>
+
+                                <div ng-if="toggleFlag == 0" style="margin-top: -20px;" class="pull-right">
+                                    <span class="label label-default functionButton" ng-click="swapFlag(1)">Change Password</span>
+                                    <span class="label label-default functionButton" ng-click="swapFlag(2)">Edit Profile</span>
+                                </div>                        
+
+                                <!-- Change Password Option -->                            
+                                <div class="modal-content zaitoonModal" ng-if="toggleFlag == 1">      
+                                  <div class="modal-body">
+                                      <div class="form-group">
+                                        <input type="password" class="form-control zaitoonModalIn" id="zaitoonModalPlace" placeholder="Current Password">
+                                      </div>
+                                      <div class="form-group">
+                                        <input type="password" class="form-control zaitoonModalIn" id="zaitoonModalPlace" placeholder="New Password">
+                                      </div>
+                                      <div class="form-group">
+                                        <input type="password" class="form-control zaitoonModalIn" id="zaitoonModalPlace" placeholder="Confirm Password">
+                                      </div>
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button type="button" class="btn btn-default zaitoonCancel" data-dismiss="modal" ng-click="swapFlag(0)">Cancel</button>
+                                    <button type="button" class="btn btn-default zaitoonSave" data-dismiss="modal">Change Password</button>
+                                  </div>
+                                </div>                                
+
+
                 </div>
             </div>
         </div>
 
     </div>
 
-    
     <!-- JS and analytics only. -->
     <!-- Bootstrap core JavaScript
 ================================================== -->
@@ -337,6 +223,13 @@
         document.body.onclick = closeMemberLayer;
         document.onkeydown = closeImgLayer;
         //]]>
+    </script>
+
+    <!-- For Verified Mobile Number -->
+    <script>
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();   
+    });
     </script>
 
 
