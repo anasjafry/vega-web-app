@@ -1,10 +1,5 @@
 angular.module('FullMenu', ['siyfion.sfTypeahead'])
   
-  //var urlroot="http://localhost/zaitoononline/";
-
-
-
-
   //Search Menu
   .controller('SearchMenuCtrl', function($scope, $http ) {
 
@@ -35,13 +30,6 @@ angular.module('FullMenu', ['siyfion.sfTypeahead'])
     },
     sufficient:10
 
-    //local : $scope.allList
-    // local: [
-    //   { name: 'Alooo Porata Mixed Curry and Rice Combo', id:1001, variety:'Aloo items', price:100 },
-    //   { name: 'Aloo Bonda Veg Mix', id:1002, variety:'Aloo items', price:80 },
-    //   { name: 'Alternate Curry', id:1003, variety:'Curries', price:200 },
-    //   { name: 'Aam Lessi', id: 1004, variety:'Juice', price:50 }
-    // ]  
   });
    console.log(numbers);
   // initialize the bloodhound suggestion engine
@@ -123,15 +111,6 @@ angular.module('FullMenu', ['siyfion.sfTypeahead'])
 })
 
 
-
-    .controller('MenuTypeController', function($scope, $http) {
-
-    $http.get("http://localhost:3001/menutype").then(function(response) {
-        $scope.menulist = response.data;
-    }); 
- 
-  })
-
     .controller('MenuController', function($scope, $http) {
 
     $http.get("http://localhost/vega-web-app/online/getmenu.php").then(function(response) {
@@ -176,12 +155,7 @@ angular.module('FullMenu', ['siyfion.sfTypeahead'])
                 
             }
                
-                //var l = JSON.parse(localStorage.getItem("itemsInfo"))
-                //localStorage.setItem('itemsInfo', JSON.stringify(items));
-                //var j =0;
-                //console.log(l);
-                
-                renderCart();
+            renderCart();
     }
  
   })
@@ -189,101 +163,6 @@ angular.module('FullMenu', ['siyfion.sfTypeahead'])
     .controller('CartController', function($scope) {
        $scope.cartNotEmpty = true;
        $scope.cartCount = 10;
-	})
-
-    .controller('DetailsController', ['$scope','$http', function($scope, $http) {
-      $scope.init = function(){ 
-        $scope.item=null;
-        $scope.cart=null;
-        var data = {}; 
-        data.orderID = "10013053";
-
-        $http({
-          method  : 'POST',
-          url     : 'http://localhost/vega-web-app/online/orderinfo.php',
-          data    : data, //forms user object
-          headers : {'Content-Type': 'application/x-www-form-urlencoded'} 
-         })
-          .then(function(response) {
-              $scope.item = response.data;
-              $scope.cart = response.data.cart;
-              console.log($scope.cart);   
-          }); 
-
-        }
-        $scope.init();
-    }])
-
-    .controller('HistoryController', ['$scope','$http', function($scope, $http) {
-      $scope.init = function(){ 
-        $scope.item=null;
-        $scope.cart=null;
-        var data = {}; 
-        data.user = "9043960876";
-
-        $http({
-          method  : 'POST',
-          url     : 'http://localhost/vega-web-app/online/orderhistory.php',
-          data    : data, //forms user object
-          headers : {'Content-Type': 'application/x-www-form-urlencoded'} 
-         })
-          .then(function(response) {
-              $scope.item = response.data;
-              $scope.cart = response.data.cart;
-              console.log(response);   
-          }); 
-
-        }
-        $scope.init();
-    }])
-
-    .controller('CheckoutController', ['$scope','$http', function($scope, $http) {
-      $scope.checkout = function(){ 
-        var info = JSON.parse(localStorage.getItem("itemsInfo"));
-        var i = 0;
-        var items=[];
-        var cart;
-        var sub_total=0;
-        while(i<info.length)   {
-            sub_total += (info[i].itemQuantity*info[i].itemPrice);
-            items.push({
-                "itemCode": info[i].itemCode,
-                "itemName": info[i].itemName,
-                "itemQuantity": info[i].itemQuantity,
-                "itemPrice": info[i].itemPrice,
-                "itemVariety": info[i].itemVariety
-            });
-            i++;
-        }
-        cart = {
-            "cartTotal": sub_total,
-            "cartCoupon": 0,
-            "items": items
-        };
-
-
-        var data = {}; 
-        data.user = "9043960876";
-        data.cart = JSON.stringify(cart);
-
-        $http({
-          method  : 'POST',
-          url     : 'http://localhost/vega-web-app/online/createorder.php',
-          data    : data, //forms user object
-          headers : {'Content-Type': 'application/x-www-form-urlencoded'} 
-         })
-          .then(function(response) {
-            if(response.data.status){
-              console.log("Success");
-              console.log(response.data.orderid);
-            }
-            else{
-              console.log("Error");
-            }          
-          });        
-
-
-        }
-    }]);
+	});
 
     
