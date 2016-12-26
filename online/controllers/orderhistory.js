@@ -1,22 +1,24 @@
 angular.module('OrderHistory', [])
 
-    .controller('HistoryController', ['$scope','$http', function($scope, $http) {
+
+.controller('DetailsController', ['$scope','$http', function($scope, $http) {
+
       $scope.init = function(){ 
         $scope.item=null;
         $scope.cart=null;
         var data = {}; 
-        data.user = "9043960876";
+        data.orderID = "10013053";
 
         $http({
           method  : 'POST',
-          url     : 'http://localhost/vega-web-app/online/orderhistory.php',
+          url     : 'http://localhost/vega-web-app/online/orderinfo.php',
           data    : data, //forms user object
           headers : {'Content-Type': 'application/x-www-form-urlencoded'} 
          })
           .then(function(response) {
               $scope.item = response.data;
               $scope.cart = response.data.cart;
-              console.log(response);   
+              console.log($scope.cart);   
           }); 
 
         }

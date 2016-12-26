@@ -1,4 +1,4 @@
-angular.module('CheckOut', [])
+angular.module('CheckOut', ['ngRoute'])
 
 .controller('CheckoutController', ['$scope','$http', function($scope, $http) {
       $scope.checkout = function(){ 

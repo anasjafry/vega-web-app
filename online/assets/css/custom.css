@@ -281,3 +281,15 @@
 	outline: none;
 	box-shadow: none;
 }
+
+
+/*For Account page*/
+.profileTitle{
+	font-size: 24px;
+	color:#16a085;
+}
+
+.profileSub{
+	font-size: 12px;
+	color:#616161;
+}
