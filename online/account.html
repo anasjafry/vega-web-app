@@ -136,30 +136,67 @@
 
             <div class="col-md-4" ng-controller="UserProfileController">
                 <!-- <div id="cartArea"></div> -->
-                <div class="bs-sidebar hidden-print" style="background: #F0FFD6;">
+                <div class=" hidden-print">
                     <ul class="nav bs-sidenav">
                     <h3 style="padding-left: 20px; font-size: 12px; color: #34495e; margin-top: 5px;">YOUR PROFILE</h3>
                     <hr style="border-top: 1px dashed #34495e; margin-top: 5px;">
-                    <div style="padding: 20px; margin-top: -15px;">
+                    <div style="padding: 20px; margin-top: -15px;" ng-if="toggleFlag != 2">
                     
-                                <h45><b class="profileTitle">{{userName}}</b></h45> 
+                                <b class="profileTitle">{{userName}}</b>
                                 <p><br><tag class="profileSub">Mobile:</tag><br><b>{{userMobile}}</b> <i style="color: #1abc9c;" class="fa fa-check-circle" data-toggle="tooltip" data-placement="right" title="Verified Mobile Number"></i></p>
-                                <p><tag class="profileSub">Default Delivery Address:</tag><br><b>{{userAddress}}<b></p>                                     
+                                <p><tag class="profileSub">Default Delivery Address:</tag><br><b>{{userAddress}}<b></p>  
+
+                    </div>
+                    <div style="padding: 20px; margin-top: -15px;" ng-if="toggleFlag == 2">
                     
-                    <hr>
+                                <div class="form-group">
+                                    <input type="text" value="{{userName}}" class="form-control zaitoonModalIn" id="zaitoonProfileNameEdit" placeholder="Your Name">
+                                </div>
 
-                                <a href="account.php?options=edit" style="color: #bdc3c7; text-decoration:underline; font-size: 10px;">Update Details</a>
-                                <a href="account.php?options=password" style="color: #f39c12; text-decoration:underline; font-size: 10px;">Change Password</a>
+                                <p><br><tag class="profileSub">Mobile:</tag><br><b>{{userMobile}}</b> <i style="color: #1abc9c;" class="fa fa-check-circle" data-toggle="tooltip" data-placement="right" title="Verified Mobile Number"></i></p>
+                                <p><tag class="profileSub">Default Delivery Address:</tag></p> 
+                                <div class="form-group" style="margin-top: -15px;">
+                                    <input type="text" value="{{userAddress}}" class="form-control zaitoonModalIn" id="zaitoonProfileAddressEdit" placeholder="Your Default Address">
+                                </div>
 
-                    </div>                                  
+                                <hr>
+                                    <button type="button" class="btn btn-default zaitoonCancel" data-dismiss="modal" ng-click="swapFlag(0)">Cancel</button>
+                                    <button type="button" class="btn btn-default zaitoonSave" data-dismiss="modal">Save</button>                                   
+
+                    </div>                                                       
                     </ul>
+
+                                <div ng-if="toggleFlag == 0" style="margin-top: -20px;" class="pull-right">
+                                    <span class="label label-default functionButton" ng-click="swapFlag(1)">Change Password</span>
+                                    <span class="label label-default functionButton" ng-click="swapFlag(2)">Edit Profile</span>
+                                </div>                        
+
+                                <!-- Change Password Option -->                            
+                                <div class="modal-content zaitoonModal" ng-if="toggleFlag == 1">      
+                                  <div class="modal-body">
+                                      <div class="form-group">
+                                        <input type="password" class="form-control zaitoonModalIn" id="zaitoonModalPlace" placeholder="Current Password">
+                                      </div>
+                                      <div class="form-group">
+                                        <input type="password" class="form-control zaitoonModalIn" id="zaitoonModalPlace" placeholder="New Password">
+                                      </div>
+                                      <div class="form-group">
+                                        <input type="password" class="form-control zaitoonModalIn" id="zaitoonModalPlace" placeholder="Confirm Password">
+                                      </div>
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button type="button" class="btn btn-default zaitoonCancel" data-dismiss="modal" ng-click="swapFlag(0)">Cancel</button>
+                                    <button type="button" class="btn btn-default zaitoonSave" data-dismiss="modal">Change Password</button>
+                                  </div>
+                                </div>                                
+
+
                 </div>
             </div>
         </div>
 
     </div>
 
-    
     <!-- JS and analytics only. -->
     <!-- Bootstrap core JavaScript
 ================================================== -->

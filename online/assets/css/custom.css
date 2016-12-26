@@ -293,3 +293,71 @@
 	font-size: 12px;
 	color:#616161;
 }
+
+.zaitoonSave, .zaitoonSave:hover { 
+	border: none; 
+	border-radius: 0px; 
+	background: #16a085;
+	color: white;
+}
+
+.zaitoonSave:hover { 
+	background: #1abc9c;
+}
+
+.zaitoonCancel, .zaitoonCancel:hover { 
+	border: none; 
+	border-radius: 0px; 
+	background: #7f8c8d;
+	color: white;
+}
+
+.zaitoonCancel:hover {  
+	background: #95a5a6;
+}
+.zaitoonModal{
+	border-radius: 0px;
+	box-shadow: none;
+}
+
+.zaitoonModalIn {
+	border-radius: 0px;
+	border: none;
+	outline: none;
+	border-bottom: 1px dashed #923434;
+	padding: 0px;
+	box-shadow: none;
+}
+
+.zaitoonModalIn:focus
+{
+	border: none;
+	outline: none;
+	box-shadow: none;
+	color: #2c3e50;
+	border-bottom: 2px solid #16a085;
+}
+
+
+#zaitoonModalPlace::-webkit-input-placeholder{
+	color: #16a085;
+	font-weight: normal;
+}
+
+.functionButton:hover{
+	background: #e67e22;
+}
+
+#zaitoonProfileNameEdit, #zaitoonProfileNameEdit::-webkit-input-placeholder{
+	color: #16a085;
+	font-weight: bold;
+	font-size: 24px;
+	background: none
+}
+
+#zaitoonProfileAddressEdit, #zaitoonProfileAddressEdit::-webkit-input-placeholder{
+	color: #333;
+	font-weight: bold;
+	font-size: 14px;
+	background: none
+}

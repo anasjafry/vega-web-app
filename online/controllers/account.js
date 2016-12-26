@@ -36,4 +36,9 @@ angular.module('Account', ['ngRoute'])
         $scope.userEmail = "anasjafry@accelerate.net.in";
         $scope.userType = "SILVER";
 
+        $scope.toggleFlag = 0;
+        $scope.swapFlag = function(to){
+          $scope.toggleFlag = to;
+        }
+
     }]);
