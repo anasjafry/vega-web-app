@@ -14,63 +14,58 @@ $_POST = json_decode(file_get_contents('php://input'), true);
 
 //validate token
 
+$type = "ARABIAN";
 
 
-$query = "SELECT * FROM z_menu WHERE 1";
+
+
+$query = "SELECT DISTINCT mainType FROM z_menu WHERE mainType='{$type}'";
 $main = mysql_query($query);
+
 $output = [];
-$rows = mysql_fetch_assoc($main);
-$maint = $rows['mainType'];
-$sub = $rows['subType'];
 
 while($rows = mysql_fetch_assoc($main))
 {
-	$query2 = "SELECT * FROM z_types WHERE short='{$rows['mainType']}'";
-	$main2 = mysql_query($query2);
-	$rows2 = mysql_fetch_assoc($main2);
-	
+	$mainType = $rows['mainType'];
+	$submenuQuery = "SELECT DISTINCT subType FROM z_menu WHERE mainType='{$mainType}'";
+	$sub = mysql_query($submenuQuery);
+
 	$subCategories=[];
-	$items=[];
+	
+	while($subrows = mysql_fetch_assoc($sub)){
+		$subType = $subrows['subType'];
 
-	if($maint==$rows['mainType'])
-	{
-		//Create Sub-menu
-	    $items[] = array(
-		"itemCode" => $rows['code'],
-		"itemName" => $rows['name'],
-		"itemPrice" => $rows['price'],
-		"isVeg" => $rows['isVeg'],
-		"tags" => $rows['tags'],
-		"isAvailable" => $rows['isAvailable']
-		); 
+		$itemQuery = "SELECT * FROM z_menu WHERE mainType='{$mainType}' AND subType='{$subType}'";
+		$allitems = mysql_query($itemQuery);
 
-		if($sub==$rows['subType'])
-		{
-			$query3 = "SELECT * FROM z_types WHERE short='{$rows['subType']}'";
-			$main3 = mysql_query($query3);
-			$rows3 = mysql_fetch_assoc($main3);
+		//Put all the items into an array.
+		$items=[];
+		while($item = mysql_fetch_assoc($allitems)){		
+			$items[] = array(
+				"itemCode" => $item['code'],
+				"itemName" => $item['name'],
+				"itemPrice" => $item['price'],
+				"isVeg" => $item['isVeg'],
+				"tags" => json_decode($item['tags']),
+				"isAvailable" => $item['isAvailable']
+			); 
+		}
 
-			//Create Sub-menu
-		    $subCategories[] = array(
-		    "subType" => $rows['subType'],
-		    "subName" => $rows3['name'],
+		//Create the subCategory with it's name and items array just created.		
+		$subCategories[] = array(
+		    "subType" => $subrows['subType'],
+		    "subName" => "FETCH FROM DB",
 		    "items" => $items
-			);
-		    //$items=[]; 
-		} 
-	}
-	else{
-	  	$output[] =array(
-		"mainType" => $rows['mainType'],
-		"mainName"=> $rows2['name'],
-		"subCategories" => $subCategories
 		);
-	  	$maint = rows['mainType'];
-	  	//$subCategories=[];
-	} 
+	}
 
+	$output[] =array(
+		"mainType" => $rows['mainType'],
+		"mainName"=> "FETCH FROM DB",
+		"subCategories" => $subCategories
+	);
 }
-//$list = array('status' => $flag);    
+   
 echo json_encode($output);
 		
 ?>

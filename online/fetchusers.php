@@ -11,10 +11,12 @@ $_POST = json_decode(file_get_contents('php://input'), true);
 
 //$token = mysql_real_escape_string($_POST['token']);
 
+$mobile = "9043960876";
+
 
 //validate token
 
-$query = "SELECT * FROM z_users WHERE 1";
+$query = "SELECT * FROM z_users WHERE mobile='{$mobile}'";
 $main = mysql_query($query);
 $output = [];
 
