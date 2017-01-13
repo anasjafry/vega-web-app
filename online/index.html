@@ -240,7 +240,7 @@
                         <li ng-repeat="item in menu">
                             <a href="#{{item.mainType}}">{{item.mainName}}</a>
                             <ul class="nav">
-                                <li ng-repeat="sub in item.submenu" class="">
+                                <li ng-repeat="sub in item.subCategories" class="">
                                     <a href="#{{item.mainType}}-{{sub.subType}}">{{sub.subName}}</a>
                                 </li>
                             </ul>
@@ -264,7 +264,7 @@
                     <h2 id="{{item.mainType}}" class="zaitoonMenuHead">{{ item.mainName }}</h2>
                     <hr style="border-top: 1px dashed #e74c3c; margin-top: 5px;">
 
-                    <div class="table-responsive" ng-repeat="sub in item.submenu">
+                    <div class="table-responsive" ng-repeat="sub in item.subCategories">
                         <table class="table table-hover zaitoonMenuTable" id="{{item.mainType}}-{{sub.subType}}">
                             <col width="60%">
                             <col width="20%">

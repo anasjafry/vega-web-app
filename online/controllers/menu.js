@@ -113,7 +113,7 @@ angular.module('FullMenu', ['siyfion.sfTypeahead'])
 
     .controller('MenuController', function($scope, $http) {
 
-    $http.get("http://localhost/vega-web-app/online/getmenu.php").then(function(response) {
+    $http.get("http://localhost/vega-web-app/online/fetchmenu.php").then(function(response) {
         $scope.menu = response.data;
     }); 
 
