@@ -264,7 +264,7 @@ while($rows = mysql_fetch_assoc($main))
 {
 
 	$mainType = $rows['mainType'];
-	$submenuQuery = "SELECT DISTINCT subType FROM z_menu WHERE mainType='{$mainType}'";
+	$submenuQuery = "SELECT DISTINCT subType FROM z_menu WHERE mainType='{$mainType}' ORDER BY sortIndex";
 	$sub = mysql_query($submenuQuery);
 
 	$subCategories=[];
