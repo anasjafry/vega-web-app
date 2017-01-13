@@ -77,7 +77,7 @@ $sampleFilter = array(
  
 
 //Set to true if Filter is Applied
-$filterFlag = true;
+$filterFlag = false;
 
 
 
@@ -255,7 +255,7 @@ if(!$sampleFilter['boneless']['skip']){
 
 
 
-$query = "SELECT DISTINCT mainType FROM z_menu WHERE mainType='{$type}'";
+$query = "SELECT DISTINCT mainType FROM z_menu WHERE 1"; //mainType='{$type}'
 $main = mysql_query($query);
 
 $output = [];
@@ -276,7 +276,7 @@ while($rows = mysql_fetch_assoc($main))
 		if($filterFlag)
 			$itemQuery = "SELECT * FROM z_menu WHERE mainType='{$mainType}' AND subType='{$subType}' ".$vegtypeFilter.$containsFilter.$spicelevelFilter.$frytypeFilter.$cookingtypeFilter.$bonelessFilter;
 		else
-			$itemQuery = "SELECT * FROM z_menu WHERE mainType='{$mainType}' AND subType='{$subType}'";
+			$itemQuery = "SELECT * FROM z_menu WHERE mainType='{$mainType}' AND subType='{$subType}' ORDER BY name";
 
 		$allitems = mysql_query($itemQuery);
 
