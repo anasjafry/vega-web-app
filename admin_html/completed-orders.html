@@ -129,15 +129,15 @@
                                        </div>
                                     </div>
                                     <div class="input-group" style="padding: 10px; border: none;">
-                                       <input type="text" class="form-control input-lg" placeholder="Mobile Number or Order ID">
+                                       <input type="text" ng-model="searchID" class="form-control input-lg" placeholder="Mobile Number or Order ID">
                                        <span class="input-group-btn">
-                                       <button class="btn btn-default btn-lg" type="button"><i class="ti ti-search"></i></button>
+                                       <button class="btn btn-default btn-lg" type="button" ng-click="search(searchID)"><i class="ti ti-search"></i></button>
                                        </span>
                                     </div>
                                     <div class="panel-body no-padding">
                                        <table class="table m-n">
                                           <tbody>
-                                             <tr ng-repeat="order in completed_orders">
+                                             <tr ng-repeat="order in completed_orders" ng-click="showOrder(order.orderID)">
                                                 <td>{{$index + 1}}</td>
                                                 <td>{{order.orderID}}</td>
                                                 <td>{{order.userID}}</td>
@@ -151,7 +151,7 @@
                               <div class="col-md-8">
                                  <div class="panel panel-bluegray" data-widget='{"draggable": "false"}'>
                                     <div class="panel-heading">
-                                       <h2>Order #10007</h2>
+                                       <h2>Order   <tag style="color: #f1c40f; font-size: 21px;">#{{displayOrderID}}</h2>
                                     </div>
                                     <div class="panel-body">
                                        <div id="earnings" style="height: 272px;" class="mt-sm mb-sm">
@@ -168,12 +168,12 @@
                                                    </tr>
                                                 </thead>
                                                 <tbody>
-                                                   <tr>
-                                                      <td align="left">1</td>
-                                                      <td>Chicken Biriyani <span class="text-warning" style="font-size: 11px;">Biriyani & Rices</span></td>
-                                                      <td>3</td>
-                                                      <td>100</td>
-                                                      <td>300</td>
+                                                   <tr ng-repeat="item in displayOrderContent.cart.items">
+                                                      <td align="left">{{$index+1}}</td>
+                                                      <td>{{item.itemName}} <span class="text-warning" style="font-size: 11px;">{{item.itemVariety}}</span></td>
+                                                      <td>{{item.itemQuantity}}</td>
+                                                      <td>{{item.itemPrice}}</td>
+                                                      <td>{{item.itemPrice*item.itemQuantity}}</td>
                                                    </tr>
                                                 </tbody>
                                              </table>

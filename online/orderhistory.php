@@ -45,6 +45,7 @@ if(isset($_GET['mobile'])){
 		$list[] = array(
 			'orderID' => $order['orderID'], 
 			'status' => $order['status'], 
+			'comment' => $order['comments'], 
 			'cart' => $cart,
 			'date' => $order['date'], 
 			'timePlace' => $order['timePlace'], 
