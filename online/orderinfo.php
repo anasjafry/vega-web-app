@@ -26,7 +26,6 @@ while($order = mysql_fetch_assoc($all))
 {
 	$cart = json_decode($order['cart']);
 	$list = array(
-		'isFound' => true,
 		'orderID' => $order['orderID'], 
 		'status' => $order['status'], 
 		'comment' => $order['comments'], 
@@ -35,12 +34,6 @@ while($order = mysql_fetch_assoc($all))
 		'timePlace' => $order['timePlace'], 
 		'timeConfirm' => $order['timeConfirm'], 
 		'timeDeliver' => $order['timeDeliver']
-		);
-}
-
-if(!$list){
-	$list = array(
-		'isFound' => false
 		);
 }
 

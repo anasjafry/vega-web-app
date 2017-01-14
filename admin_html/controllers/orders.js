@@ -2,12 +2,51 @@ angular.module('OrdersApp', [])
 
   .controller('completedOrdersController', function($scope, $http) {    
 
-      $http.get("http://localhost/vega-web-app/online/orderhistory.php?status=0&id=0").then(function(response) {
+      $http.get("http://localhost/vega-web-app/online/orderhistory.php?status=2&id=0").then(function(response) {
           $scope.completed_orders = response.data;  
           //Default ORDER to display:
           $scope.displayOrderID = $scope.completed_orders[0].orderID;
           $scope.displayOrderContent = $scope.completed_orders[0];      
       }); 
+
+      $scope.showOrder = function(orderid){
+      $scope.displayOrderID = orderid;       
+      var i = 0;  
+      while(i < $scope.completed_orders.length){
+          if($scope.displayOrderID == $scope.completed_orders[i].orderID){
+            $scope.displayOrderContent = $scope.completed_orders[i];
+            break;
+          }
+          i++;
+      }
+      }
+      $scope.searchID='';
+      $scope.search = function(id){
+      console.log($scope.searchID);      
+      var i = 0;  
+      $http.get("http://localhost/vega-web-app/online/orderhistory.php?status=2&mobile="+$scope.searchID).then(function(response) {
+          $scope.completed_orders = response.data; 
+          if($scope.completed_orders.length == 0){
+            $http.get("http://localhost/vega-web-app/online/orderinfo.php?orderID="+$scope.searchID).then(function(response) {
+                console.log("This Shit Works");
+                var temp=[];
+                temp.push(response.data);
+                $scope.completed_orders = temp;  
+                console.log($scope.completed_orders);
+                if($scope.completed_orders.length == 0){
+                  $scope.completed_orders="Sorry no items match your search";
+                }
+                else{
+                  $scope.displayOrderID = $scope.completed_orders[0].orderID;
+                  $scope.displayOrderContent = $scope.completed_orders[0]; 
+                }  
+            });
+          }
+          $scope.displayOrderID = $scope.completed_orders[0].orderID;
+          $scope.displayOrderContent = $scope.completed_orders[0];      
+      }); 
+      }
+
 
   })
   
