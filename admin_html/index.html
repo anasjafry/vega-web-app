@@ -236,11 +236,38 @@
                                                 </div>
                                              </div>
                                           </a>
-                                          <div class="col-md-3">
+
+                                          <!-- PENDING ORDER CASE -->
+
+                                          <div class="col-md-3" ng-if="isPendingDisplayed">
                                              <div class="btn btn-danger-alt btn-label" ng-click="rejectOrder(displayOrderID)"><i class="ti ti-close" ></i> Reject</div>
                                           </div>
-                                          <div class="col-md-3">
+                                          <div class="col-md-3" ng-if="isPendingDisplayed">
                                              <div class="btn btn-success-alt btn-label" ng-click="confirmOrder(displayOrderID)"><i class="ti ti-check"></i> Confirm</div>
+                                          </div>
+
+
+
+                                          <!-- CONFIRMED ORDER CASE -->                                          
+                                          <div class="col-md-3" ng-if="!isPendingDisplayed && !showDeliveryAgents">
+                                             <div class="btn btn-danger-alt btn-label" ng-click="rejectOrder(displayOrderID)"><i class="ti ti-close" ></i> Cancel</div>
+                                          </div>
+                                          <div class="col-md-3" ng-if="!isPendingDisplayed && !showDeliveryAgents">
+                                             <div class="btn btn-success-alt btn-label" ng-click="assignAgent()"><i class="ti ti-check"></i> Dispatch</div>
+                                          </div>
+
+                                          <div class="col-md-6" ng-if="!isPendingDisplayed && showDeliveryAgents">
+                                             <div class="form-group">
+                                                <label for="selector1" class="col-sm-12 control-label">Choose Delivery Agent</label>
+                                                <div class="col-sm-12">
+                                                   <select name="selector1" id="selector1" class="form-control"
+                                                      ng-model="agentsList"
+                                                      ng-options="agent.label for agent in delivery_agents">
+                                                   </select>
+                                                </div>
+                                             </div>
+                                             <br><br>                                         
+                                             <div ng-if="agentsList.label" class="btn btn-success-alt btn-label pull-right" style="margin-right: 20px;" ng-click="dispatchOrder(displayOrderID, agentsList.value)"><i class="ti ti-check"></i> Assign</div>
                                           </div>
                                        </div>
                                     </div>

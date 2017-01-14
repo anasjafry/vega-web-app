@@ -50,7 +50,10 @@ angular.module('OrdersApp', [])
 
   })
   
-  .controller('ordersController', function($scope, $http, $interval) {    
+  .controller('ordersController', function($scope, $http, $interval) {  
+
+    //Show only when "dispatch order" is clicked.
+    $scope.showDeliveryAgents = false;  
 
     //Default styling
     document.getElementById("confirmedTab").style.display="none";
@@ -60,6 +63,8 @@ angular.module('OrdersApp', [])
 
 
     $scope.showConfirmed = function(){
+      $scope.showDeliveryAgents = false; // Hide choose agent option   
+
       document.getElementById("pendingTab").style.display="none";
       document.getElementById("confirmedTab").style.display="block";
       document.getElementById("pendingTabButton").style.background="#F1F1F1";
@@ -71,6 +76,8 @@ angular.module('OrdersApp', [])
     }
 
     $scope.showPending = function(){
+      $scope.showDeliveryAgents = false; // Hide choose agent option   
+
       document.getElementById("pendingTab").style.display="block";
       document.getElementById("confirmedTab").style.display="none";
       document.getElementById("confirmedTabButton").style.background="#F1F1F1";
@@ -113,7 +120,10 @@ angular.module('OrdersApp', [])
 
 
     $scope.showOrder = function(orderid){
-      $scope.displayOrderID = orderid;       
+      $scope.showDeliveryAgents = false; // Hide choose agent option   
+
+      $scope.displayOrderID = orderid;    
+        
       var i = 0;  
       //Find matching order 
       if($scope.isPendingDisplayed){
@@ -147,6 +157,36 @@ angular.module('OrdersApp', [])
 
     $scope.rejectOrder = function(orderid){
       $http.get("http://localhost/vega-web-app/online/rejectorder.php?id="+orderid).then(function(response) {
+        $scope.initializePendingOrders();
+        $scope.displayOrderID = "";
+        $scope.displayOrderContent = "";
+      });            
+    }
+
+
+    $scope.assignAgent = function(orderid){
+      $scope.showDeliveryAgents = true;
+      $http.get("http://localhost/vega-web-app/online/fetchroles.php?branch=VELACHERY&role=AGENT").then(function(response) {
+        $scope.all_agents = response.data.results;
+        $scope.delivery_agents = [];
+        var i = 0;
+        while(i < $scope.all_agents.length){
+          $scope.delivery_agents.push(
+            {
+              value: $scope.all_agents[i].code , 
+              label: $scope.all_agents[i].name
+            }
+          );          
+          i++;
+        }
+        
+      });            
+    }
+
+
+    $scope.dispatchOrder = function(orderid, agentcode){
+      //WHAT IS LEFT -- PUT THE agent code in DB (against ORDER ID) for future reference.
+      $http.get("http://localhost/vega-web-app/online/dispatchorder.php?id="+orderid+"&agent="+agentcode).then(function(response) {
         $scope.initializePendingOrders();
         $scope.displayOrderID = "";
         $scope.displayOrderContent = "";
