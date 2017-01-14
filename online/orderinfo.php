@@ -12,8 +12,8 @@ require 'connect.php';
 
 $_POST = json_decode(file_get_contents('php://input'), true);
 
-if(isset($_POST['orderID']))
-	$oid = $_POST['orderID'];//"10013052";
+if(isset($_GET['orderID']))
+	$oid = $_GET['orderID']; //Change it to POST later.
 else
 	$oid = 0000;
 
