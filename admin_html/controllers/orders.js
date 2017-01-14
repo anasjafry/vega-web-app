@@ -1,5 +1,16 @@
 angular.module('OrdersApp', [])
 
+  .controller('completedOrdersController', function($scope, $http) {    
+
+      $http.get("http://localhost/vega-web-app/online/orderhistory.php?status=0&id=0").then(function(response) {
+          $scope.completed_orders = response.data;  
+          //Default ORDER to display:
+          $scope.displayOrderID = $scope.completed_orders[0].orderID;
+          $scope.displayOrderContent = $scope.completed_orders[0];      
+      }); 
+
+  })
+  
   .controller('ordersController', function($scope, $http, $interval) {    
 
     //Default styling
