@@ -135,8 +135,9 @@
                                        </span>
                                     </div>
                                     <div class="panel-body no-padding">
-                                       <table class="table m-n">
+                                       <table class="table m-n table-hover">
                                           <tbody>
+                                             <p ng-if="!completed_orders.length" style="padding: 20px; text-align: center">There are no matching results.</p>
                                              <tr ng-repeat="order in completed_orders" ng-click="showOrder(order.orderID)">
                                                 <td>{{$index + 1}}</td>
                                                 <td>{{order.orderID}}</td>
@@ -151,10 +152,10 @@
                               <div class="col-md-8">
                                  <div class="panel panel-bluegray" data-widget='{"draggable": "false"}'>
                                     <div class="panel-heading">
-                                       <h2>Order   <tag style="color: #f1c40f; font-size: 21px;">#{{displayOrderID}}</h2>
+                                       <h2 ng-if="displayOrderID">Order <tag style="color: #f1c40f; font-size: 21px;">#{{displayOrderID}}</h2>
                                     </div>
-                                    <div class="panel-body">
-                                       <div id="earnings" style="height: 272px;" class="mt-sm mb-sm">
+                                    <div class="panel-body" ng-if="displayOrderID">
+                                       <div id="earnings" class="mt-sm mb-sm">
                                           <!-- Order Data -->					
                                           <div class="table-responsive">
                                              <table class="table">

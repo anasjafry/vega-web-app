@@ -21,24 +21,24 @@ angular.module('OrdersApp', [])
       }
       }
       $scope.searchID='';
-      $scope.search = function(id){
-      console.log($scope.searchID);      
+      $scope.search = function(id){     
       var i = 0;  
       $http.get("http://localhost/vega-web-app/online/orderhistory.php?status=2&mobile="+$scope.searchID).then(function(response) {
           $scope.completed_orders = response.data; 
           if($scope.completed_orders.length == 0){
             $http.get("http://localhost/vega-web-app/online/orderinfo.php?orderID="+$scope.searchID).then(function(response) {
-                console.log("This Shit Works");
-                var temp=[];
-                temp.push(response.data);
-                $scope.completed_orders = temp;  
-                console.log($scope.completed_orders);
-                if($scope.completed_orders.length == 0){
-                  $scope.completed_orders="Sorry no items match your search";
+                
+                if(response.data.length != 0){
+                  var temp=[];
+                  temp.push(response.data);
+                  $scope.completed_orders = temp;
+
+                  $scope.displayOrderID = $scope.completed_orders[0].orderID;
+                  $scope.displayOrderContent = $scope.completed_orders[0];   
                 }
                 else{
-                  $scope.displayOrderID = $scope.completed_orders[0].orderID;
-                  $scope.displayOrderContent = $scope.completed_orders[0]; 
+                  $scope.completed_orders = [];
+                  $scope.displayOrderID = 0 ;
                 }  
             });
           }
