@@ -139,7 +139,7 @@
                                           <tbody>
                                              <p ng-if="!completed_orders.length" style="padding: 20px; text-align: center">There are no matching results.</p>
                                              <tr ng-repeat="order in completed_orders" ng-click="showOrder(order.orderID)">
-                                                <td>{{$index + 1}}</td>
+                                                <td>{{$index + 1 + limiter}}</td>
                                                 <td>{{order.orderID}}</td>
                                                 <td>{{order.userID}}</td>
                                                 <td>Rs. {{order.cart.cartTotal}}</td>
@@ -147,8 +147,8 @@
                                           </tbody>
                                        </table>
                                     </div>
-                                    <center><label><span class="label label-success"><i class="fa fa-chevron-left" aria-hidden="true"></i>Prev</span></label>
-                                    <label><span class="label label-success">Next<i class="fa fa-chevron-right" aria-hidden="true"></i></span></label></center>
+                                    <center><label ng-if="prevflag" ng-click="showPrev()"><span class="label label-success"><i class="fa fa-chevron-left" aria-hidden="true"></i>Prev</span></label>
+                                    <label ng-if="nextflag" ng-click="showNext()"><span class="label label-success">Next<i class="fa fa-chevron-right" aria-hidden="true"></i></span></label></center>
                                  </div>
                               </div>
                               <div class="col-md-8">
