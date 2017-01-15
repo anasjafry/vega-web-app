@@ -12,10 +12,15 @@ angular.module('UsersApp', [])
     	$scope.prevflag=true;
     	$scope.limiter+=5;
     	$http.get("http://localhost/vega-web-app/online/orderhistory.php?mobile=9043960876&id="+$scope.limiter).then(function(response) {
-        	$scope.user_orders = response.data;
         	if($scope.user_orders.length < 5){
+                if($scope.user_orders.length == 0){
+                   $scope.nextflag=false;
+                   $scope.limiter-=10;
+                   $scope.showNext(); 
+                }
         		$scope.nextflag=false;
-        	}       
+        	}
+            $scope.user_orders = response.data;       
     	}); 
     }
     $scope.showPrev = function(){
