@@ -288,6 +288,8 @@ while($rows = mysql_fetch_assoc($main))
 				"itemName" => $item['name'],
 				"itemPrice" => $item['price'],
 				"isVeg" => $item['isVeg']? true : false,
+				"isCustom" => $item['isCustomisable']? true : false,
+				"custom" => json_decode($item['customisation']),
 				"tags" => json_decode($item['tags']),
 				"isAvailable" => $item['isAvailable']? true : false
 			); 
