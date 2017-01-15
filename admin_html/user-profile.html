@@ -15,7 +15,8 @@
     <link type="text/css" href="assets/fonts/font-awesome/css/font-awesome.min.css" rel="stylesheet">        <!-- Font Awesome -->
     <link type="text/css" href="assets/fonts/themify-icons/themify-icons.css" rel="stylesheet">              <!-- Themify Icons -->
     <link type="text/css" href="assets/css/styles.css" rel="stylesheet">                                     <!-- Core CSS with all styles -->
-
+    <script src="assets/js/angular.min.js"></script>
+    <script src="controllers/user.js"></script>
     <link type="text/css" href="assets/plugins/codeprettifier/prettify.css" rel="stylesheet">                <!-- Code Prettifier -->
     <link type="text/css" href="assets/plugins/iCheck/skins/minimal/blue.css" rel="stylesheet">              <!-- iCheck -->
 
@@ -30,7 +31,7 @@
 
     </head>
 
-    <body class="animated-content">
+    <body class="animated-content" ng-app="UsersApp" ng-controller="userOrdersController">
         
         <header id="topnav" class="navbar navbar-default navbar-fixed-top" role="banner">
 
@@ -271,16 +272,18 @@
 										  </tr>
 									</thead>
 									<tbody>
-										  <tr>
-										    <th scope="row">1.</th>
-										    <td>10005</td>
-										    <td>15 Nov. 2016</td>
-										    <td>Barbeque (1), Chicken Biriyani (2), Pepsi 300ml (1)</td>
-										    <td>Rs. 430</td>
+										  <tr ng-repeat="order in user_orders">
+										    <th scope="row">{{$index + 1 +limiter}}</th>
+										    <td>{{order.orderID}}</td>
+										    <td>{{order.date}}</td>
+										    <td><span ng-repeat="item in order.cart.items">{{item.itemName}} ({{item.itemQuantity}}),</span></td>
+										    <td>Rs. {{order.cart.cartTotal}}</td>
 										  </tr>										  
 									</tbody>
 								</table>
 							</div><!-- /.table-responsive -->
+							<center><label ng-if="prevflag" ng-click="showPrev()"><span class="label label-success"><i class="fa fa-chevron-left" aria-hidden="true"></i>Prev</span></label>
+                                    <label ng-if="nextflag" ng-click="showNext()"><span class="label label-success">Next<i class="fa fa-chevron-right" aria-hidden="true"></i></span></label></center>
 						</div> <!-- /.panel-body -->
 					</div>
 				</div> <!-- #tab-projects -->
