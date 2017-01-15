@@ -9,6 +9,30 @@ angular.module('OrdersApp', [])
           $scope.displayOrderContent = $scope.completed_orders[0];      
       }); 
 
+    $scope.prevflag=false;
+    $scope.limiter=0;
+    $scope.nextflag=true;
+    $scope.showNext = function(){
+      $scope.prevflag=true;
+      $scope.limiter+=5;
+      $http.get("http://localhost/vega-web-app/online/orderhistory.php?status=2&id="+$scope.limiter).then(function(response) {
+          $scope.completed_orders = response.data;
+          if($scope.completed_orders.length < 5){
+            $scope.nextflag=false;
+          }       
+      }); 
+    }
+    $scope.showPrev = function(){
+      $scope.nextflag=true;
+      $scope.limiter-=5;
+      $http.get("http://localhost/vega-web-app/online/orderhistory.php?status=2&id="+$scope.limiter).then(function(response) {
+          $scope.completed_orders = response.data;       
+      });
+      if($scope.limiter==0){
+        $scope.prevflag=false;
+      } 
+    }
+
       $scope.showOrder = function(orderid){
       $scope.displayOrderID = orderid;       
       var i = 0;  

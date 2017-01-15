@@ -19,6 +19,7 @@ angular.module('UsersApp', [])
     	}); 
     }
     $scope.showPrev = function(){
+    	$scope.nextflag=true;
     	$scope.limiter-=5;
     	$http.get("http://localhost/vega-web-app/online/orderhistory.php?mobile=9043960876&id="+$scope.limiter).then(function(response) {
         	$scope.user_orders = response.data;       
