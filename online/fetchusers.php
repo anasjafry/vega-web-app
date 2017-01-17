@@ -18,17 +18,18 @@ $mobile = "9043960876";
 
 $query = "SELECT * FROM z_users WHERE mobile='{$mobile}'";
 $main = mysql_query($query);
-$output = [];
+// $output = [];
 
 while($rows = mysql_fetch_assoc($main))
 {
-	$output[]=array(
+	$output=array(
 		"name" => $rows['name'],
 	    "mobile" => $rows['mobile'],
-	    "isVerified" => $rows['isVerified'],
-	    "isBlocked" => $rows['isBlocked'],
+	    "isVerified" => $rows['isVerified'] == "1" ? true:false,
+	    "isBlocked" => $rows['isBlocked'] == "1" ? true:false,
 	    "lastLogin" => $rows['lastLogin'],
-	    "isSubmittedFeedback"=> $rows['isFeedback'],
+	    "memberSince" => "Fetch from DB",
+	    "isSubmittedFeedback"=> $rows['isFeedback'] == "1" ? true:false,
 		"memberType"=> $rows['memberType'],
 		"savedAddresses"=> json_decode($rows['savedAddresses']),
 		"email"=> $rows['email'],
