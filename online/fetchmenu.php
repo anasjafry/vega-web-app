@@ -255,7 +255,7 @@ if(!$sampleFilter['boneless']['skip']){
 
 
 
-$query = "SELECT DISTINCT mainType FROM z_menu WHERE 1"; //mainType='{$type}'
+$query = "SELECT DISTINCT mainType FROM z_menu WHERE mainType='{$type}'"; //mainType='{$type}'
 $main = mysql_query($query);
 
 $output = [];
@@ -290,7 +290,6 @@ while($rows = mysql_fetch_assoc($main))
 				"isVeg" => $item['isVeg']? true : false,
 				"isCustom" => $item['isCustomisable']? true : false,
 				"custom" => json_decode($item['customisation']),
-				"tags" => json_decode($item['tags']),
 				"isAvailable" => $item['isAvailable']? true : false
 			); 
 		}
