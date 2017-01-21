@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+
+<link rel="stylesheet" type="text/css" href="http://localhost/vega-web-app/online/dist/css/bootstrap.css">
+<script type="text/javascript" src="http://localhost/vega-web-app/online/assets/js/jquery.js"></script>
+<script type="text/javascript" src="http://localhost/vega-web-app/online/assets/js/bootstrap.js"></script>
+
+    <script src="http://code.jquery.com/jquery-1.11.1.min.js"> </script>
+    <script src="https://icp.citruspay.com/js/citrus.js"> </script>
+    <script src="https://icp.citruspay.com/js/jquery.payment.js"> </script>
+
+
+    <script type="text/javascript">
+    CitrusPay.Merchant.Config = {
+        // Merchant details
+        Merchant: {
+            accessKey: 'BUCSR9TEY01XIKSQDCTN', //Replace with your access key
+            vanityUrl: 'aiu78di9il'  //Replace with your vanity URL
+        }
+    };
+    </script>
+	
+
+    <script type="text/javascript">
+    
+    fetchPaymentOptions();
+    
+    function handleCitrusPaymentOptions(citrusPaymentOptions) {
+        if (citrusPaymentOptions.netBanking != null)
+            for (i = 0; i < citrusPaymentOptions.netBanking.length; i++) {
+                var obj = document.getElementById("citrusAvailableOptions");
+                var option = document.createElement("option");
+                option.text = citrusPaymentOptions.netBanking[i].bankName;
+                option.value = citrusPaymentOptions.netBanking[i].issuerCode;
+                //obj.add(option);
+            }
+    }
+    </script>
+
+
+    	    <script type="text/javascript">
+    
+    function citrusServerErrorMsg(errorResponse) {
+        alert(errorResponse);
+        console.log(errorResponse);
+    }
+    function citrusClientErrMsg(errorResponse) {
+        alert(errorResponse);
+        console.log(errorResponse);
+    }
+    </script>
+
+    <script type="text/javascript">
+        //Net Banking
+        $('#citrusNetbankingButton').on("click", function () { makePayment("netbanking") });
+        //Card Payment
+        $("#citrusCardPayButton").on("click", function () { makePayment("card") });
+    </script>
+
+<style>
+.cardSection{
+	margin: 10px 0px;
+}
+
+.citrusFolder{
+    margin:10px 0px;
+}
+
+.inputForCitrus{
+    background: none;
+    width: 100%;
+    border: none;
+    box-shadow: none;
+    border-bottom: 1px solid #bdc3c7;
+    font-size: 16px;
+    outline: 0;
+    font-weight: 300;
+}
+
+.inputForCitrus: focus{
+    border-bottom: 2px solid #34495e;
+    font-size: 16px;
+    
+}
+
+.citrusLabel{
+    font-size: 9px;
+    text-transform: uppercase;
+    color: #7f8c8d;
+    font-weight: 100;
+    line-height: 10px;
+    margin-bottom: 0px;
+}
+
+.citrusPayButton{
+    background: #27ae60;
+    color: white;
+    box-shadow: none;
+    border: none;
+    outline: 0;
+    min-width: 150px;
+    height: 35px;
+}
+
+
+</style>
+
+
+<script>
+    
+jQuery(document).ready(function() { 
+    jQuery.support.cors = true; 
+    
+    // setup card inputs;       
+    jQuery('#citrusExpiry').payment('formatCardExpiry');
+    jQuery('#citrusCvv').payment('formatCardCVC');
+    jQuery('#citrusNumber').keyup(function() {
+        var cardNum = jQuery('#citrusNumber').val().replace(/\s+/g, '');        
+            var type = jQuery.payment.cardType(cardNum);
+            console.log(type);
+            jQuery("#citrusNumber").css("background", "#FFF url(images/" + type + ".png) no-repeat right");                        
+            if(type!='amex')
+            jQuery("#citrusCvv").attr("maxlength","3");
+            else
+            jQuery("#citrusCvv").attr("maxlength","4");                     
+            jQuery('#citrusNumber').payment('formatCardNumber');                                            
+            jQuery("#citrusScheme").val(type);      
+    });              
+});
+
+</script>
+
+
+</head>
+
+<body>
+
+
+<div class="container">
+    <div class="row">
+
+		<input type="hidden" id="citrusFirstName" value="ABHIJITH"/> 
+		<input type="hidden" id="citrusLastName" value="CS" />
+		<input type="hidden" id="citrusEmail" value="abhijithcs1993@gmail.com"/>
+		<input type="hidden" id="citrusMobile" value="9043960876" />
+		<input type="hidden" id="citrusStreet1" value="S-12 905 Smondoville" />
+		<input type="hidden" id="citrusStreet2" value="NeoTOwn" />
+		<input type="hidden" id="citrusCity" value="Electronic City Phase 1" />
+		<input type="hidden" id="citrusState" value="Karnataka" />
+		<input type="hidden" id="citrusCountry" value="India" />
+		<input type="hidden" id="citrusZip" value="560100" />      
+
+		<input type="hidden" readonly id="citrusAmount" value="1.00" /> 	
+		<input type="hidden" readonly id="citrusMerchantTxnId" value="9043960876" />
+		<input type="hidden" readonly id="citrusSignature" value="3d938fe8106c78bf6c27ccfcd0d3a320c0a796ff" />
+		<input type="hidden" readonly id="citrusReturnUrl" value="http://localhost/vega-web-app/online/citrusresponse.php" />
+		<input type="hidden" readonly id="citrusNotifyUrl" value="http://localhost/vega-web-app/online/citrusstatus.php" /> 
+
+
+        <div class="col-xs-12 col-sm-12 citrusFolder">   
+            <label class="citrusLabel">Card Number</label>
+            <input type="text" id="citrusNumber" placeholder="Card Number" class="inputForCitrus" value=""/>
+        </div>
+        <div class="col-xs-12 col-sm-12 citrusFolder">   
+            <label class="citrusLabel">Card Holder's Name</label>
+            <input type="text" id="citrusCardHolder" placeholder="Card Holder's Name" class="inputForCitrus" value=""/>
+        </div>        
+        <div class="col-xs-6 col-sm-6 citrusFolder">   
+            <label class="citrusLabel">Expiry Date</label>
+            <input type="text" id="citrusExpiry" placeholder="MM/YYYY" class="inputForCitrus" value=""/>
+        </div>
+        <div class="col-xs-6 col-sm-6 citrusFolder">   
+            <label class="citrusLabel">CVV</label>
+            <input type="text" id="citrusCvv" placeholder="CVV" class="inputForCitrus" value=""/>
+        </div>
+
+        <div class="col-xs-12 col-sm-12">   
+            <input type="button" class="citrusPayButton" value="Pay Now" id="citrusCardPayButton"/>
+        </div>
+
+
+    
+	    <select id="citrusCardType" hidden>
+	        <option selected="selected" value="debit">Debit</option>
+	        <option value="credit">Credit</option>
+	    </select>
+	    <select id="citrusScheme" hidden>
+	        <option selected="selected" value="visa">VISA</option>
+	        <option value="mastercard">MASTER</option>
+	    </select>
+    
+    
+
+        
+    </div>
+</div>
+
+
+</body>
+</html>
