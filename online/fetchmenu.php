@@ -14,71 +14,71 @@ $_POST = json_decode(file_get_contents('php://input'), true);
 
 //validate token
 
-$type = "ARABIAN";
+$type = $_POST['cuisine'];
+
+$filterFlag = $_POST['isFilter'];
+
+
+if($filterFlag)
+{
+
+$sampleFilter = json_decode($_POST['filter'], true);
 
 //Sample Filter Object
 
-$vegtype = array(
-		"showVeg" => true,
-		"showNonVeg" => true
-	);
-$contains = array(
-		"skip" => false,
-		"chicken" => true,
-		"mutton" => false,
-		"fish" => false,
-		"prawns" => false,
-		"egg" => false
-	);
-$avoid = array(
-		"chicken" => false,
-		"mutton" => false,
-		"fish" => false,
-		"prawns" => false,
-		"egg" => false
-	);
-$spicelevel = array(
-		"skip" => true,
-		"spicy" => true,
-		"sweetened" => false,
-		"non" => false
-	);
-$frytype = array(
-		"skip" => true,
-		"oilfry" => true,
-		"tawafry" => false
-	);
-$cookingtype = array(
-		"skip" => true,
-		"gravy" => true,
-		"semi" => false,
-		"dry" => false,
-		"deep" => false
-	);
+// $vegtype = array(
+// 		"showVeg" => true,
+// 		"showNonVeg" => true
+// 	);
+// $contains = array(
+// 		"skip" => false,
+// 		"chicken" => true,
+// 		"mutton" => false,
+// 		"fish" => false,
+// 		"prawns" => false,
+// 		"egg" => false
+// 	);
+// $avoid = array(
+// 		"chicken" => false,
+// 		"mutton" => false,
+// 		"fish" => false,
+// 		"prawns" => false,
+// 		"egg" => false
+// 	);
+// $spicelevel = array(
+// 		"skip" => true,
+// 		"spicy" => true,
+// 		"sweetened" => false,
+// 		"non" => false
+// 	);
+// $frytype = array(
+// 		"skip" => true,
+// 		"oilfry" => true,
+// 		"tawafry" => false
+// 	);
+// $cookingtype = array(
+// 		"skip" => true,
+// 		"gravy" => true,
+// 		"semi" => false,
+// 		"dry" => false,
+// 		"deep" => false
+// 	);
 
-$boneless = array(
-		"skip" => false,
-		"bone" => false,
-		"boneless" => true
-	);
+// $boneless = array(
+// 		"skip" => false,
+// 		"bone" => false,
+// 		"boneless" => true
+// 	);
 
-$sampleFilter = array(
-				"vegtype" => $vegtype,
-				"contains" => $contains,
-				"avoid" => $avoid,
-				"spicelevel" => $spicelevel,
-				"frytype" => $frytype,
-				"cookingtype" => $cookingtype,
-				"boneless" => $boneless
-			);
-
-
-//$sampleFilter['vegtype']['showNonVeg']
- 
-
-//Set to true if Filter is Applied
-$filterFlag = false;
-
+// $sampleFilter = array(
+// 				"vegtype" => $vegtype,
+// 				"contains" => $contains,
+// 				"avoid" => $avoid,
+// 				"spicelevel" => $spicelevel,
+// 				"frytype" => $frytype,
+// 				"cookingtype" => $cookingtype,
+// 				"boneless" => $boneless
+// 			);
 
 
 //Filter 1 : VEG or NON VEG
@@ -253,7 +253,7 @@ if(!$sampleFilter['boneless']['skip']){
 		$bonelessFilter = " AND isBoneless in (".$bonelessFilter.")";
 }
 
-
+} //End If $filterFlag
 
 $query = "SELECT DISTINCT mainType FROM z_menu WHERE mainType='{$type}'"; //mainType='{$type}'
 $main = mysql_query($query);
