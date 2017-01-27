@@ -128,6 +128,26 @@ if(!$sampleFilter['contains']['skip']){
 		$containsFilterCount++;
 	}
 
+	//Non Veg Mix Case
+	if($sampleFilter['contains']['chicken'] || $sampleFilter['contains']['mutton'] || $sampleFilter['contains']['egg'])
+	{
+		if(!$containsFilterCount)
+			$containsFilter = "6";
+		else
+			$containsFilter = $containsFilter.", 6";
+		$containsFilterCount++;
+	}
+
+	//Sea Food Mix Case
+	if($sampleFilter['contains']['fish'] || $sampleFilter['contains']['prawns'])
+	{
+		if(!$containsFilterCount)
+			$containsFilter = "7";
+		else
+			$containsFilter = $containsFilter.", 7";
+		$containsFilterCount++;
+	}	
+
 	if($containsFilterCount) //Making it in a proper format
 		$containsFilter = " AND nonvegContent in (".$containsFilter.")";
 }
@@ -141,23 +161,23 @@ $spicelevelFilterCount = 0;
 if(!$sampleFilter['spicelevel']['skip']){
 	if($sampleFilter['spicelevel']['spicy']){
 		if(!$spicelevelFilterCount)
+			$spicelevelFilter = "1";
+		else
+			$spicelevelFilter = $spicelevelFilter.", 1";
+		$spicelevelFilterCount++;
+	}
+	if($sampleFilter['spicelevel']['sweetened']){
+		if(!$spicelevelFilterCount)
 			$spicelevelFilter = "3";
 		else
 			$spicelevelFilter = $spicelevelFilter.", 3";
 		$spicelevelFilterCount++;
 	}
-	if($sampleFilter['spicelevel']['sweetened']){
+	if($sampleFilter['spicelevel']['non']){
 		if(!$spicelevelFilterCount)
 			$spicelevelFilter = "2";
 		else
 			$spicelevelFilter = $spicelevelFilter.", 2";
-		$spicelevelFilterCount++;
-	}
-	if($sampleFilter['spicelevel']['non']){
-		if(!$spicelevelFilterCount)
-			$spicelevelFilter = "1";
-		else
-			$spicelevelFilter = $spicelevelFilter.", 1";
 		$spicelevelFilterCount++;
 	}
 
@@ -172,16 +192,16 @@ $frytypeFilterCount = 0;
 if(!$sampleFilter['frytype']['skip']){
 	if($sampleFilter['frytype']['oilfry']){
 		if(!$frytypeFilterCount)
-			$frytypeFilter = "2";
+			$frytypeFilter = "1";
 		else
-			$frytypeFilter = $frytypeFilter.", 2";
+			$frytypeFilter = $frytypeFilter.", 1";
 		$frytypeFilterCount++;
 	}
 	if($sampleFilter['frytype']['tawafry']){
 		if(!$frytypeFilterCount)
-			$frytypeFilter = "1";
+			$frytypeFilter = "2";
 		else
-			$frytypeFilter = $frytypeFilter.", 1";
+			$frytypeFilter = $frytypeFilter.", 2";
 		$frytypeFilterCount++;
 	}
 
@@ -197,30 +217,30 @@ $cookingtypeFilterCount = 0;
 if(!$sampleFilter['cookingtype']['skip']){
 	if($sampleFilter['cookingtype']['deep']){
 		if(!$cookingtypeFilterCount)
-			$cookingtypeFilter = "1";
+			$cookingtypeFilter = "4";
 		else
-			$cookingtypeFilter = $cookingtypeFilter.", 1";
+			$cookingtypeFilter = $cookingtypeFilter.", 4";
 		$cookingtypeFilterCount++;
 	}
 	if($sampleFilter['cookingtype']['dry']){
-		if(!$cookingtypeFilterCount)
-			$cookingtypeFilter = "2";
-		else
-			$cookingtypeFilter = $cookingtypeFilter.", 2";
-		$cookingtypeFilterCount++;
-	}
-	if($sampleFilter['cookingtype']['semi']){
 		if(!$cookingtypeFilterCount)
 			$cookingtypeFilter = "3";
 		else
 			$cookingtypeFilter = $cookingtypeFilter.", 3";
 		$cookingtypeFilterCount++;
 	}
+	if($sampleFilter['cookingtype']['semi']){
+		if(!$cookingtypeFilterCount)
+			$cookingtypeFilter = "2";
+		else
+			$cookingtypeFilter = $cookingtypeFilter.", 2";
+		$cookingtypeFilterCount++;
+	}
 	if($sampleFilter['cookingtype']['gravy']){
 		if(!$cookingtypeFilterCount)
-			$cookingtypeFilter = "4";
+			$cookingtypeFilter = "1";
 		else
-			$cookingtypeFilter = $cookingtypeFilter.", 4";
+			$cookingtypeFilter = $cookingtypeFilter.", 1";
 		$cookingtypeFilterCount++;
 	}
 
