@@ -11,6 +11,7 @@ $_POST = json_decode(file_get_contents('php://input'), true);
 
 //$token = mysql_real_escape_string($_POST['token']);
 
+//fetching deals and coupon codes
 $output = [];
 
 	$output[]=array(
