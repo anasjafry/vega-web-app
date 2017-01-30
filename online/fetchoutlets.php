@@ -61,30 +61,37 @@ $_POST = json_decode(file_get_contents('php://input'), true);
 
 */
 
+	$fotos = [];
+	$fotos = array(
+		"https://b.zmtcdn.com/data/reviews_photos/0fe/dc4a9be9c2d2cc74b20805bff358a0fe_1481544893.jpg",
+		"https://b.zmtcdn.com/data/pictures/1/60681/2f4892ce5684d423d6782ead8c240f9d.jpg",
+		"https://b.zmtcdn.com/data/pictures/1/60681/4dfdad4aed2c8e4a35cfa345fa99c9f5.jpg");
+
 $output = [];
 $outlets = [];
 
 	$outlets[]=array(
 		"name"=> "HAL Road",
-		"code"=> "VELACHERY",
+		"code"=> "HALROAD",
 		"line1"=> "Opp. to Grand Mall",
 		"line2"=> "Velacheri - Thambaram Main Road",
 		"line3"=> "Chennai",
 		"mobile"=> "9043960876",
 		"lat"=> 43.07493,
-		"lng"=> -89.381388
+		"lng"=> -89.381388,
+		"pictures" => $fotos
 	);
-
 
 	$outlets[]=array(
 		"name"=> "JP Nagar",
-		"code"=> "1",
+		"code"=> "JPNAGAR",
 		"line1"=> "Near Bus Depot",
 		"line2"=> "Besant Nagar Road",
 		"line3"=> "Thiruvanmyur",
 		"mobile"=> "9884179675",
 		"lat"=> 12.996752,
-		"lng"=> 80.2539273
+		"lng"=> 80.2539273,
+		"pictures" => $fotos
 	);
 
 	$output[]=array(
@@ -102,7 +109,8 @@ $outlets = [];
 		"line3"=> "Thiruvanmyur",
 		"mobile"=> "9884179675",
 		"lat"=> 12.996752,
-		"lng"=> 80.2539273
+		"lng"=> 80.2539273,
+		"pictures" => $fotos
 	);
 
 
@@ -114,7 +122,8 @@ $outlets = [];
 		"line3"=> "Chennai",
 		"mobile"=> "9043960876",
 		"lat"=> 43.07493,
-		"lng"=> -89.381388
+		"lng"=> -89.381388,
+		"pictures" => $fotos
 	);   
 
 		$output[]=array(
@@ -128,14 +137,15 @@ if(!isset($_GET['id'])){
 else{
 	$outlet = "";
 	$outlet =array(
-		"name"=> "Velachery",
+		"name"=> $_GET['id'],
 		"code"=> "VELACHERY",
 		"line1"=> "Opp. to Grand Mall",
 		"line2"=> "Velacheri - Thambaram Main Road",
 		"line3"=> "Chennai",
 		"mobile"=> "9043960876",
 		"lat"=> 12.996752,
-		"lng"=> 80.2539273
+		"lng"=> 80.2539273,
+		"pictures" => $fotos
 	);   
 	echo json_encode($outlet);
 }
