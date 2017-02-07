@@ -14,7 +14,6 @@ $otp = $_POST['otp'];
 
 //$token = mysql_real_escape_string($_POST['token']);
 
-$output = [];
 
 date_default_timezone_set('Asia/Calcutta');
 $date = date("j F, Y");
@@ -24,11 +23,10 @@ $time = date("g:i a");
 $query = "SELECT * from z_users WHERE mobile='{$mobile}' AND otp='{$otp}'";
 $main = mysql_query($query);
 $rows = mysql_fetch_assoc($main);
-$output = [];
 $status = '';
 $error = '';
 
-$loginjson[] = array(
+$loginjson = array(
 	"mobile" => $rows['mobile'],
 	"date" => $date,
 	"time" => $time
@@ -44,6 +42,7 @@ $secretHash = "7a6169746f6f6e746f6b656e"; //hexa for "zaitoontoken"
 //To encrypt
 $encryptedMessage = openssl_encrypt($textToEncrypt, $encryptionMethod, $secretHash);
 $token = $encryptedMessage;
+echo($token);
 //To Decrypt
 $decryptedMessage = openssl_decrypt($encryptedMessage, $encryptionMethod, $secretHash);
 
@@ -52,7 +51,7 @@ $decryptedMessage = openssl_decrypt($encryptedMessage, $encryptionMethod, $secre
 
 
 if(!empty($rows)){
-	$response[] = array(
+	$response = array(
 		"name" => $rows['name'],
 		"mobile" => $rows['mobile'],
 		"isVerified" => $rows['isVerified'],
@@ -73,14 +72,14 @@ else{
 	$error = 'No user exists';
 }
 
-$output[] = array(
+$output = array(
 	"response" => $response,
 	"status" => $status,
 	"error" => $error
 );
 
 //$list = array('status' => $flag);    
-echo json_encode($output);
+//echo json_encode($output);
 		
 ?>
 

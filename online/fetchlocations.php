@@ -12,12 +12,10 @@ $_POST = json_decode(file_get_contents('php://input'), true);
 //$token = mysql_real_escape_string($_POST['token']);
 
 //fetching deals and coupon codes
-$output = [];
 
 $query = "SELECT DISTINCT city from z_locations";
 $main = mysql_query($query);
-$output = [];
-$response = [];
+
 $status = 'fail';
 $error = '';
 
@@ -35,14 +33,14 @@ while($rows = mysql_fetch_assoc($main)){
 		);
 		$status = 'success';
 	}
-	$response[] = array(
+	$response = array(
 		"city" => $rows['city'],
 		"localities" => $localities
 	);
 	//echo(sizeof ($rows1));
 }
 
-$output[] = array(
+$output = array(
 	"response" => $response,
 	"status" => $status,
 	"error" => $error

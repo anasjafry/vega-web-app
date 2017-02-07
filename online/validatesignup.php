@@ -19,21 +19,15 @@ $name = $_POST['name'];
 $email = $_POST['email'];
 
 
-
-//$token = mysql_real_escape_string($_POST['token']);
-
-$output = [];
-
 date_default_timezone_set('Asia/Calcutta');
 $date = date("j F Y");
 $time = date("g:i a");
 
-$output = [];
 $status = '';
 $error = '';
 
-$tokenjson[] = array(
-	"mobile" => $rows['mobile'],
+$tokenjson = array(
+	"mobile" => $mobile,
 	"date" => $date,
 	"time" => $time
 );
@@ -54,7 +48,7 @@ $decryptedtoken = openssl_decrypt($token, $encryptionMethod, $secretHash);
 
 
 if($otpuser == $otpapi){
-	$response[] = array(
+	$response = array(
 		"name" => $name,
 		"mobile" => $mobile,
 		"isVerified" => true,
@@ -72,7 +66,6 @@ if($otpuser == $otpapi){
 	$lastLogin = $time.", ".$date;
 	$query = "INSERT INTO z_users (`mobile`, `name`, `isVerified`, `isBlocked`, `lastLogin`, `memberSince`, `isFeedback`, `memberType`, `savedAddresses`, `email`, `password`, `otp`) VALUES ('{$mobile}','{$name}','true','false','{$lastLogin}','{$date}','false','fresher','[]','{$email}','password','{$otpapi}')";
 	$main = mysql_query($query);
-	echo($query);
 }
 else{
 	$response = "";
@@ -80,7 +73,7 @@ else{
 	$error = 'Not valid credentials';
 }
 
-$output[] = array(
+$output = array(
 	"response" => $response,
 	"status" => $status,
 	"error" => $error
