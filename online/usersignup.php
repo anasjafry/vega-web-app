@@ -12,14 +12,9 @@ $_POST = json_decode(file_get_contents('php://input'), true);
 
 $mobile = $_POST['mobile'];
 
-//$token = mysql_real_escape_string($_POST['token']);
-
-$output = [];
-
 $query = "SELECT * from z_users WHERE mobile='{$mobile}'";
 $main = mysql_query($query);
 $rows = mysql_fetch_assoc($main);
-$output = [];
 $status = '';
 $error = '';
 
@@ -35,7 +30,7 @@ $decryptedotp = openssl_decrypt($encryptedotp, $encryptionMethod, $secretHash);
 echo ($otp);
 
 if(empty($rows)){
-	$response[] = array(
+	$response = array(
 		"userid" => $mobile,
 		"isOTPSent" => true,
 		"otp" => $encryptedotp
@@ -43,7 +38,7 @@ if(empty($rows)){
 	$status = 'success';
 }
 else{
-	$response[] = array(
+	$response = array(
 		"userid" => $mobile,
 		"isOTPSent" => false
 	);
@@ -51,7 +46,7 @@ else{
 	$error = 'User aldready exists';
 }
 
-$output[] = array(
+$output = array(
 	"response" => $response,
 	"status" => $status,
 	"error" => $error

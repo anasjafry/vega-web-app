@@ -13,24 +13,25 @@ $mobile = $_POST['mobile'];
 
 //$token = mysql_real_escape_string($_POST['token']);
 
-$output = [];
 
 $query = "SELECT * from z_users WHERE mobile='{$mobile}'";
 $main = mysql_query($query);
 $rows = mysql_fetch_assoc($main);
-$output = [];
 $status = '';
 $error = '';
+$otp = rand(1000,9999);
 
 if(!empty($rows)){
-	$response[] = array(
+	$query1 = "UPDATE `z_users` SET `otp`='{$otp}' WHERE mobile='{$mobile}'";
+	$main1 = mysql_query($query1);
+	$response = array(
 		"userid" => $mobile,
 		"isOTPSent" => true
 	);
 	$status = 'success';
 }
 else{
-	$response[] = array(
+	$response = array(
 		"userid" => $mobile,
 		"isOTPSent" => false
 	);
@@ -38,7 +39,7 @@ else{
 	$error = 'No user exists';
 }
 
-$output[] = array(
+$output = array(
 	"response" => $response,
 	"status" => $status,
 	"error" => $error
