@@ -17,6 +17,9 @@ $output = [];
 $query = "SELECT DISTINCT city from z_locations";
 $main = mysql_query($query);
 $output = [];
+$response = [];
+$status = 'fail';
+$error = '';
 
 while($rows = mysql_fetch_assoc($main)){
 	$query1 = "SELECT * from z_locations WHERE city='{$rows['city']}'";
@@ -30,14 +33,20 @@ while($rows = mysql_fetch_assoc($main)){
 			"minOrder" => $rows1['minOrder'],
 			"minTime" => $rows1['minTime']
 		);
+		$status = 'success';
 	}
-	$output[] = array(
+	$response[] = array(
 		"city" => $rows['city'],
 		"localities" => $localities
 	);
-
+	//echo(sizeof ($rows1));
 }
 
+$output[] = array(
+	"response" => $response,
+	"status" => $status,
+	"error" => $error
+	);
 //$list = array('status' => $flag);    
 echo json_encode($output);
 		
