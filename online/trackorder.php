@@ -18,10 +18,14 @@ if(isset($_GET['orderID']))
 $query = "SELECT * FROM `zaitoon_orderlist` WHERE `orderID`='{$oid}'";
 $all = mysql_query($query);
 
-$list = [];
+$list = "";
+$status = 'fail';
+$error = 'No such order exists!';
 
 while($order = mysql_fetch_assoc($all))
-{
+{	
+	$status = 'success';
+	$error = '';
 	$cart = json_decode($order['cart']);
 	$list = array(
 		'orderID' => $order['orderID'], 
@@ -33,6 +37,12 @@ while($order = mysql_fetch_assoc($all))
 		);
 }
 
-echo json_encode($list);
+$output = array(
+	"status" => $status,
+	"error" => $error,
+	"response" => $list
+);
+
+echo json_encode($output);
 		
 ?>
