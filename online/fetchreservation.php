@@ -12,9 +12,6 @@ $_POST = json_decode(file_get_contents('php://input'), true);
 
 $userID = $_POST['userID'];
 
-//$stub = '{"isDefault": false, "name": "Abhijith C S", "flatNo": "306", "flatName": "Alakananda Hostel", "landmark": "IIT Madras Campus", "area": "IIT Madras", "city": "Chennai", "contact": 9003824036 }';
-$details = $_POST['details'];
-
 $encryptionMethod = "AES-256-CBC";
 $secretHash = "7a6169746f6f6e746f6b656e";
 $token = $_POST['token'];
@@ -24,25 +21,32 @@ $tokenid = json_decode($decryptedtoken,true);
 //$error =
 //$output = [];
 
-date_default_timezone_set('Asia/Calcutta');
-$date = date("j F, Y");
-$time = date("g:i a");
-
 $status = 'fail';
-$error = 'Access Denied. Not Authorized!';
-
+$error = 'No such user exists!';
+$response = "";
 //echo($tokenid['mobile']);
 if($tokenid['mobile'] == $userID){
 	$status = 'success';
 	$error = "";
-	$query = "INSERT INTO z_reservations (`userID`, `outlet`, `date` , `time` , `count`) VALUES ('{$userID}','{$details['outlet']}','{$date}','{$time}','{$details['count']}')";
+	$query = "SELECT * from z_reservations WHERE userID='{$userID}' ORDER BY `date` DESC LIMIT 2";
 	$main = mysql_query($query);
+	while($rows = mysql_fetch_assoc($main)){
+		$response[] =array(
+			"userID" => $userID,
+			"outlet" => $rows['outlet'],
+			"date" => $rows['date'],
+			"time" => $rows['time'],
+			"count" => $rows['count']	
+		);	
+	}
+	
 }
 
 
 $output = array(
 	"status" => $status,
-	"error" => $error
+	"error" => $error,
+	"response" => $response
 );
 
 echo json_encode($output);
