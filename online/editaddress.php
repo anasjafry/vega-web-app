@@ -1,5 +1,5 @@
 <?php
-header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Origin: *'); 
 header('Access-Control-Allow-Headers: Content-Type');
 header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
 header('Access-Control-Allow-Credentials: true');
@@ -11,37 +11,36 @@ require 'connect.php';
 $_POST = json_decode(file_get_contents('php://input'), true);
 
 $userID = $_POST['userID'];
-
-//$stub = '{"isDefault": false, "name": "Abhijith C S", "flatNo": "306", "flatName": "Alakananda Hostel", "landmark": "IIT Madras Campus", "area": "IIT Madras", "city": "Chennai", "contact": 9003824036 }';
-$address = $_POST['address'];
-
-$encryptionMethod = "AES-256-CBC";
+$address = $_POST['address']; 
+$id = $_POST['id'];
+$encryptionMethod = "AES-256-CBC";  
 $secretHash = "7a6169746f6f6e746f6b656e";
 $token = $_POST['token'];
 $decryptedtoken = openssl_decrypt($token, $encryptionMethod, $secretHash);
 //echo($decryptedtoken);
 $tokenid = json_decode($decryptedtoken,true);
-//$error =
-//$output = [];
-$i = 0;
-$id = 0;
 
 $status = 'fail';
 $error = 'No such address exists!';
+//$error = 
+//$output = [];
+$i = 0;
 
-//echo($tokenid['mobile']);
 if($tokenid['mobile'] == $userID){
-	$status = 'success';
-	$error = "";
 	$query = "SELECT * from z_users WHERE mobile='{$userID}'";
 	$main = mysql_query($query);
 	$rows = mysql_fetch_assoc($main);
 	$useraddress = json_decode($rows['savedAddresses']);
-	$i = sizeof($useraddress)-1;
-	$id = ($useraddress[$i]->id) + 1;
+	while ($i < sizeof($useraddress)) {
+		if($id == $useraddress[$i]->id){
+			$status = 'success';
+			$error = "";
+			break;
+		}
+		$i++;
+	}
 
-	$item = sizeof($useraddress);
-	$useraddress[$item] = array(
+	$useraddress[$i] = array(
 		"id" => $id,
 		"isDefault" => $address['isDefault'],
 		"name" => $address['name'],
@@ -53,6 +52,7 @@ if($tokenid['mobile'] == $userID){
 		"contact" => $address['contact']
 	);
 	$newadd = json_encode($useraddress);
+	//echo($newadd);
 	$query = "UPDATE z_users SET `savedAddresses`='{$newadd}' WHERE mobile='{$userID}'";
 	$main = mysql_query($query);
 }
@@ -64,5 +64,6 @@ $output = array(
 );
 
 echo json_encode($output);
-
+		
 ?>
+
