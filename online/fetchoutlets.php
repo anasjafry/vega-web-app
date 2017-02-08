@@ -9,8 +9,6 @@ require 'connect.php';
 
 $_POST = json_decode(file_get_contents('php://input'), true);
 
-
-
 $query = "SELECT DISTINCT city from z_outlets";
 $main = mysql_query($query);
 
