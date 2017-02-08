@@ -29,13 +29,13 @@ $date = date("j F, Y");
 $time = date("g:i a");
 
 $status = 'fail';
-$error = 'No such user exists!';
+$error = 'Access Denied. Not Authorized!';
 
 //echo($tokenid['mobile']);
 if($tokenid['mobile'] == $userID){
 	$status = 'success';
 	$error = "";
-	$query = "INSERT INTO z_reservations (`userID`, `outlet`, `date`, `time`, `count`) VALUES ('{$userID}','{$details['outlet']}','{$date}','{$time}','{$details['count']}')";
+	$query = "INSERT INTO z_reservations (`userID`, `outlet`, `date` , `time` , `count`) VALUES ('{$userID}','{$details['outlet']}','{$date}','{$time}','{$details['count']}')";
 	$main = mysql_query($query);
 }
 

@@ -28,13 +28,14 @@ $response = "";
 if($tokenid['mobile'] == $userID){
 	$status = 'success';
 	$error = "";
-	$query = "SELECT * from z_reservations WHERE userID='{$userID}' ORDER BY `timestamp` DESC LIMIT 2";
+	$query = "SELECT * from z_reservations WHERE userID='{$userID}' ORDER BY `date` DESC LIMIT 2";
 	$main = mysql_query($query);
 	while($rows = mysql_fetch_assoc($main)){
 		$response[] =array(
 			"userID" => $userID,
 			"outlet" => $rows['outlet'],
-			"timestamp" => $rows['timestamp'],
+			"date" => $rows['date'],
+			"time" => $rows['time'],
 			"count" => $rows['count']	
 		);	
 	}
