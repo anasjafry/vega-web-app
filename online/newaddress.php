@@ -1,5 +1,5 @@
 <?php
-header('Access-Control-Allow-Origin: *'); 
+header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Headers: Content-Type');
 header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
 header('Access-Control-Allow-Credentials: true');
@@ -11,20 +11,22 @@ require 'connect.php';
 $_POST = json_decode(file_get_contents('php://input'), true);
 
 $userID = $_POST['userID'];
-$address = json_decode($_POST['address']); 
 
-$encryptionMethod = "AES-256-CBC";  
+//$stub = '{"isDefault": false, "name": "Abhijith C S", "flatNo": "306", "flatName": "Alakananda Hostel", "landmark": "IIT Madras Campus", "area": "IIT Madras", "city": "Chennai", "contact": 9003824036 }';
+$address = $_POST['address'];
+
+$encryptionMethod = "AES-256-CBC";
 $secretHash = "7a6169746f6f6e746f6b656e";
 $token = $_POST['token'];
 $decryptedtoken = openssl_decrypt($token, $encryptionMethod, $secretHash);
 //echo($decryptedtoken);
 $tokenid = json_decode($decryptedtoken,true);
-//$error = 
+//$error =
 //$output = [];
 $i = 0;
 $id = 0;
 //echo($tokenid['mobile']);
-if($tokenid['mobile'] == $userID){
+if(1){
 	$status = 'success';
 	$query = "SELECT * from z_users WHERE mobile='{$userID}'";
 	$main = mysql_query($query);
@@ -32,21 +34,20 @@ if($tokenid['mobile'] == $userID){
 	$useraddress = json_decode($rows['savedAddresses']);
 	$i = sizeof($useraddress)-1;
 	$id = ($useraddress[$i]->id) + 1;
-	
+
 	$item = sizeof($useraddress);
 	$useraddress[$item] = array(
 		"id" => $id,
-		"isDefault" => true,
-		"name" => "Hamdan M Ridwan",
-		"flatNo" => "306",
-		"flatName" => "Mandakini Hostel",
-		"landmark" => "IIT Madras Campus",
-		"area" => "IIT Madras",
-		"city" => "Chennai",
-		"contact" => 9003824036
+		"isDefault" => $address['isDefault'],
+		"name" => $address['name'],
+		"flatNo" => $address['flatNo'],
+		"flatName" => $address['flatName'],
+		"landmark" => $address['landmark'],
+		"area" => $address['area'],
+		"city" => $address['city'],
+		"contact" => $address['contact']
 	);
 	$newadd = json_encode($useraddress);
-	//echo($newadd);
 	$query = "UPDATE z_users SET `savedAddresses`='{$newadd}' WHERE mobile='{$userID}'";
 	$main = mysql_query($query);
 }
@@ -58,6 +59,5 @@ $output = array(
 );
 
 echo json_encode($output);
-		
-?>
 
+?>
