@@ -1,5 +1,5 @@
 <?php
-header('Access-Control-Allow-Origin: *'); 
+header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Headers: Content-Type');
 header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
 header('Access-Control-Allow-Credentials: true');
@@ -9,146 +9,49 @@ require 'connect.php';
 
 $_POST = json_decode(file_get_contents('php://input'), true);
 
-//$token = mysql_real_escape_string($_POST['token']);
 
-/*
 
-[{
-	"city": "CHENNAI",
-	"outlets": [{
-		"name": "Velachery",
-		"code": "VELACHERY",
-		"line1": "Opp. to Grand Mall",
-		"line2": "Velacheri - Thambaram Main Road",
-		"line3": "Chennai",
-		"mobile": "9043960876",
-		"lat": 43.07493,
-		"lng": -89.381388
-	}, {
-		"name": "Adyar",
-		"code": "ADYAR",
-		"line1": "Near Bus Depot",
-		"line2": "Besant Nagar Road",
-		"line3": "Thiruvanmyur",
-		"mobile": "9884179675",
-		"lat": 12.996752,
-		"lng": 80.2539273
-	}]
+$query = "SELECT DISTINCT city from z_outlets";
+$main = mysql_query($query);
 
-}, {
-	"city": "BANGALORE",
-	"outlets": [{
-		"name": "HAL Road",
-		"code": "VELACHERY",
-		"line1": "Opp. to Grand Mall",
-		"line2": "Velacheri - Thambaram Main Road",
-		"line3": "Chennai",
-		"mobile": "9043960876",
-		"lat": 43.07493,
-		"lng": -89.381388
-	}, {
-		"name": "JP Nagar",
-		"code": "ADYAR",
-		"line1": "Near Bus Depot",
-		"line2": "Besant Nagar Road",
-		"line3": "Thiruvanmyur",
-		"mobile": "9884179675",
-		"lat": 12.996752,
-		"lng": 80.2539273
-	}]
+$status = 'fail';
+$error = '';
 
-}]
+while($rows = mysql_fetch_assoc($main)){
+	$query1 = "SELECT * from z_outlets WHERE city='{$rows['city']}'";
+	$main1 = mysql_query($query1);
+	$outlets = [];
 
-*/
 
-	$fotos = [];
-	$fotos = array(
-		"https://b.zmtcdn.com/data/reviews_photos/0fe/dc4a9be9c2d2cc74b20805bff358a0fe_1481544893.jpg",
-		"https://b.zmtcdn.com/data/pictures/1/60681/2f4892ce5684d423d6782ead8c240f9d.jpg",
-		"https://b.zmtcdn.com/data/pictures/1/60681/4dfdad4aed2c8e4a35cfa345fa99c9f5.jpg");
+	while($rows1 = mysql_fetch_assoc($main1)){
+		$outlets[]=array(
+			"name"=> $rows1['name'],
+			"code"=> $rows1['code'],
+			"line1"=> $rows1['line1'],
+			"line2"=> $rows1['line2'],
+			"mobile"=> $rows1['contact'],
+			"lat"=> $rows1['latitude'],
+			"lng"=> $rows1['longitude'],
+			"pictures" => json_decode($rows1['fotos'])
+		);
+		$status = 'success';
+	}
 
-$output = [];
-$outlets = [];
-
-	$outlets[]=array(
-		"name"=> "HAL Road",
-		"code"=> "HALROAD",
-		"line1"=> "Opp. to Grand Mall",
-		"line2"=> "Velacheri - Thambaram Main Road",
-		"line3"=> "Chennai",
-		"mobile"=> "9043960876",
-		"lat"=> 43.07493,
-		"lng"=> -89.381388,
-		"pictures" => $fotos
+	$response[]= array(
+		"city" => $rows['city'],
+		"outlets" => $outlets
 	);
 
-	$outlets[]=array(
-		"name"=> "JP Nagar",
-		"code"=> "JPNAGAR",
-		"line1"=> "Near Bus Depot",
-		"line2"=> "Besant Nagar Road",
-		"line3"=> "Thiruvanmyur",
-		"mobile"=> "9884179675",
-		"lat"=> 12.996752,
-		"lng"=> 80.2539273,
-		"pictures" => $fotos
-	);
-
-	$output[]=array(
-		"city" => "Bangalore",
-		"outlets"=> $outlets	
-	);	
-   
-$outlets = [];
-
-	$outlets[]=array(
-		"name"=> "Adyar",
-		"code"=> "ADYAR",
-		"line1"=> "Near Bus Depot",
-		"line2"=> "Besant Nagar Road",
-		"line3"=> "Thiruvanmyur",
-		"mobile"=> "9884179675",
-		"lat"=> 12.996752,
-		"lng"=> 80.2539273,
-		"pictures" => $fotos
-	);
-
-
-	$outlets[]=array(
-		"name"=> "Velachery",
-		"code"=> "VELACHERY",
-		"line1"=> "Opp. to Grand Mall",
-		"line2"=> "Velacheri - Thambaram Main Road",
-		"line3"=> "Chennai",
-		"mobile"=> "9043960876",
-		"lat"=> 43.07493,
-		"lng"=> -89.381388,
-		"pictures" => $fotos
-	);   
-
-		$output[]=array(
-		"city" => "Chennai",
-		"outlets"=> $outlets	
-	);	
-   
-if(!isset($_GET['id'])){
-	echo json_encode($output);
 }
-else{
-	$outlet = "";
-	$outlet =array(
-		"name"=> $_GET['id'],
-		"code"=> "VELACHERY",
-		"line1"=> "Opp. to Grand Mall",
-		"line2"=> "Velacheri - Thambaram Main Road",
-		"line3"=> "Chennai",
-		"mobile"=> "9043960876",
-		"lat"=> 12.996752,
-		"lng"=> 80.2539273,
-		"pictures" => $fotos
-	);   
-	echo json_encode($outlet);
-}
-		
+
+
+$output = array(
+	"response" => $response,
+	"status" => $status,
+	"error" => $error
+	);
+//$list = array('status' => $flag);
+echo json_encode($output);
+
+
 ?>
-
