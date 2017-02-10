@@ -59,18 +59,29 @@ if($tokenid['mobile'] == $userID){
 		$error = "One or More item is unavailable";
 	}
 	else{
-		if($cart['cartTotal'] < $rows['minOrder']){
-			$status = "fail";
-			$error = "Minimum Order for the outlet is: ".$rows['minOrder'];
+		if($isTakeAway == false){
+			if($cart['cartTotal'] < $rows['minOrder']){
+				$status = "fail";
+				$error = "Minimum Order for the outlet is: ".$rows['minOrder'];
+			}
+			else{
+				$status = "success";
+				$error = "";
+				$cartjson = json_encode($_POST['cart']);
+				$addressjson = json_encode($address);
+				$query = "INSERT INTO `zaitoon_orderlist`(`date`,`timePlace`, `userID`, `status`, `comments`, `cart`, `deliveryAddress`, `modeOfPayment`) VALUES ('{$date}','{$time}','{$userID}',0,'{$comments}','{$cartjson}','{$addressjson}','{$modeOfPayment}')";
+				mysql_query($query);
+			}
 		}
 		else{
 			$status = "success";
 			$error = "";
 			$cartjson = json_encode($_POST['cart']);
 			$addressjson = json_encode($address);
-			$query = "INSERT INTO `zaitoon_orderlist`(`date`,`timePlace`, `userID`, `status`, `comments`, `cart`, `deliveryAddress`, `modeOfPayment`) VALUES ('{$date}','{$time}','{$userID}',0,'{$comments}','{$cartjson}','{$addressjson}','{$modeOfPayment}')";
+			$query = "INSERT INTO `zaitoon_orderlist`(`date`,`timePlace`, `userID`, `status`, `comments`, `cart`, `deliveryAddress`, `modeOfPayment`) VALUES ('{$date}','{$time}','{$userID}',0,'{$comments}','{$cartjson}','','{$modeOfPayment}')";
 			mysql_query($query);
 		}
+		
 	}
 
 
