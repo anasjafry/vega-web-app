@@ -31,7 +31,8 @@ $time = date("g:i a");
 $status = "fail";
 $error = "Not authorized user!";
 $i = 0;
-
+$carttamper = 0;
+$total=0;
 if($tokenid['mobile'] == $userID){
 	$error = "";
 	$serve = "SELECT * FROM z_locations WHERE `location`='{$location}' AND `outlet`='{$outlet}'";
@@ -51,6 +52,10 @@ if($tokenid['mobile'] == $userID){
 		}
 		else{
 			$flag = 1;
+			if($rows1['price']!=$items[$i]['itemPrice']){
+				$carttamper = 1;
+			}
+			$total += $rows1['price']*$items[$i]['itemQuantity'];
 		}
 		$i++;
 	}
@@ -65,29 +70,36 @@ if($tokenid['mobile'] == $userID){
 				$error = "Minimum Order for the outlet is: ".$rows['minOrder'];
 			}
 			else{
+				if($carttamper == 1 || $total!=$cart['cartTotal']){
+					$status = "fail";
+					$error = "Cart has been tampered";
+				}
+				else{
+					$status = "success";
+					$error = "";
+					$cartjson = json_encode($_POST['cart']);
+					$addressjson = json_encode($address);
+					$query = "INSERT INTO `zaitoon_orderlist`(`date`,`timePlace`, `userID`, `status`, `comments`, `cart`, `deliveryAddress`, `modeOfPayment`) VALUES ('{$date}','{$time}','{$userID}',0,'{$comments}','{$cartjson}','{$addressjson}','{$modeOfPayment}')";
+					mysql_query($query);	
+				}
+			}
+		}
+		else{
+			if($carttamper == 1 || $total!=$cart['cartTotal']){
+				echo($total);
+				$status = "fail";
+				$error = "Cart has been tampered";
+			}
+			else{
 				$status = "success";
 				$error = "";
 				$cartjson = json_encode($_POST['cart']);
 				$addressjson = json_encode($address);
-				$query = "INSERT INTO `zaitoon_orderlist`(`date`,`timePlace`, `userID`, `status`, `comments`, `cart`, `deliveryAddress`, `modeOfPayment`) VALUES ('{$date}','{$time}','{$userID}',0,'{$comments}','{$cartjson}','{$addressjson}','{$modeOfPayment}')";
+				$query = "INSERT INTO `zaitoon_orderlist`(`date`,`timePlace`, `userID`, `status`, `comments`, `cart`, `deliveryAddress`, `modeOfPayment`) VALUES ('{$date}','{$time}','{$userID}',0,'{$comments}','{$cartjson}','','{$modeOfPayment}')";
 				mysql_query($query);
 			}
 		}
-		else{
-			$status = "success";
-			$error = "";
-			$cartjson = json_encode($_POST['cart']);
-			$addressjson = json_encode($address);
-			$query = "INSERT INTO `zaitoon_orderlist`(`date`,`timePlace`, `userID`, `status`, `comments`, `cart`, `deliveryAddress`, `modeOfPayment`) VALUES ('{$date}','{$time}','{$userID}',0,'{$comments}','{$cartjson}','','{$modeOfPayment}')";
-			mysql_query($query);
-		}
-		
 	}
-
-
-	
-	//$query = "INSERT INTO `zaitoon_orderlist`(`date`,`timePlace`, `userID`, `status`, `comments`, `cart`) VALUES ('{$date}','{$time}','{$userID}',0,'None','{$cart}')";
-	//mysql_query($query);
 }
 
 $output = array(
