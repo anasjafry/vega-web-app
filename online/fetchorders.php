@@ -15,7 +15,7 @@ $secretHash = "7a6169746f6f6e746f6b656e";
 
 $_POST = json_decode(file_get_contents('php://input'), true);
 
-$status = $_POST['status'];
+$orderstatus = $_POST['status'];
 $outlet = $_POST['outlet']; 
 
 $token = $_POST['token'];
@@ -31,7 +31,7 @@ if($outlet == $tokenid['outlet'])
 {
 	$status = 'fail';
 	$error = 'No orders!';
-	$query = "SELECT * FROM `zaitoon_orderlist` WHERE `status`='{$status}' AND `outlet`='{$outlet}'";
+	$query = "SELECT * FROM `zaitoon_orderlist` WHERE `status`='{$orderstatus}' AND `outlet`='{$outlet}'";
 	$all = mysql_query($query);
 	while($order = mysql_fetch_assoc($all)){
 		$status = 'success';
