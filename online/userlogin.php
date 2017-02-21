@@ -1,5 +1,5 @@
 <?php
-header('Access-Control-Allow-Origin: *'); 
+header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Headers: Content-Type');
 header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
 header('Access-Control-Allow-Credentials: true');
@@ -19,7 +19,7 @@ $main = mysql_query($query);
 $rows = mysql_fetch_assoc($main);
 $status = '';
 $error = '';
-$otp = rand(1000,9999);
+$otp = 1000; //rand(1000,9999);
 
 if(!empty($rows)){
 	$query1 = "UPDATE `z_users` SET `otp`='{$otp}' WHERE mobile='{$mobile}'";
@@ -45,8 +45,7 @@ $output = array(
 	"error" => $error
 );
 
-//$list = array('status' => $flag);    
+//$list = array('status' => $flag);
 echo json_encode($output);
-		
-?>
 
+?>
