@@ -66,6 +66,9 @@ $error = 'User is not Authorized';
 
 if($order['userID'] == $tokenid['mobile'])
 {
+	//Delivery agent
+	$agent = mysql_fetch_assoc(mysql_query("SELECT * FROM `z_deliveryagents` WHERE mobile='{$order['agentMobile']}'"));
+
 	$status = true;
 	$error = '';
 	$cart = json_decode($order['cart']);
@@ -77,7 +80,10 @@ if($order['userID'] == $tokenid['mobile'])
 		'date' => $order['date'],
 		'timePlace' => $order['timePlace'],
 		'timeConfirm' => $order['timeConfirm'],
-		'timeDeliver' => $order['timeDeliver']
+		'timeDispatch' => $order['timeDispatch'],
+		'timeDeliver' => $order['timeDeliver'],
+		'agentName' => $agent['name'],
+		'agentMobile' => $order['agentMobile']
 		);
 }
 
