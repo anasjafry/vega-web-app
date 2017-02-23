@@ -1,25 +1,59 @@
 <?php
-
-/*** YET TO ADD "NO RESULTS" SCENARIO ***/
-
-header('Access-Control-Allow-Origin: *'); 
+//Headers
+header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Headers: Content-Type');
 header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
 header('Access-Control-Allow-Credentials: true');
 
+//Database Connection
 define('INCLUDE_CHECK', true);
 require 'connect.php';
 
+//Encryption Credentials
+define('SECURE_CHECK', true);
+require 'secure.php';
+
 $_POST = json_decode(file_get_contents('php://input'), true);
 
+//Encryption Validation
+if(!isset($_POST['token'])){
+	$output = array(
+		"status" => false,
+		"error" => "Access Token is missing"
+	);
+	die(json_encode($output));
+}
 
-$oid = $_POST['orderID']; 
+if(!isset($_POST['orderID'])){
+	$output = array(
+		"status" => false,
+		"error" => "Order ID is missing"
+	);
+	die(json_encode($output));
+}
 
-$encryptionMethod = "AES-256-CBC";
-$secretHash = "7a6169746f6f6e746f6b656e";
 $token = $_POST['token'];
 $decryptedtoken = openssl_decrypt($token, $encryptionMethod, $secretHash);
-$tokenid = json_decode($decryptedtoken,true);
+$tokenid = json_decode($decryptedtoken, true);
+
+//Expiry Validation
+date_default_timezone_set('Asia/Calcutta');
+$dateStamp = date_create($tokenid['date']);
+$today = date_create(date("Y-m-j"));
+$interval = date_diff($dateStamp, $today);
+$interval = $interval->format('%a');
+
+if($interval > $tokenExpiryDays){
+	$output = array(
+		"status" => false,
+		"error" => "Expired Token"
+	);
+	die(json_encode($output));
+}
+
+
+
+$oid = $_POST['orderID'];
 
 $query = "SELECT * FROM `zaitoon_orderlist` WHERE `orderID`='{$oid}'";
 $all = mysql_query($query);
@@ -27,23 +61,29 @@ $order = mysql_fetch_assoc($all);
 
 $list = "";
 
-$status = 'fail';
-$error = 'Not authorized!';
+$status = false;
+$error = 'User is not Authorized';
 
 if($order['userID'] == $tokenid['mobile'])
 {
-	$status = 'success';
+	//Delivery agent
+	$agent = mysql_fetch_assoc(mysql_query("SELECT * FROM `z_deliveryagents` WHERE mobile='{$order['agentMobile']}'"));
+
+	$status = true;
 	$error = '';
 	$cart = json_decode($order['cart']);
 	$list = array(
-		'orderID' => $order['orderID'], 
-		'status' => $order['status'], 
-		'comment' => $order['comments'], 
+		'orderID' => $order['orderID'],
+		'status' => $order['status'],
+		'comment' => $order['comments'],
 		'cart' => $cart,
-		'date' => $order['date'], 
-		'timePlace' => $order['timePlace'], 
-		'timeConfirm' => $order['timeConfirm'], 
-		'timeDeliver' => $order['timeDeliver']
+		'date' => $order['date'],
+		'timePlace' => $order['timePlace'],
+		'timeConfirm' => $order['timeConfirm'],
+		'timeDispatch' => $order['timeDispatch'],
+		'timeDeliver' => $order['timeDeliver'],
+		'agentName' => $agent['name'],
+		'agentMobile' => $order['agentMobile']
 		);
 }
 
@@ -54,5 +94,4 @@ $output = array(
 );
 
 echo json_encode($output);
-		
 ?>

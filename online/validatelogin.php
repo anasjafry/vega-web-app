@@ -1,5 +1,5 @@
 <?php
-header('Access-Control-Allow-Origin: *'); 
+header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Headers: Content-Type');
 header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
 header('Access-Control-Allow-Credentials: true');
@@ -12,12 +12,8 @@ $_POST = json_decode(file_get_contents('php://input'), true);
 $mobile = $_POST['mobile'];
 $otp = $_POST['otp'];
 
-//$token = mysql_real_escape_string($_POST['token']);
-
-
 date_default_timezone_set('Asia/Calcutta');
-$date = date("j F, Y");
-$time = date("g:i a");
+$date = date("Y-m-j");
 
 
 $query = "SELECT * from z_users WHERE mobile='{$mobile}' AND otp='{$otp}'";
@@ -28,21 +24,22 @@ $error = '';
 
 $loginjson = array(
 	"mobile" => $rows['mobile'],
-	"date" => $date,
-	"time" => $time
+	"date" => $date
 );
+
+$status = false;
 
 //$token = mcrypt_encrypt(MCRYPT_RIJNDAEL_128, $key,json_encode($loginjson), MCRYPT_MODE_CBC, $iv);
 //hash_hmac ( "sha256" , json_encode($loginjson) , 'zaitoonkey' );
 
 $textToEncrypt = json_encode($loginjson);
-$encryptionMethod = "AES-256-CBC";  
+$encryptionMethod = "AES-256-CBC";
 $secretHash = "7a6169746f6f6e746f6b656e"; //hexa for "zaitoontoken"
 
 //To encrypt
 $encryptedMessage = openssl_encrypt($textToEncrypt, $encryptionMethod, $secretHash);
 $token = $encryptedMessage;
-echo($token);
+
 //To Decrypt
 $decryptedMessage = openssl_decrypt($encryptedMessage, $encryptionMethod, $secretHash);
 
@@ -64,12 +61,12 @@ if(!empty($rows)){
 		"email" => $rows['email'],
 		"token" => $token
 	);
-	$status = 'success';
+	$status = true;
 }
 else{
 	$response = "";
-	$status = 'fail';
-	$error = 'No user exists';
+	$status = false;
+	$error = 'OTP Mismatch.';
 }
 
 $output = array(
@@ -78,8 +75,7 @@ $output = array(
 	"error" => $error
 );
 
-//$list = array('status' => $flag);    
-//echo json_encode($output);
-		
-?>
+//$list = array('status' => $flag);
+echo json_encode($output);
 
+?>
