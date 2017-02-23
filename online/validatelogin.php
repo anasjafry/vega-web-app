@@ -11,14 +11,9 @@ $_POST = json_decode(file_get_contents('php://input'), true);
 
 $mobile = $_POST['mobile'];
 $otp = $_POST['otp'];
-// $mobile = "9043960876";
-// $otp = "8556";
-//$token = mysql_real_escape_string($_POST['token']);
-
 
 date_default_timezone_set('Asia/Calcutta');
-$date = date("j F, Y");
-$time = date("g:i a");
+$date = date("Y-m-j");
 
 
 $query = "SELECT * from z_users WHERE mobile='{$mobile}' AND otp='{$otp}'";
@@ -29,8 +24,7 @@ $error = '';
 
 $loginjson = array(
 	"mobile" => $rows['mobile'],
-	"date" => $date,
-	"time" => $time
+	"date" => $date
 );
 
 $status = false;

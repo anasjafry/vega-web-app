@@ -6,6 +6,7 @@ header('Access-Control-Allow-Credentials: true');
 
 define('INCLUDE_CHECK', true);
 require 'connect.php';
+
 error_reporting(0);
 //$_POST = json_decode(file_get_contents('php://input'), true);
 
@@ -15,8 +16,8 @@ $user = "9043960876";
 
 //Get the corresponding rule from the DB
 //$coupon = json_decode('{ "rule": "FIRSTORDER", "discount": "75", "minimum": "400", "isAppOnly": true }',true);
-// $coupon = json_decode('{ "rule": "PERCENTAGE", "minimumCart": 400, "maximum": 50, "percentage":8.9, "isAppOnly": true }',true);
-$coupon = json_decode('{ "rule": "DISCOUNTEDCOMBO", "items": [{"code":1000098,"count":2},{"code":1000099,"count":1}], "discount":100, "isAppOnly": true }',true);
+$coupon = json_decode('{ "rule": "PERCENTAGE", "minimumCart": 400, "maximum": 50, "percentage":8.9, "isAppOnly": true }',true);
+//$coupon = json_decode('{ "rule": "DISCOUNTEDCOMBO", "items": [{"code":1000098,"count":20},{"code":1000099,"count":1}], "discount":100, "isAppOnly": true }',true);
 $rule = $coupon['rule'];
 
 //Get Cart Info.

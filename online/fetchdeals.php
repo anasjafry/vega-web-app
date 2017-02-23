@@ -17,7 +17,7 @@ $deals = [];
 $query = "SELECT * from z_deals";
 $main = mysql_query($query);
 
-$status = 'fail';
+$status = false;
 $error = '';
 
 while($row = mysql_fetch_assoc($main)){
@@ -31,7 +31,7 @@ while($row = mysql_fetch_assoc($main)){
 		"isAppOnly" => $row['isAppOnly'],
 		"validTill" => $row['validTill']
 	);
-	$status = 'success';
+	$status = true;
 }
 
 $output = array(
