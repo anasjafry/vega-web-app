@@ -1,39 +1,65 @@
 <?php
-header('Access-Control-Allow-Origin: *'); 
+header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Headers: Content-Type');
 header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
 header('Access-Control-Allow-Credentials: true');
 error_reporting(0);
 
+
+//Database Connection
 define('INCLUDE_CHECK', true);
 require 'connect.php';
 
+//Encryption Credentials
+define('SECURE_CHECK', true);
+require 'secure.php';
+
 $_POST = json_decode(file_get_contents('php://input'), true);
 
+//Encryption Validation
+if(!isset($_POST['token'])){
+	$output = array(
+		"status" => false,
+		"error" => "Access Token is missing"
+	);
+	die(json_encode($output));
+}
+
+if(!isset($_POST['address']) || !isset($_POST['id'])){
+	$output = array(
+		"status" => false,
+		"error" => "Address Object is missing"
+	);
+	die(json_encode($output));
+}
+
+
+
+
+
 $userID = $_POST['userID'];
-$address = $_POST['address']; 
+$address = $_POST['address'];
 $id = $_POST['id'];
-$encryptionMethod = "AES-256-CBC";  
-$secretHash = "7a6169746f6f6e746f6b656e";
+
+
 $token = $_POST['token'];
 $decryptedtoken = openssl_decrypt($token, $encryptionMethod, $secretHash);
-//echo($decryptedtoken);
 $tokenid = json_decode($decryptedtoken,true);
 
-$status = 'fail';
-$error = 'No such address exists!';
-//$error = 
-//$output = [];
+$status = false;
+$error = 'No such address exists';
+
 $i = 0;
 
-if($tokenid['mobile'] == $userID){
+$userID = $tokenid['mobile'];
+
 	$query = "SELECT * from z_users WHERE mobile='{$userID}'";
 	$main = mysql_query($query);
 	$rows = mysql_fetch_assoc($main);
 	$useraddress = json_decode($rows['savedAddresses']);
 	while ($i < sizeof($useraddress)) {
 		if($id == $useraddress[$i]->id){
-			$status = 'success';
+			$status = true;
 			$error = "";
 			break;
 		}
@@ -48,14 +74,24 @@ if($tokenid['mobile'] == $userID){
 		"flatName" => $address['flatName'],
 		"landmark" => $address['landmark'],
 		"area" => $address['area'],
-		"city" => $address['city'],
 		"contact" => $address['contact']
 	);
+
+	//Error Reporting
+	if($address['name'] == null || $address['flatNo'] == null || $address['flatName'] == null || $address['landmark'] == null || $address['area'] == null || $address['contact'] == null){
+		$output = array(
+			"status" => false,
+			"error" => "Fields missing."
+		);
+		die(json_encode($output));
+	}
+
+
 	$newadd = json_encode($useraddress);
-	//echo($newadd);
+
 	$query = "UPDATE z_users SET `savedAddresses`='{$newadd}' WHERE mobile='{$userID}'";
 	$main = mysql_query($query);
-}
+
 
 
 $output = array(
@@ -64,6 +100,5 @@ $output = array(
 );
 
 echo json_encode($output);
-		
-?>
 
+?>
