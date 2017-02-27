@@ -7,14 +7,19 @@ header('Access-Control-Allow-Credentials: true');
 define('INCLUDE_CHECK', true);
 require 'connect.php';
 
-$_POST = json_decode(file_get_contents('php://input'), true);
-
-//$token = mysql_real_escape_string($_POST['token']);
-
 //fetching deals and coupon codes
 $deals = [];
 
-$query = "SELECT * from z_deals";
+
+/* FRAMING QUERY */
+//Howmany results to output
+$limiter = "";
+if(isset($_GET['id'])){
+	$limiter = " LIMIT  {$_GET['id']},5";
+}
+
+
+$query = "SELECT * from z_deals".$limiter;
 $main = mysql_query($query);
 
 $status = false;
