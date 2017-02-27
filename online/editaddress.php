@@ -44,7 +44,23 @@ $id = $_POST['id'];
 
 $token = $_POST['token'];
 $decryptedtoken = openssl_decrypt($token, $encryptionMethod, $secretHash);
-$tokenid = json_decode($decryptedtoken,true);
+$tokenid = json_decode($decryptedtoken, true);
+
+//Expiry Validation
+date_default_timezone_set('Asia/Calcutta');
+$dateStamp = date_create($tokenid['date']);
+$today = date_create(date("Y-m-j"));
+$interval = date_diff($dateStamp, $today);
+$interval = $interval->format('%a');
+
+if($interval > $tokenExpiryDays){
+	$output = array(
+		"status" => false,
+		"error" => "Expired Token"
+	);
+	die(json_encode($output));
+}
+
 
 $status = false;
 $error = 'No such address exists';
