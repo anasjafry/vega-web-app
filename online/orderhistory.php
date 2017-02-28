@@ -82,7 +82,7 @@ if(!$merchantService){
 
 	$status = true;
 
-	$query = "SELECT * FROM zaitoon_orderlist WHERE userID = '{$mobile}'".$orderstatus." ORDER BY orderID".$limiter;
+	$query = "SELECT * FROM zaitoon_orderlist WHERE userID = '{$mobile}'".$orderstatus." ORDER BY orderID DESC".$limiter;
 	$all = mysql_query($query);
 
 	while($order = mysql_fetch_assoc($all))

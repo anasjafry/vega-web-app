@@ -4,25 +4,102 @@ header('Access-Control-Allow-Headers: Content-Type');
 header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
 header('Access-Control-Allow-Credentials: true');
 
+error_reporting(0);
+
+
+//Database Connection
 define('INCLUDE_CHECK', true);
 require 'connect.php';
 
-error_reporting(0);
-//$_POST = json_decode(file_get_contents('php://input'), true);
+//Encryption Credentials
+define('SECURE_CHECK', true);
+require 'secure.php';
 
-//Take coupon code from the POST request.
-$code = "ZAITOONFIRST";
-$user = "9043960876";
+$_POST = json_decode(file_get_contents('php://input'), true);
 
-//Get the corresponding rule from the DB
+//Encryption Validation
+if(!isset($_POST['token'])){
+	$output = array(
+		"status" => false,
+		"error" => "Access Token is missing"
+	);
+	die(json_encode($output));
+}
+
+if(!isset($_POST['coupon'])){
+	$output = array(
+		"status" => false,
+		"error" => "Code is missing"
+	);
+	die(json_encode($output));
+}
+
+if(!isset($_POST['cart'])){
+	$output = array(
+		"status" => false,
+		"error" => "Cart Object is missing"
+	);
+	die(json_encode($output));
+}
+
+
+$token = $_POST['token'];
+$decryptedtoken = openssl_decrypt($token, $encryptionMethod, $secretHash);
+$tokenid = json_decode($decryptedtoken, true);
+
+//Expiry Validation
+date_default_timezone_set('Asia/Calcutta');
+$dateStamp = date_create($tokenid['date']);
+$today = date_create(date("Y-m-j"));
+$interval = date_diff($dateStamp, $today);
+$interval = $interval->format('%a');
+
+if($interval > $tokenExpiryDays){
+	$output = array(
+		"status" => false,
+		"error" => "Expired Token"
+	);
+	die(json_encode($output));
+}
+
+
+//Check if the token is tampered
+if($tokenid['mobile']){
+	$user = $tokenid['mobile'];
+}
+else{
+	$output = array(
+		"status" => false,
+		"error" => "Token is tampered"
+	);
+	die(json_encode($output));
+}
+
+
+
+/** Rules Templates **/
 //$coupon = json_decode('{ "rule": "FIRSTORDER", "discount": "75", "minimum": "400", "isAppOnly": true }',true);
-$coupon = json_decode('{ "rule": "PERCENTAGE", "minimumCart": 400, "maximum": 50, "percentage":8.9, "isAppOnly": true }',true);
+//$coupon = json_decode('{ "rule": "PERCENTAGE", "minimumCart": 400, "maximum": 50, "percentage":8.9, "isAppOnly": true }',true);
 //$coupon = json_decode('{ "rule": "DISCOUNTEDCOMBO", "items": [{"code":1000098,"count":20},{"code":1000099,"count":1}], "discount":100, "isAppOnly": true }',true);
-$rule = $coupon['rule'];
+
+$code = $_POST['coupon'];
+
+$detailed = mysql_query("SELECT * FROM z_couponrules WHERE code='{$code}'");
+if($info = mysql_fetch_assoc($detailed)){
+	$coupon = json_decode($info['rule'], true);
+	$rule = $coupon['rule']; //COUPON RULE
+}
+else{ //No such coupon exist
+	$output = array(
+		"status" => false,
+		"error" => "No such coupon exists."
+	);
+	die(json_encode($output));
+}
+
 
 //Get Cart Info.
-$cart = json_decode('{ "cartTotal": 568, "cartCoupon": "GET10", "items": [{ "itemCode": "1000098", "itemName": "Veg Burger", "itemQuantity": 7, "itemPrice": "45", "itemVariety": "Burgers" }, { "itemCode": "1000099", "itemName": "Veg Cheese Burger", "itemQuantity": 3, "itemPrice": "50", "itemVariety": "Burgers" }, { "itemCode": "10000125", "itemName": "Kesari", "itemQuantity": 1, "itemPrice": "15", "itemVariety": "Breakfast" }, { "itemCode": "10000124", "itemName": "Vada (2 Nos)", "itemQuantity": 1, "itemPrice": "20", "itemVariety": "Breakfast" }, { "itemCode": "10000123", "itemName": "Pongal", "itemQuantity": 1, "itemPrice": "20", "itemVariety": "Breakfast" }, { "itemCode": "10000122", "itemName": "Idly (3 Nos)", "itemQuantity": 1, "itemPrice": "20", "itemVariety": "Breakfast" }, { "itemCode": "10000121", "itemName": "Onion Oothappam", "itemQuantity": 1, "itemPrice": "30", "itemVariety": "Breakfast" }] }', true);
-$cartItems = $cart['items'];
+$cart = $_POST['cart'];
 
 
 //Rules
@@ -36,7 +113,7 @@ switch ($rule){
 			$i = 0;
 			$total = 0;
 			while($cart['items'][$i]['itemCode']){
-				$total = $total + ($cart['items'][$i]['itemPrice']*$cart['items'][$i]['itemQuantity']);
+				$total = $total + ($cart['items'][$i]['itemPrice']*$cart['items'][$i]['qty']);
 				$i++;
 			}
 				//setting status true if cart value is greater than min. of coupon
@@ -73,7 +150,7 @@ switch ($rule){
 		$i = 0;
 		$total = 0;
 		while($cart['items'][$i]['itemCode']){
-			$total = $total + ($cart['items'][$i]['itemPrice']*$cart['items'][$i]['itemQuantity']);
+			$total = $total + ($cart['items'][$i]['itemPrice']*$cart['items'][$i]['qty']);
 			$i++;
 		}
 
@@ -121,10 +198,10 @@ switch ($rule){
 					if($combocart['items'][$i]['itemCode'] == $coupon['items'][$j]['code'])
 					{
 						// echo '<br>[COUPON] found matching!';
-						if($combocart['items'][$i]['itemQuantity'] >= $coupon['items'][$j]['count'])
+						if($combocart['items'][$i]['qty'] >= $coupon['items'][$j]['count'])
 						{
 							// echo '<br>[COUPON] Proceed';
-							$combocart['items'][$i]['itemQuantity'] = $combocart['items'][$i]['itemQuantity'] - $coupon['items'][$j]['count'];
+							$combocart['items'][$i]['qty'] = $combocart['items'][$i]['qty'] - $coupon['items'][$j]['count'];
 							$isValid = true;
 						}
 						else {

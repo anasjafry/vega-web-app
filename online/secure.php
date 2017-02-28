@@ -3,6 +3,6 @@
 
 	$encryptionMethod = "AES-256-CBC";
 	$secretHash = "7a6169746f6f6e746f6b656e";
-	$tokenExpiryDays = 5; //5 days
+	$tokenExpiryDays = 1; //5 days
 
 ?>

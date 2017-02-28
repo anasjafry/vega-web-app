@@ -31,9 +31,11 @@ while($row = mysql_fetch_assoc($main)){
 		"itemCode" => $row['code'],
 		"itemName" => $row['name'],
 		"itemPrice" => $row['price'],
+		"isCombo" => true,
+		"isCustome" => false,
 		"isAvailable" => $row['isAvailable']? true : false,
-		"description" => $row['description'],
-		"isImageAvailable" => $row['isImg'],
+		"combo" => $row['description'],
+		"isImageAvailable" => $row['isImg']? true : false,
 		"url" => $row['url']
 	);
 	$status = true;
