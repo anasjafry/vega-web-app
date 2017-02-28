@@ -13,20 +13,33 @@ $status = false;
 $error = '';
 
 if(isset($_GET['outletcode'])){
-	$query1 = "SELECT * from z_outlets WHERE code='{$_GET['outletcode']}'";
-	$main1 = mysql_query($query1);
 
-	if($rows1 = mysql_fetch_assoc($main1)){
+	if($rows1 = mysql_fetch_assoc(mysql_query("SELECT * from z_outlets WHERE code='{$_GET['outletcode']}'"))){
 	$status = true;
-	$response=array(
+	//Get location specific details
+
+	$rows2 = mysql_fetch_assoc(mysql_query("SELECT * from z_locations WHERE outlet='{$_GET['outletcode']}' AND locationCode='{$_GET['locationCode']}'"));
+
+	$response = array(
+		"outlet" => $rows1['code'],
+		"city"  => $rows1['city'],
+		"location"  => $rows2['location'],
 		"name"=> $rows1['name'],
-		"code"=> $rows1['code'],
 		"line1"=> $rows1['line1'],
 		"line2"=> $rows1['line2'],
 		"mobile"=> $rows1['contact'],
 		"lat"=> $rows1['latitude'],
 		"lng"=> $rows1['longitude'],
-		"pictures" => json_decode($rows1['fotos'])
+		"pictures" => json_decode($rows1['fotos']),
+		"isTaxCollected" => $rows1['isTaxCollected'] == 1? true: false,
+		"taxPercentage"=> $rows1['taxPercentage'],
+		"isParcelCollected"=> $rows1['isParcelCollected'] == 1? true: false,
+		"parcelPercentageDelivery"=> $rows1['parcelPercentageDelivery'],
+		"parcelPercentagePickup"=> $rows1['parcelPercentagePickup'],
+		"minTime"=> $rows2['minTime'],
+		"minAmount"=> $rows2['minOrder'],
+		"isAcceptingOnlinePayment"=> $rows1['isAcceptingOnlinePayment'] == 1? true: false
+
 	);
 	}
 	else{
