@@ -12,6 +12,7 @@ error_reporting(0);
 $status = false;
 $error = '';
 
+
 if(isset($_GET['outletcode'])){
 
 	if($rows1 = mysql_fetch_assoc(mysql_query("SELECT * from z_outlets WHERE code='{$_GET['outletcode']}'"))){
@@ -24,6 +25,7 @@ if(isset($_GET['outletcode'])){
 		"outlet" => $rows1['code'],
 		"city"  => $rows1['city'],
 		"location"  => $rows2['location'],
+		"locationCode"  => $rows2['locationCode'],
 		"name"=> $rows1['name'],
 		"line1"=> $rows1['line1'],
 		"line2"=> $rows1['line2'],
@@ -48,7 +50,41 @@ if(isset($_GET['outletcode'])){
 	}
 
 }
+else if(isset($_GET['locationCode'])){
+$outletInfo = mysql_fetch_assoc(mysql_query("SELECT * from z_locations WHERE locationCode='{$_GET['locationCode']}'"));
 
+if($rows1 = mysql_fetch_assoc(mysql_query("SELECT * from z_outlets WHERE code='{$outletInfo['outlet']}'"))){
+$status = true;
+
+$response = array(
+	"outlet" => $rows1['code'],
+	"city"  => $rows1['city'],
+	"location"  => $outletInfo['location'],
+	"locationCode"  => $outletInfo['locationCode'],
+	"name"=> $rows1['name'],
+	"line1"=> $rows1['line1'],
+	"line2"=> $rows1['line2'],
+	"mobile"=> $rows1['contact'],
+	"lat"=> $rows1['latitude'],
+	"lng"=> $rows1['longitude'],
+	"pictures" => json_decode($rows1['fotos']),
+	"isTaxCollected" => $rows1['isTaxCollected'] == 1? true: false,
+	"taxPercentage"=> $rows1['taxPercentage'],
+	"isParcelCollected"=> $rows1['isParcelCollected'] == 1? true: false,
+	"parcelPercentageDelivery"=> $rows1['parcelPercentageDelivery'],
+	"parcelPercentagePickup"=> $rows1['parcelPercentagePickup'],
+	"minTime"=> $outletInfo['minTime'],
+	"minAmount"=> $outletInfo['minOrder'],
+	"isAcceptingOnlinePayment"=> $rows1['isAcceptingOnlinePayment'] == 1? true: false
+
+);
+}
+else{
+	$status = false;
+	$error = "Invalid Code";
+}
+
+}
 else{
 $query = "SELECT DISTINCT city from z_outlets";
 $main = mysql_query($query);

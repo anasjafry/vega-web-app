@@ -5,7 +5,6 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
 header('Access-Control-Allow-Credentials: true');
 error_reporting(0);
 
-
 //Database Connection
 define('INCLUDE_CHECK', true);
 require 'connect.php';
@@ -25,14 +24,6 @@ if(!isset($_POST['token'])){
 	die(json_encode($output));
 }
 
-if(!isset($_POST['orderID'])){
-	$output = array(
-		"status" => false,
-		"error" => "Order ID is missing"
-	);
-	die(json_encode($output));
-}
-
 //Expiry Validation
 date_default_timezone_set('Asia/Calcutta');
 $dateStamp = date_create($tokenid['date']);
@@ -47,10 +38,6 @@ if($interval > $tokenExpiryDays){
 	);
 	die(json_encode($output));
 }
-
-$review = json_encode($_POST['review']);
-$orderID = $_POST['orderID'];
-
 
 $token = $_POST['token'];
 $decryptedtoken = openssl_decrypt($token, $encryptionMethod, $secretHash);
@@ -72,19 +59,27 @@ else{
 $status = false;
 $error = 'Something went wrong';
 
-	$query = "SELECT * from zaitoon_orderlist WHERE orderID='{$orderID}' AND userID='{$userID}'";
+	$query = "SELECT orderID from zaitoon_orderlist WHERE status='3' AND userID='{$userID}' AND feedback='' ORDER BY orderID DESC";
 	$main = mysql_query($query);
 	$rows = mysql_fetch_assoc($main);
 	if(!empty($rows)){
-		$status = true;
-		$error = '';
-		$query1 = "UPDATE zaitoon_orderlist SET `feedback`='{$review}' WHERE userID='{$userID}' AND orderID='{$orderID}'";
-		mysql_query($query1);
+		$query2 = "SELECT orderID from zaitoon_orderlist WHERE status='3' AND userID='{$userID}' ORDER BY orderID DESC";
+		$main2 = mysql_query($query2);
+		$rows2 = mysql_fetch_assoc($main2);
+
+		if(!empty($rows2)){
+			if($rows['orderID'] == $rows2['orderID']){
+				$status = true;
+				$error = '';
+				$response = $rows['orderID'];
+			}
+		}
 	}
 
 $output = array(
 	"status" => $status,
-	"error" => $error
+	"error" => $error,
+	"response" => $response
 );
 
 echo json_encode($output);

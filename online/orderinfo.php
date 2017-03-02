@@ -74,6 +74,7 @@ if($order['userID'] == $tokenid['mobile'])
 	$cart = json_decode($order['cart']);
 	$list = array(
 		'orderID' => $order['orderID'],
+		'isTakeaway' => $order['isTakeaway'] == 1? true: false,
 		'status' => $order['status'],
 		'comment' => $order['comments'],
 		'cart' => $cart,
