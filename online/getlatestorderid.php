@@ -55,26 +55,19 @@ else{
 	die(json_encode($output));
 }
 
-
 $status = false;
 $error = 'Something went wrong';
 
-	$query = "SELECT orderID from zaitoon_orderlist WHERE status='3' AND userID='{$userID}' AND feedback='' ORDER BY orderID DESC";
-	$main = mysql_query($query);
-	$rows = mysql_fetch_assoc($main);
-	if(!empty($rows)){
-		$query2 = "SELECT orderID from zaitoon_orderlist WHERE status='3' AND userID='{$userID}' ORDER BY orderID DESC";
-		$main2 = mysql_query($query2);
-		$rows2 = mysql_fetch_assoc($main2);
 
-		if(!empty($rows2)){
-			if($rows['orderID'] == $rows2['orderID']){
+	$info1 = mysql_fetch_assoc(mysql_query("SELECT orderID from zaitoon_orderlist WHERE status='3' AND userID='{$userID}' AND feedback='NA' ORDER BY orderID DESC"));
+	$info2 = mysql_fetch_assoc(mysql_query("SELECT orderID from zaitoon_orderlist WHERE status='3' AND userID='{$userID}' ORDER BY orderID DESC"));
+
+	if($info1['orderID'] == $info2['orderID']){
 				$status = true;
 				$error = '';
-				$response = $rows['orderID'];
-			}
-		}
+				$response = $info1['orderID'];
 	}
+
 
 $output = array(
 	"status" => $status,
