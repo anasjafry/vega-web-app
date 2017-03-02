@@ -90,6 +90,7 @@ if(!$merchantService){
 		$cart = json_decode($order['cart']);
 		$list[] = array(
 			'orderID' => $order['orderID'],
+			'isTakeaway' => $order['isTakeaway'] == 1? true: false,
 			'userID' => $order['userID'],
 			'status' => $order['status'],
 			'cart' => $cart,

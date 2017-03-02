@@ -9,9 +9,7 @@ require 'connect.php';
 
 $_POST = json_decode(file_get_contents('php://input'), true);
 
-$mobile = $_POST['mobile'];
-
-//$token = mysql_real_escape_string($_POST['token']);
+$mobile = mysql_real_escape_string($_POST['mobile']);
 
 
 $query = "SELECT * from z_users WHERE mobile='{$mobile}'";
@@ -28,14 +26,14 @@ if(!empty($rows)){
 		"userid" => $mobile,
 		"isOTPSent" => true
 	);
-	$status = 'success';
+	$status = true;
 }
 else{
 	$response = array(
 		"userid" => $mobile,
 		"isOTPSent" => false
 	);
-	$status = 'fail';
+	$status = false;
 	$error = 'No user exists';
 }
 
@@ -45,7 +43,6 @@ $output = array(
 	"error" => $error
 );
 
-//$list = array('status' => $flag);
 echo json_encode($output);
 
 ?>

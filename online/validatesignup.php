@@ -1,22 +1,26 @@
 <?php
-header('Access-Control-Allow-Origin: *'); 
+header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Headers: Content-Type');
 header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
 header('Access-Control-Allow-Credentials: true');
 error_reporting(0);
+
+
+//Database Connection
 define('INCLUDE_CHECK', true);
 require 'connect.php';
 
+//Encryption Credentials
+define('SECURE_CHECK', true);
+require 'secure.php';
+
 $_POST = json_decode(file_get_contents('php://input'), true);
 
-$encryptionMethod = "AES-256-CBC";  
-$secretHash = "7a6169746f6f6e746f6b656e"; //hexa for "zaitoontoken"
-
-$mobile = $_POST['mobile'];
+$mobile = mysql_real_escape_string($_POST['mobile']);
 $otpapi = openssl_decrypt($_POST['otpapi'], $encryptionMethod, $secretHash);
-$otpuser = $_POST['otpuser'];
-$name = $_POST['name'];
-$email = $_POST['email'];
+$otpuser = mysql_real_escape_string($_POST['otpuser']);
+$name = mysql_real_escape_string($_POST['name']);
+$email = mysql_real_escape_string($_POST['email']);
 
 
 date_default_timezone_set('Asia/Calcutta');
@@ -56,21 +60,21 @@ if($otpuser == $otpapi){
 		"lastLogin" => $time.", ".$date,
 		"memberSince" => $date,
 		"isSubmittedFeedback" => false,
-		"memberType" => "fresher",
+		"memberType" => "FRESHER",
 		"savedAddresses" => [],
 		"email" => $email,
 		"token" => $token
 	);
 
-	$status = 'success';
+	$status = true;
 	$lastLogin = $time.", ".$date;
 	$query = "INSERT INTO z_users (`mobile`, `name`, `isVerified`, `isBlocked`, `lastLogin`, `memberSince`, `isFeedback`, `memberType`, `savedAddresses`, `email`, `password`, `otp`) VALUES ('{$mobile}','{$name}','true','false','{$lastLogin}','{$date}','false','fresher','[]','{$email}','password','{$otpapi}')";
 	$main = mysql_query($query);
 }
 else{
 	$response = "";
-	$status = 'fail';
-	$error = 'Not valid credentials';
+	$status = false;
+	$error = 'OTP is not correct';
 }
 
 $output = array(
@@ -79,8 +83,7 @@ $output = array(
 	"error" => $error
 );
 
-//$list = array('status' => $flag);    
+//$list = array('status' => $flag);
 echo json_encode($output);
-		
-?>
 
+?>

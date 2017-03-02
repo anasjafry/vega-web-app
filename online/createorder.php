@@ -155,9 +155,19 @@ $total = 0;
 			{
 				$flag = 1;
 				if($rows1['price'] != $items[$i]['itemPrice']){
-					$carttamper = 1;
+					//Do not check price if custom item
+					if(!$items[$i]['isCustom']){
+						$carttamper = 1;
+					}
 				}
-				$total += $rows1['price']*$items[$i]['qty'];
+
+				if(!$items[$i]['isCustom']){
+					$total += $rows1['price']*$items[$i]['qty'];
+				}
+				else{
+					$total += $items[$i]['itemPrice']*$items[$i]['qty'];
+				}
+
 			}
 
 			$i++;
