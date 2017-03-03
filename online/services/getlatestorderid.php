@@ -62,7 +62,7 @@ $error = 'Something went wrong';
 	$info1 = mysql_fetch_assoc(mysql_query("SELECT orderID from zaitoon_orderlist WHERE status='3' AND userID='{$userID}' AND feedback='NA' ORDER BY orderID DESC"));
 	$info2 = mysql_fetch_assoc(mysql_query("SELECT orderID from zaitoon_orderlist WHERE status='3' AND userID='{$userID}' ORDER BY orderID DESC"));
 
-	if($info1['orderID'] == $info2['orderID']){
+	if($info1['orderID'] != "" && $info1['orderID'] == $info2['orderID']){
 				$status = true;
 				$error = '';
 				$response = $info1['orderID'];
