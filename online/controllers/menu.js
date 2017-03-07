@@ -4,6 +4,11 @@ angular.module('FullMenu', ['siyfion.sfTypeahead'])
     $qProvider.errorOnUnhandledRejections(false);
 }])
 
+
+
+
+
+
     .controller('MenuController', function($scope, $http) {
 
       //Check if the user is Logged In
@@ -13,6 +18,16 @@ angular.module('FullMenu', ['siyfion.sfTypeahead'])
       else{
         $scope.isLoggedIn = false;
       }
+
+      //Check if the location is set
+      if(localStorage.getItem("location") === null){
+        $scope.isLocationSet = false;
+      }
+      else{
+        $scope.isLocationSet = true;
+        $scope.locationData = JSON.parse(localStorage.getItem("location"));
+      }
+
 
       //console.log($scope.isLoggedIn);
 

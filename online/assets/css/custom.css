@@ -470,3 +470,21 @@ ol ol {
 	color: #16a085;
 	border-bottom: 2px solid #16a085;
 }
+
+.cityDropdown{
+	border: none;
+}
+
+.cityDropdown:focus{
+	outline: none;
+	box-shadow: none;
+}
+
+
+/*Label*/
+.labelLocation{
+	font-size: 12px;
+	font-weight: 200;
+	text-transform: uppercase;
+	color: #34495e;
+}
