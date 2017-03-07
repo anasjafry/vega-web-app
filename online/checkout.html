@@ -9,7 +9,7 @@
 
     <!-- Bootstrap core CSS -->
     <link href="dist/css/bootstrap.css" rel="stylesheet">
-    
+
     <!-- Documentation extras -->
     <link href="assets/css/docs.css" rel="stylesheet">
     <link href="assets/css/art.css" rel="stylesheet">
@@ -33,16 +33,16 @@
     <script type="text/javascript" charset="utf-8" src="assets/js/angular.min.js"></script>
     <script src="controllers/checkout.js"></script>
     <script type="text/javascript" charset="utf-8" src="assets/js/angular-route.js"></script>
-    
+
     <script type="text/javascript">
 
             function renderCart(){
 
         var row = "";
-     
+
         if (JSON.parse(localStorage.getItem("itemsInfo")).length != 0) // If the cart is not empty.
         {
-        
+
         var info = JSON.parse(localStorage.getItem("itemsInfo"));
         var sub_total = 0;
         var i = 0;
@@ -51,13 +51,13 @@
 
             //Jugaad to hide border in the first row.
             var noBorder = "";
-            if(i == 0){noBorder = 'style="border-top:none; padding-top: 20px;"'}        
+            if(i == 0){noBorder = 'style="border-top:none; padding-top: 20px;"'}
 
              row = row +'<tr><td class="crossIcon" '+noBorder+'>  </td> <td class="cartDescription" '+noBorder+'> <p style="font-size: 14px; color: #2980b9">'+info[i].itemName+'</p> <p style="font-size: 9px; color: grey; margin-top: -10px;">'+info[i].itemVariety+'</p> </td> <td class="cart_quantity" '+noBorder+'> <div class="cartButtons"><span id="item_count_12">x '+info[i].itemQuantity+' </span></div> </td> <td class="cart_price" '+noBorder+'> <p><i class="fa fa-inr"></i> <span id="item_price_12">'+info[i].itemPrice+'</span></p> </td> </tr>';
              sub_total += (info[i].itemQuantity*info[i].itemPrice);
              i++;
         }
-        
+
         document.getElementById("cartArea").innerHTML  = '<div style="max-height:300px; overflow-y:auto;" id="ScrollStyle"><table class="table table-condensed" style="margin-bottom: 0px; margin-top: -16px;"> <tbody></tbody> <colgroup> <col width="2%"> <col width="55%"> <col width="25%"> <col width="18%"> </colgroup> <tbody> '+row+' </tbody> </table></div><table class="table table-condensed" style="margin-bottom: -20px;"> <tbody> <tr> <td><grey>Cart Sub Total</grey></td> <td><grey><i class="fa fa-inr"></i> '+sub_total+'</grey></td> </tr> <tr class="shipping-cost"> <td><grey>Container Charges (7%)</grey></td> <td><grey><i class="fa fa-inr"></i>'+(Math.round(sub_total*.07))+'</grey></td> </tr> <tr> <td><red>Grand Total</red></td> <td><strong><red><span><i class="fa fa-inr"></i> '+(sub_total+(Math.round(sub_total*.07)))+'</span></red></strong></td> </tr> </tbody> </table><br>';
         document.getElementById("fullCartArea").innerHTML = "";
     }
@@ -65,7 +65,7 @@
         document.getElementById("cartArea").innerHTML = '<center> <img src="assets/images/elements/emptycart.png" width="50%"> <p style="color: #bdc3c7">Your Cart is Empty.</p> </center>';
         document.getElementById("fullCartArea").innerHTML  = '<p style="color: #bdc3c7; padding-top: 5px; font-size: 11px;">Add items to the cart to place a fresh order. You can quickly <a class="label label-default greyLabel" href="account.html" style="font-size: 10px;">Repeat an Order</a> you made with Zaitoon before.</p>';
     }
-    } 
+    }
 
         </script>
 
@@ -91,7 +91,7 @@
     <script type="text/javascript" charset="utf-8" src="/rb/pages/_main.js?nFlag=201611"></script>
     <link href="dist/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet">
 </head>
- 
+
 <body onload="renderCart()" ng-app="CheckOut">
     <a class="sr-only" href="#content">Skip navigation</a>
 
@@ -135,7 +135,7 @@
         <div class="row">
             <div class="col-md-7" role="main" ng-controller="CheckoutController">
                 <div class="bs-docs-section">
-                    
+
                     <h2 class="zaitoonMenuHead">Checkout</h2>
                     <hr style="border-top: 1px dashed #e74c3c; margin-top: 5px;">
                     <div class="table-responsive">
@@ -167,12 +167,12 @@
                                           </div>
                                           <div class="form-group">
                                             <input type="text" class="form-control checkOutFields checkOutIn" id="" placeholder="Landmark" name="landmark">
-                                          </div>  
-                                                     
+                                          </div>
+
                                             <div class="form-group">
-                                              
+
                                               <label style="font-weight: normal; font-size: 14px; color: #bdc3c7"><input type="checkbox" value="" checked> Save as default delivery address.</label>
-                                            </div>                                  
+                                            </div>
                                     </td>
                                 </tr>
                                 <tr>
@@ -183,7 +183,7 @@
                                         <p id="alertNotes" style="color: #bdc3c7; margin-top: 3px;"></p>
                                     </div>
                                     </td>
-                                </tr>                               
+                                </tr>
 
                             </tbody>
                         </table>
@@ -208,7 +208,7 @@
                                         <input type="radio" name="pay" value="pay1"> COD<br>
                                         <input type="radio" name="pay" value="pay2"> Paytm Wallet<br>
                                         <input type="radio" name="pay" value="pay3"> Net Banking
-                                    </div>                                    
+                                    </div>
                                     </td>
                                 </tr>
                             </tbody>
@@ -224,31 +224,31 @@
 
 
 
-            <div class="col-md-3" ng-controller="CartController">                        
+            <div class="col-md-3" ng-controller="CartController">
                 <div class="bs-sidebar" role="complementary">
                     <ul class="nav bs-sidenav myCartMain">
                     <h3 style="padding-left: 20px;">Your Cart</h3>
-                    <hr style="margin-bottom: 0px">                      
-                        <div id="cartArea" class="mycartArea">                             
-                        </div>  <!-- Closing cart area --> 
+                    <hr style="margin-bottom: 0px">
+                        <div id="cartArea" class="mycartArea">
+                        </div>  <!-- Closing cart area -->
                     </ul>
-                    <div id="fullCartArea">                        
+                    <div id="fullCartArea">
                     </div>
-                    
+
                     <b class="CheckOutSubHead"><br>Apply Coupon Code</b>
                     <div class="input-group" style="margin-top: 10px">
                         <input type="text" class="form-control couponIn" placeholder="Coupon Code" aria-describedby="basic-addon2">
                         <span class="input-group-addon" id="basic-addon2">Apply</span>
-                    </div>  
+                    </div>
 
                 </div>
-                
+
             </div>
         </div>
 
     </div>
 
-    
+
     <!-- JS and analytics only. -->
     <!-- Bootstrap core JavaScript
 ================================================== -->
