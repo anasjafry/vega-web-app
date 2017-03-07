@@ -18,6 +18,7 @@
 
     <link rel="stylesheet" href="assets/css/vegetarian.css" />
 
+
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
 	  <script src="assets/js/html5shiv.js"></script>
@@ -215,6 +216,13 @@
     <script src="controllers/menu.js"></script>
 
 
+        <!-- Bootstrap Dropdown Plugin -->
+        <link rel="stylesheet" href="dist/bootstrap-select/bootstrap-select.min.css">
+        <script src="dist/bootstrap-select/bootstrap-select.min.js"></script>
+
+
+
+
     <!-- For passing data to modal -->
     <script>
     $(document).on("click", ".open-AddCustomItemDialog", function () {
@@ -230,6 +238,33 @@
     });
     </script>
 
+    <!-- For city selection -->
+    <script>
+    $(function() {
+
+      $('.dummyCity').on('change', function(){
+        var city = $(this).val();
+        var temp = {};
+        temp.city = city;
+        localStorage.setItem("location", JSON.stringify(temp));
+        $('#setLocation').modal('show'); //Ask to set location
+      });
+
+      $('.dummyLocation').on('change', function(){
+        var location = $(this).val();
+
+        if(localStorage.getItem("location")){
+          var temp = JSON.parse(localStorage.getItem('location')) || [];
+          temp.location = location;
+          temp.locationCode = "100";
+          localStorage.setItem("location", JSON.stringify(temp));
+        }
+        $('#setLocation').modal('hide');
+      });
+
+    });
+    </script>
+
 
 </head>
 
@@ -238,7 +273,7 @@
 
     <!-- Docs master nav -->
 
-    <header class="navbar navbar-fixed-top bs-docs-nav" role="banner">
+    <header class="navbar navbar-fixed-top bs-docs-nav" role="banner" ng-controller="MenuController">
         <div class="container">
             <div class="navbar-header" >
                 <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
@@ -246,6 +281,20 @@
                     <i class="fa fa-bars"></i>
                 </button>
                 <a href="index.html" class="navbar-brand"><img src="assets/images/common/logo_small.png"></a>
+            </div>
+            <div class="navbar-header" style="float:right; vertical-align: middle">
+              <ul class="nav navbar-nav">
+                  <li ng-if="isLocationSet">
+                      <a href="" data-toggle="modal" data-target="#setLocation"><i class="fa fa-map-marker"></i> {{locationData.location}}, {{locationData.city}}</a>
+                  </li>
+                  <li ng-if="!isLocationSet">
+                    <select class="selectpicker dummyCity" title="Select City">
+                      <option>Bangalore</option>
+                      <option>Chennai</option>
+                      <option>Madurai</option>
+                    </select>
+                  </li>
+              </ul>
             </div>
             <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
                 <ul class="nav navbar-nav">
@@ -367,8 +416,10 @@
     </div>
 
 
+
+
     <!-- ADD CUSTOM ITEM - Modal -->
-    <div id="customiseItem" class="modal fade" role="dialog" ng-controller="MenuController">
+    <div id="customiseItem" class="modal fade" role="dialog">
       <div class="modal-dialog">
 
         <!-- Modal content-->
@@ -387,6 +438,44 @@
     </div>
 
 
+
+
+
+    <!-- SET LOCATION  - Modal -->
+    <div id="setLocation" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content" style="border-radius: 0px">
+          <div class="modal-header" style="color: #27ae60">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Select Your Location</h4>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-sm-2">
+              </div>
+              <div class="col-sm-8">
+                <select class="selectpicker dummyLocation" data-live-search="true" data-size="4" id="areasList">
+                  <option>Adyar</option>
+                  <option>Velachery</option>
+                  <option>IIT</option>
+                  <option>Guindy</option>
+                  <option>Anna Nagar</option>
+                  <option>Tiruvanmyur</option>
+                  <option>T nagar</option>
+                  <option>Besant Nagar</option>
+
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+
     <!-- JS and analytics only. -->
     <!-- Bootstrap core JavaScript
 ================================================== -->
@@ -397,6 +486,11 @@
     <script src="assets/js/holder.js"></script>
 
     <script src="assets/js/application.js"></script>
+
+
+
+
+
 
 </body>
 
