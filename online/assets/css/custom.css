@@ -1,15 +1,15 @@
 /*For Index Page*/
 
 .zaitoonNoStock{
-	border: 1px solid #95a5a6; 
-	border-radius: 5px; 
+	border: 1px solid #95a5a6;
+	border-radius: 5px;
 	background: none;
 	color: #95a5a6;
 }
 
-.zaitoonAdd { 
-	border: 1px solid #27ae60; 
-	border-radius: 5px; 
+.zaitoonAdd {
+	border: 1px solid #27ae60;
+	border-radius: 5px;
 	background: none;
 	color: #27ae60;
 }
@@ -86,7 +86,7 @@
 }
 
 .quickMenuHead{
-	padding-left: 20px; 
+	padding-left: 20px;
 	color: #2c3e50;
 }
 
@@ -300,25 +300,25 @@
 	color:#616161;
 }
 
-.zaitoonSave, .zaitoonSave:hover { 
-	border: none; 
-	border-radius: 0px; 
+.zaitoonSave, .zaitoonSave:hover {
+	border: none;
+	border-radius: 0px;
 	background: #16a085;
 	color: white;
 }
 
-.zaitoonSave:hover { 
+.zaitoonSave:hover {
 	background: #1abc9c;
 }
 
-.zaitoonCancel, .zaitoonCancel:hover { 
-	border: none; 
-	border-radius: 0px; 
+.zaitoonCancel, .zaitoonCancel:hover {
+	border: none;
+	border-radius: 0px;
 	background: #7f8c8d;
 	color: white;
 }
 
-.zaitoonCancel:hover {  
+.zaitoonCancel:hover {
 	background: #95a5a6;
 }
 .zaitoonModal{
@@ -386,4 +386,87 @@
 	box-shadow: none;
 	border-radius: 0px;
 	color: white;
+}
+
+
+/*For Modal*/
+
+ol {
+    counter-reset: li; /* Initiate a counter */
+    list-style: none; /* Remove default numbering */
+    *list-style: decimal; /* Keep using default numbering for IE6/7 */
+    font: 16px;
+    padding: 0;
+    margin-bottom: 4em;
+}
+
+ol ol {
+    margin: 0 0 0 2em; /* Add some left margin for inner lists */
+}
+
+.rectangle-list a{
+    position: relative;
+    display: block;
+    padding: 10px;
+    margin: .5em 0 .5em 2.5em;
+    background: #ecf0f1;
+    color: #2c3e50;
+    text-decoration: none;
+    transition: all .3s ease-out;
+}
+
+.rectangle-list a:hover{
+    background: #bdc3c7;
+}
+
+.rectangle-list a:before{
+    content: counter(li);
+		color: #FFF;
+    counter-increment: li;
+    position: absolute;
+    left: -2.5em;
+    top: 50%;
+    margin-top: -1em;
+    background: #27ae60;
+    height: 2em;
+    width: 2em;
+    line-height: 2em;
+    text-align: center;
+    font-weight: 300;
+}
+
+.rectangle-list a:after{
+    position: absolute;
+    content: '';
+    border: .5em solid transparent;
+    left: -1em;
+    top: 50%;
+    margin-top: -.5em;
+    transition: all .3s ease-out;
+}
+
+.rectangle-list a:hover:after{
+    left: -.5em;
+    border-left-color: #27ae60;
+}
+
+/*Search Bar in Menu*/
+.menuSearch{
+	font-weight: 200;
+	font-size: 18px;
+	border-radius: 0px;
+	border: none;
+	outline: none;
+	border-bottom: 1px solid #CCCCCC;
+	padding: 0px;
+	box-shadow: none;
+}
+
+.menuSearch:focus
+{
+	border: none;
+	outline: none;
+	box-shadow: none;
+	color: #16a085;
+	border-bottom: 2px solid #16a085;
 }

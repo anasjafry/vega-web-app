@@ -1,15 +1,14 @@
 <!DOCTYPE html>
-<html lang="ko">
-
+<html>
 <head>
     <meta http-equiv="content-type" content="text/html;charset=utf-8" />
-    <title>Zaitoon-Online Order</title>
+    <title>Zaitoon Online</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Bootstrap core CSS -->
     <link href="dist/css/bootstrap.css" rel="stylesheet">
-    
+
     <!-- Documentation extras -->
     <link href="assets/css/docs.css" rel="stylesheet">
     <link href="assets/css/art.css" rel="stylesheet">
@@ -23,24 +22,75 @@
     <!--[if lt IE 9]>
 	  <script src="assets/js/html5shiv.js"></script>
 	  <script src="assets/js/respond.min.js"></script>
-	<![endif]-->
+	  <![endif]-->
 
     <!-- Favicons -->
-<!--     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/rb/layouts/bs-docs/ico/apple-touch-icon-144-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/rb/layouts/bs-docs/ico/apple-touch-icon-114-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/rb/layouts/bs-docs/ico/apple-touch-icon-72-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" href="/rb/layouts/bs-docs/ico/apple-touch-icon-57-precomposed.png">
-    <link rel="shortcut icon" href="/rb/layouts/bs-docs/ico/favicon.png"> -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/icons/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/icons/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="assets/icons/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="assets/icons/apple-touch-icon-57-precomposed.png">
+    <link rel="shortcut icon" href="assets/icons/favicon.png">
 
     <script>
+
+    function addToCartNow(name, code, price, choice){
+
+      $('#customiseItem').modal('hide');
+      var item = {};
+      item.itemName = name;
+      item.itemCode = code;
+      console.log(item)
+
+      if(localStorage.getItem("itemsInfo") === null){
+          var temp = [];
+          localStorage.setItem("itemsInfo", JSON.stringify(temp));
+      }
+      var info = JSON.parse(localStorage.getItem("itemsInfo")); //getting items from localStorage
+      var i = 0;
+      var flag = -1;
+
+      while(i<info.length)
+      {
+          //checks if item aldready in cart and returns the position of that object if exists
+          if(info[i].itemCode == code)
+          {
+              if(info[i].variant == choice){
+                flag = i;
+                break;
+              }
+          }
+          i++;
+      }
+
+      if(flag != -1){
+          var items = JSON.parse(localStorage.itemsInfo);
+          items[flag].qty +=1;
+          localStorage.setItem("itemsInfo", JSON.stringify(items));
+      }
+      else{
+          var oldItems = JSON.parse(localStorage.getItem('itemsInfo')) || [];
+          var newItem = item;
+          newItem.qty = 1;
+          newItem.isCustom = true;
+          newItem.variant = choice;
+          newItem.itemPrice = price;
+          oldItems.push(newItem);
+          var x = JSON.parse(localStorage.getItem("itemsInfo")) ;
+          //console.log(x.itemQuantity);
+          localStorage.setItem('itemsInfo', JSON.stringify(oldItems));
+
+      }
+
+      renderCart();
+    }
 
     function renderCart(){
 
         var row = "";
-     
+
         if (JSON.parse(localStorage.getItem("itemsInfo")).length != 0) // If the cart is not empty.
         {
-        
+
         var info = JSON.parse(localStorage.getItem("itemsInfo"));
         var sub_total = 0;
         var i = 0;
@@ -49,13 +99,18 @@
 
             //Jugaad to hide border in the first row.
             var noBorder = "";
-            if(i == 0){noBorder = 'style="border-top:none; padding-top: 20px;"'}        
+            if(i == 0){noBorder = 'style="border-top:none; padding-top: 20px;"'}
 
-             row = row +'<tr><td class="crossIcon" '+noBorder+'> <div onclick="deleteFromCart('+info[i].itemCode+')"><i class="fa fa-times-circle"></i></div> </td> <td class="cartDescription" '+noBorder+'> <p style="font-size: 14px; color: #2980b9">'+info[i].itemName+'</p> <p style="font-size: 9px; color: grey; margin-top: -10px;">'+info[i].itemVariety+'</p> </td> <td class="cart_quantity" '+noBorder+'> <div class="cartButtons"> <i class="fa fa-minus-circle zaitoonCartMenuMinus" aria-hidden="true" onclick="minusFunction('+info[i].itemCode+')"></i><span id="item_count_12"> '+info[i].itemQuantity+' </span><i class="fa fa-plus-circle zaitoonCartMenuPlus" aria-hidden="true" onclick="addFunction('+info[i].itemCode+')"></i> </div> </td> <td class="cart_price" '+noBorder+'> <p><i class="fa fa-inr"></i> <span id="item_price_12">'+info[i].itemPrice+'</span></p> </td> </tr>';
-             sub_total += (info[i].itemQuantity*info[i].itemPrice);
+             row = row +'<tr><td class="crossIcon" '+noBorder+'> <div onclick="deleteFromCart('+info[i].itemCode+')"><i class="fa fa-times-circle"></i></div> </td> <td class="cartDescription" '+noBorder+'> <p style="font-size: 14px; color: #2980b9">'+info[i].itemName+'</p>';
+             if(info[i].isCustom)
+             {
+                row = row + '<p style="font-size: 9px; color: grey; margin-top: -10px;">Choice: '+info[i].variant+'</p>';
+             }
+             row = row + '</td> <td class="cart_quantity" '+noBorder+'> <div class="cartButtons"> <i class="fa fa-minus-circle zaitoonCartMenuMinus" aria-hidden="true" onclick="minusFunction('+info[i].itemCode+')"></i><span id="item_count_12"> '+info[i].qty+' </span><i class="fa fa-plus-circle zaitoonCartMenuPlus" aria-hidden="true" onclick="addFunction('+info[i].itemCode+')"></i> </div> </td> <td class="cart_price" '+noBorder+'> <p><i class="fa fa-inr"></i> <span id="item_price_12">'+info[i].itemPrice+'</span></p> </td> </tr>';
+             sub_total += (info[i].qty*info[i].itemPrice);
              i++;
         }
-        
+
         document.getElementById("cartArea").innerHTML  = '<div style="max-height:300px; overflow-y:auto;" id="ScrollStyle"><table class="table table-condensed" style="margin-bottom: 0px; margin-top: -16px;"> <tbody></tbody> <colgroup> <col width="2%"> <col width="55%"> <col width="25%"> <col width="18%"> </colgroup> <tbody> '+row+' </tbody> </table></div><table class="table table-condensed" style="margin-bottom: -20px;"> <tbody> <tr> <td><grey>Cart Sub Total</grey></td> <td><grey><i class="fa fa-inr"></i> '+sub_total+'</grey></td> </tr> <tr class="shipping-cost"> <td><grey>Container Charges (7%)</grey></td> <td><grey><i class="fa fa-inr"></i>'+(Math.round(sub_total*.07))+'</grey></td> </tr> <tr> <td><red>Grand Total</red></td> <td><strong><red><span><i class="fa fa-inr"></i> '+(sub_total+(Math.round(sub_total*.07)))+'</span></red></strong></td> </tr> </tbody> </table><hr><a href="checkout.html" style="text-decoration: none"><button class="btn btn-success btn-block">Check Out</button></a>';
         document.getElementById("fullCartArea").innerHTML = "";
     }
@@ -82,13 +137,13 @@
                     flag = i;
                     break;
                 }
-                i++; 
+                i++;
             }
-            var item = JSON.parse(localStorage.itemsInfo);  
+            var item = JSON.parse(localStorage.itemsInfo);
             item.splice(flag, 1);
             localStorage.setItem("itemsInfo", JSON.stringify(item));
             renderCart();
-            console.log((JSON.parse(localStorage.getItem("itemsInfo")))[0]);    
+            console.log((JSON.parse(localStorage.getItem("itemsInfo")))[0]);
         }
         function minusFunction(code) {
             //document.getElementById("item_count_12").innerHTML  = "red";
@@ -104,21 +159,21 @@
                     flag = i;
                     break;
                 }
-                i++; 
-            } 
-            var item = JSON.parse(localStorage.itemsInfo);  
-            if(item[flag].itemQuantity > 1){
+                i++;
+            }
+            var item = JSON.parse(localStorage.itemsInfo);
+            if(item[flag].qty > 1){
                 //console.log(item[flag].itemQuantity);
-                item[flag].itemQuantity -=1;
+                item[flag].qty -=1;
                 localStorage.setItem("itemsInfo", JSON.stringify(item));
                 console.log((JSON.parse(localStorage.getItem("itemsInfo")))[0]);
             }
             else{
                 item.splice(flag, 1);
                 localStorage.setItem("itemsInfo", JSON.stringify(item));
-                console.log((JSON.parse(localStorage.getItem("itemsInfo")))[0]);    
+                console.log((JSON.parse(localStorage.getItem("itemsInfo")))[0]);
             }
-            renderCart(); 
+            renderCart();
             //document.getElementById("item_count_12").innerHTML  = "red";
             console.log(info.length) ;
         }
@@ -135,40 +190,20 @@
                     flag = i;
                     break;
                 }
-                i++; 
-            } 
-            var item = JSON.parse(localStorage.itemsInfo);  
+                i++;
+            }
+            var item = JSON.parse(localStorage.itemsInfo);
             //console.log(item[flag].itemQuantity);
-            item[flag].itemQuantity +=1;
+            item[flag].qty +=1;
             localStorage.setItem("itemsInfo", JSON.stringify(item));
             renderCart();
             console.log((JSON.parse(localStorage.getItem("itemsInfo")))[0]);
-            
+
         }
 
     </script>
 
 
-
-   <!--  <link type="text/css" rel="stylesheet" charset="utf-8" href="/rb/layouts/bs-docs/_main.css?nFlag=201611" /> -->
-<!--     <script type="text/javascript">
-        //<![CDATA[
-        var mbrclick = false;
-        var rooturl = 'http://redblock.co.kr/rb';
-        var rootssl = 'https://redblock.co.kr/rb';
-        var raccount = 'bs-docs';
-        var moduleid = 'home';
-        var memberid = '';
-        var is_admin = '';
-        var needlog = '로그인후에 이용하실 수 있습니다. ';
-        var neednum = '숫자만 입력해 주세요.';
-        var myagent = navigator.appName.indexOf('Explorer') != -1 ? 'ie' : 'ns';
-        //]]>
-    </script> -->
-    <!-- <script type="text/javascript" charset="utf-8" src="assets/js/sys.js?nFlag=201611"></script> -->
-<!--     <script type="text/javascript" charset="utf-8" src="/rb/layouts/bs-docs/_main.js?nFlag=201611"></script>
-    <link type="text/css" rel="stylesheet" charset="utf-8" href="/rb/pages/_main.css?nFlag=201611" />
-    <script type="text/javascript" charset="utf-8" src="/rb/pages/_main.js?nFlag=201611"></script> -->
     <link href="dist/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
     <!-- Angular -->
@@ -180,8 +215,25 @@
     <script src="controllers/menu.js"></script>
 
 
-</head> 
-<body onload="renderCart()" ng-app="FullMenu" data-spy="scroll" data-target=".bs-sidebar">
+    <!-- For passing data to modal -->
+    <script>
+    $(document).on("click", ".open-AddCustomItemDialog", function () {
+     var item = $(this).data('id');
+     var i = 0;
+     var list = "";
+     while(i < item.custom.length){
+       list = list + '<li onclick="addToCartNow(\''+item.itemName+'\', \''+item.itemCode+'\', \''+item.custom[i].customPrice+'\', \''+item.custom[i].customName+'\')"><a>'+item.custom[i].customName+' (Rs. '+item.custom[i].customPrice+')</a></li>';
+       i++;
+     }
+     document.getElementById("customOptionsTitle").innerHTML = "Your choice for "+item.itemName;
+     document.getElementById("customOptionsBody").innerHTML = list;
+    });
+    </script>
+
+
+</head>
+
+<body onload="renderCart()" ng-app="FullMenu" data-spy="scroll" data-target=".bs-sidebar" ng-cloak>
     <a class="sr-only" href="#content">Skip navigation</a>
 
     <!-- Docs master nav -->
@@ -218,55 +270,39 @@
         </div>
     </div>
 
-
-    <!--
-    <div class="bs-old-docs">
-        <div class="container">
-            <strong>
-      <a href="{{ page.base_url }}2.3.2/">Looking for Bootstrap 2.3.2 docs?</a>
-    </strong> We've moved it to a new home while we push forward with Bootstrap 3. <a href="http://blog.getbootstrap.com/">Read the blog</a> for details.
-        </div>
-    </div>
-
-    -->
-    
     <div class="container bs-docs-container">
         <div class="row">
 
-            <div class="col-md-3" ng-controller="MenuController">  
+            <div class="col-md-3" ng-controller="MenuController">
 
                 <div class="bs-sidebar hidden-print affix-top" role="complementary">
-                    <ul class="nav bs-sidenav">
+                    <ul class="nav bs-sidenav" style="border-radius: 0px">
                     <h3 class="quickMenuHead">Quick Menu</h3>
-                    <hr></hr>                          
-                        <li ng-repeat="item in menu">
-                            <a href="#{{item.mainType}}">{{item.mainName}}</a>
+                    <hr></hr>
+                        <li ng-repeat="item in menu track by $index">
+                            <a href="#{{item.mainType}}" >{{item.mainName}}</a>
                             <ul class="nav">
-                                <li ng-repeat="sub in item.subCategories" class="">
-                                    <a href="#{{item.mainType}}-{{sub.subType}}">{{sub.subName}}</a>
+                                <li ng-repeat="sub in item.subCategories track by $index" class="">
+                                    <a href="#{{item.mainType}}-{{sub.subType}}" >{{sub.subName}}</a>
                                 </li>
                             </ul>
-                        </li> 
-                    </ul> 
-                    <!-- Search in Menu -->
-                    <p style="margin-top: 30px; font-size: 12px; color: #e74c3c">Just type in your taste and add it to the cart with a single click.</p>
-                    <hr style="padding: 0px; margin: 0px; margin-top: -3px; border-bottom: 1px dashed #e74c3c;">
-                    <div ng-controller="SearchMenuCtrl" style="margin-top: 20px;">
-
-                        <input class='typeahead' placeholder="Search and Quick Add" type="text" sf-typeahead options="exampleOptions" datasets="numbersDataset" ng-model="selectedNumber">
-                        <p style="color: #64B171; margin-top: 5px; font-size: 12px;">{{searchMsg}}</p>                        
-                    </div>   
+                        </li>
+                    </ul>
 
                 </div>
             </div>
             <div class="col-md-6" role="main" ng-controller="MenuController" style="margin-top: 10px;">
-       
-                <div class="bs-docs-section" ng-repeat="item in menu">
-                    
-                    <h2 id="{{item.mainType}}" class="zaitoonMenuHead">{{ item.mainName }}</h2>
+
+                <!-- Search Box -->
+                <input class="menuSearch" style="padding-top: 16px; width: 100%;" ng-model="searchKeyword" placeholder="Search" style="border: none; border-bottom: 1px solid #ABABAB">
+
+
+                <div class="bs-docs-section" ng-repeat="item in menu | filter: searchKeyword track by $index">
+
+                    <h2 id="{{item.mainType}}" class="zaitoonMenuHead" >{{ item.mainName }}</h2>
                     <hr style="border-top: 1px dashed #e74c3c; margin-top: 5px;">
 
-                    <div class="table-responsive" ng-repeat="sub in item.subCategories">
+                    <div class="table-responsive" ng-repeat="sub in item.subCategories | filter: searchKeyword track by $index">
                         <table class="table table-hover zaitoonMenuTable" id="{{item.mainType}}-{{sub.subType}}">
                             <col width="60%">
                             <col width="20%">
@@ -274,30 +310,34 @@
 
                             <thead>
                                 <tr>
-                                    <th class="zaitoonSubMenuHead">{{ sub.subName }}</th>
+                                    <th class="zaitoonSubMenuHead" >{{ sub.subName }}</th>
                                     <th></th>
                                     <th></th>
                                 </tr>
                             </thead>
-                            <tbody>                    
-                                <tr ng-repeat="i in sub.items">
+                            <tbody>
+                                <tr ng-repeat="i in sub.items | filter: searchKeyword track by $index">
 
                                     <td style="vertical-align: middle;">
 
                                         <span ng-if="i.isVeg" style="font-size: 65%; padding-right: 5px;" class="veg-indian-vegetarian"></span>
-                                        <span ng-if="!i.isVeg" style="font-size: 65%; padding-right: 5px;" class="nonveg-indian-vegetarian"></span>
-                                        
+                                        <span ng-if="!i.isVeg" style="font-size: 65%; padding-right: 5px;" class="nonveg-indian-vegetarian" ></span>
+
                                         {{ i.itemName }}
 
                                         </td>
                                     <td style="vertical-align: middle;">
-                                        <strong><i class="fa fa-inr"></i> {{ i.itemPrice }}</strong>    
+                                        <strong><i class="fa fa-inr"></i> {{ i.itemPrice }}</strong>
                                     </td>
-                                    <td style="vertical-align: middle;">
-                                        <button ng-if="i.isAvailable" class="btn btn-sm zaitoonAdd" ng-click="addToCart(i.itemCode, i.itemName, i.itemPrice, sub.subName)"> Add </button>
+                                    <td style="vertical-align: middle;" ng-if="i.isCustom">
+                                        <button ng-if="i.isAvailable" class="btn btn-sm zaitoonAdd open-AddCustomItemDialog" data-id="{{i}}" data-toggle="modal" data-target="#customiseItem"> Add </button>
                                         <div ng-if="!i.isAvailable" class=" btn-sm zaitoonNoStock">Out of Stock</div>
                                     </td>
-                                </tr>                                
+                                    <td style="vertical-align: middle;" ng-if="!i.isCustom">
+                                        <button ng-if="i.isAvailable" class="btn btn-sm zaitoonAdd" ng-click="addToCart(i)"> Add </button>
+                                        <div ng-if="!i.isAvailable" class=" btn-sm zaitoonNoStock">Out of Stock</div>
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -309,53 +349,54 @@
 
 
 
-            <div class="col-md-3" ng-controller="CartController">                        
+            <div class="col-md-3" ng-controller="CartController">
                 <div class="bs-sidebar" role="complementary">
-                    <ul class="nav bs-sidenav myCartMain">
+                    <ul class="nav bs-sidenav myCartMain" style="border-radius: 0px">
                     <h3 style="padding-left: 20px;">Your Cart</h3>
-                    <hr style="margin-bottom: 0px">                      
-                        <div id="cartArea" class="mycartArea">                             
-                        </div>  <!-- Closing cart area --> 
+                    <hr style="margin-bottom: 0px">
+                        <div id="cartArea" class="mycartArea">
+                        </div>  <!-- Closing cart area -->
                     </ul>
-                    <div id="fullCartArea">                        
+                    <div id="fullCartArea">
                     </div>
                 </div>
-                
+
             </div>
-        </div> 
+        </div>
 
     </div>
 
 
+    <!-- ADD CUSTOM ITEM - Modal -->
+    <div id="customiseItem" class="modal fade" role="dialog" ng-controller="MenuController">
+      <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content" style="border-radius: 0px">
+          <div class="modal-header" style="color: #27ae60">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title" id="customOptionsTitle">Choose an Option</h4>
+          </div>
+          <div class="modal-body">
+            <ol class="rectangle-list" id="customOptionsBody">
+            </ol>
+          </div>
+        </div>
+
+      </div>
+    </div>
 
 
-    
     <!-- JS and analytics only. -->
     <!-- Bootstrap core JavaScript
 ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
- 
+
     <script src="assets/js/bootstrap.js"></script>
 
-    <script src="http://platform.twitter.com/widgets.js"></script>
     <script src="assets/js/holder.js"></script>
 
     <script src="assets/js/application.js"></script>
-
-    <div id="_box_layer_"></div>
-    <div id="_action_layer_"></div>
-    <div id="_hidden_layer_"></div>
-    <div id="_overLayer_" class="hide"></div>
-    <iframe name="_action_frame_home" width="0" height="0" frameborder="0" scrolling="no" style="display: none;"></iframe>
-    <script type="text/javascript">
-        //<![CDATA[
-        document.body.onclick = closeMemberLayer;
-        document.onkeydown = closeImgLayer;
-        //]]>
-    </script>
-
-
-
 
 </body>
 
