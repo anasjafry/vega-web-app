@@ -491,3 +491,37 @@ ol ol {
 	text-transform: uppercase;
 	color: #34495e;
 }
+
+.cityButton{
+	background: none;
+	border: none;
+	border-radius: 0px;
+	color: #EAEAEA;
+}
+
+.cityButton:hover{
+	color: #FFF;
+}
+
+.cityButton:active, .cityButton:focus{
+	color: #FFF;
+	outline: none;
+}
+
+.nav .myCityA a:active, .nav .myCityA a:focus{
+	background: none;
+}
+
+.modal-open {
+    overflow: scroll;
+}
+
+.changeCity{
+	color:#95a5a6;
+	float: right;
+	padding: 0px 10px;
+}
+
+.changeCity:hover{
+	color:#16a085;
+}
