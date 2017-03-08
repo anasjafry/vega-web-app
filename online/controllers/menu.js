@@ -24,8 +24,13 @@ angular.module('FullMenu', ['siyfion.sfTypeahead'])
         $scope.isLocationSet = false;
       }
       else{
-        $scope.isLocationSet = true;
         $scope.locationData = JSON.parse(localStorage.getItem("location"));
+        if($scope.locationData.city != null && $scope.locationData.location != null ){
+          $scope.isLocationSet = true;
+        }
+        else{
+          $scope.isLocationSet = false;
+        }
       }
 
 
