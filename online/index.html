@@ -215,14 +215,6 @@
     <script type="text/javascript" charset="utf-8" src="assets/js/angular-typeahead.js"></script>
     <script src="controllers/menu.js"></script>
 
-
-        <!-- Bootstrap Dropdown Plugin -->
-        <link rel="stylesheet" href="dist/bootstrap-select/bootstrap-select.min.css">
-        <script src="dist/bootstrap-select/bootstrap-select.min.js"></script>
-
-
-
-
     <!-- For passing data to modal -->
     <script>
     $(document).on("click", ".open-AddCustomItemDialog", function () {
@@ -240,22 +232,33 @@
 
     <!-- For city selection -->
     <script>
-    $(function() {
-
-      $('.dummyCity').on('change', function(){
-        var city = $(this).val();
+      function setCity(city){
         var temp = {};
         temp.city = city;
         localStorage.setItem("location", JSON.stringify(temp));
-        $('#setLocation').modal('show'); //Ask to set location
-      });
-    });
+        location.reload(true);
+      }
+
+      function changeCity(){
+        localStorage.removeItem("location");
+        location.reload(true);
+      }
+
+      function callSetLocation(){
+        if(localStorage.getItem("location")){
+          var temp = JSON.parse(localStorage.getItem("location"));
+          if(temp.city != null && temp.location == null){
+            //City is Set but not location -> Ask for Location
+            $('#setLocation').modal('show');
+          }
+        }
+      }
     </script>
 
 
 </head>
 
-<body onload="renderCart()" ng-app="FullMenu" data-spy="scroll" data-target=".bs-sidebar" ng-cloak>
+<body onload="renderCart(); callSetLocation();" ng-app="FullMenu" data-spy="scroll" data-target=".bs-sidebar" ng-cloak>
     <a class="sr-only" href="#content">Skip navigation</a>
 
     <!-- Docs master nav -->
@@ -272,16 +275,21 @@
             <div class="navbar-header" style="float:right; vertical-align: middle">
               <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
                 <ul class="nav navbar-nav">
-                    <li ng-if="isLocationSet">
+                    <li ng-if="isLocationSet" class="myCityA">
                         <a href="" data-toggle="modal" data-target="#setLocation"><i class="fa fa-map-marker"></i> {{locationData.location}}, {{locationData.city}}</a>
                     </li>
                     <li ng-if="!isLocationSet">
-                      <select class="selectpicker dummyCity" title="Select City">
-                        <option>Bangalore</option>
-                        <option>Chennai</option>
-                        <option>Madurai</option>
-                      </select>
+                      <div class="dropdown" style="margin-top: 9px;">
+                        <button class="btn cityButton dropdown-toggle" type="button" data-toggle="dropdown">Set Your Location
+                        <span class="caret"></span></button>
+                        <ul class="dropdown-menu">
+                          <li onclick="setCity('Bangalore')"><a href="">Bangalore</a></li>
+                          <li onclick="setCity('Chennai')"><a href="">Chennai</a></li>
+                          <li onclick="setCity('Madurai')"><a href="">Madurai</a></li>
+                        </ul>
+                      </div>
                     </li>
+
                 </ul>
             </nav>
 
@@ -439,21 +447,11 @@
         <div class="modal-content" style="border-radius: 0px">
           <div class="modal-header" style="color: #27ae60">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title" style="font-size: 14px; font-weight: 200;">SET LOCATION</h4>
+            <h4 class="modal-title" style="font-size: 14px; font-weight: 200;">SET LOCATION<tag class="changeCity" onclick="changeCity()"><i class="fa fa-refresh"></i> Change City</tag></h4>
           </div>
           <div class="modal-body">
             <div class="row">
               <div class="col-sm-12">
-                <!-- <select class="selectpicker dummyLocation" style="width: 100%" data-live-search="true" data-size="4" id="areasList">
-                  <option>Adyar</option>
-                  <option>Velachery</option>
-                  <option>IIT</option>
-                  <option>Guindy</option>
-                  <option>Anna Nagar</option>
-                  <option>Tiruvanmyur</option>
-                  <option>T nagar</option>
-                  <option>Besant Nagar</option>
-                </select> -->
                 <div id="remote" style="width:100%" >
                   <input class="typeahead" style="width:100%" type="text" placeholder="Where do you want the food to be delivered?">
                 </div>
@@ -480,11 +478,12 @@
 
     <!-- For the location typeahead -->
     <script>
+      var city = JSON.parse(localStorage.getItem("location")).city;
       var areaSuggestions = new Bloodhound({
         datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
         queryTokenizer: Bloodhound.tokenizers.whitespace,
         remote: {
-          url: 'http://localhost/vega-web-app/online/services/searchareas.php?city=Chennai&key=%QUERY',
+          url: 'http://localhost/vega-web-app/online/services/searchareas.php?city='+city+'&key=%QUERY',
           wildcard: '%QUERY'
         }
       });
@@ -506,7 +505,10 @@
           localStorage.setItem("location", JSON.stringify(temp));
         }
         $('#setLocation').modal('hide');
+        window.location = "index.html";
+
       })
+
     </script>
 
 
