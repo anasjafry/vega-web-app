@@ -11,7 +11,6 @@ $_POST = json_decode(file_get_contents('php://input'), true);
 
 $mobile = mysql_real_escape_string($_POST['mobile']);
 
-
 $query = "SELECT * from z_users WHERE mobile='{$mobile}'";
 $main = mysql_query($query);
 $rows = mysql_fetch_assoc($main);

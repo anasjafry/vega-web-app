@@ -65,7 +65,7 @@
              i++;
         }
 
-        document.getElementById("cartArea").innerHTML  = '<div style="max-height:300px; overflow-y:auto;" id="ScrollStyle"><table class="table table-condensed" style="margin-bottom: 0px; margin-top: -16px;"> <tbody></tbody> <colgroup> <col width="2%"> <col width="55%"> <col width="25%"> <col width="18%"> </colgroup> <tbody> '+row+' </tbody> </table></div><table class="table table-condensed" style="margin-bottom: -20px;"> <tbody> <tr> <td><grey>Cart Sub Total</grey></td> <td><grey><i class="fa fa-inr"></i> '+sub_total+'</grey></td> </tr> <tr class="shipping-cost"> <td><grey>Container Charges (7%)</grey></td> <td><grey><i class="fa fa-inr"></i>'+(Math.round(sub_total*.07))+'</grey></td> </tr> <tr> <td><red>Grand Total</red></td> <td><strong><red><span><i class="fa fa-inr"></i> '+(sub_total+(Math.round(sub_total*.07)))+'</span></red></strong></td> </tr> </tbody> </table><br>';
+        document.getElementById("cartArea").innerHTML  = '<div style="max-height:300px; overflow-y:auto;" id="ScrollStyle"><table class="table table-condensed" style="margin-bottom: 0px; margin-top: -16px;"> <tbody></tbody> <colgroup> <col width="2%"> <col width="55%"> <col width="25%"> <col width="18%"> </colgroup> <tbody> '+row+' </tbody> </table></div><table class="table table-condensed" style="margin-bottom: -20px;"> <tbody> <tr> <td><grey>Cart Sub Total</grey></td> <td><grey><i class="fa fa-inr"></i> '+sub_total+'</grey></td> </tr> <tr class="shipping-cost"> <td><grey>Discounts</grey></td> <td><grey><i class="fa fa-inr"></i><tag id="discountTab"> 0</tag></grey></td> </tr> <tr class="shipping-cost"> <td><grey>Container Charges (7%)</grey></td> <td><grey><i class="fa fa-inr"></i> '+(Math.round(sub_total*.07))+'</grey></td> </tr> <tr> <td><red>Grand Total</red></td> <td><strong><red><span><i class="fa fa-inr"></i> <tag id="grandTotal">'+(sub_total+(Math.round(sub_total*.07)))+'</tag></span></red></strong></td> </tr> </tbody> </table><br>';
         document.getElementById("fullCartArea").innerHTML = "";
     }
     else{
@@ -79,7 +79,7 @@
     <link href="dist/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet">
 </head>
 
-<body onload="renderCart()" ng-app="CheckOut">
+<body onload="renderCart()" ng-app="CheckOut" ng-cloak>
     <a class="sr-only" href="#content">Skip navigation</a>
 
     <!-- Docs master nav -->
@@ -245,11 +245,11 @@
 
                     <b class="CheckOutSubHead"><br>Apply Coupon Code</b>
                     <div class="input-group" style="margin-top: 10px">
-                        <input type="text" class="form-control couponIn" placeholder="Coupon Code" ng-model="coupon" aria-describedby="basic-addon2">
+                        <input id="couponCode" type="text" class="form-control couponIn" placeholder="Coupon Code" ng-model="coupon" ng-keyup="invalidateCoupon()" aria-describedby="basic-addon2">
                         <span class="input-group-addon" ng-click="applyCoupon()" id="basic-addon2">Apply</span>
                     </div>
                     <p ng-if="isCouponApplied" style="padding-top: 5px;">
-                      <tag ng-if="!isCouponFailed" style="color: #27AE60">Applied successfully! You get Rs. {{couponDiscount}} discount!</tag>
+                      <tag ng-if="!isCouponFailed" style="color: #27AE60">Applied successfully! You get Rs. {{couponDiscount}} discount.</tag>
                       <tag ng-if="isCouponFailed" style="color: #FF5733">Failed. {{couponError}}</tag>
                     </p>
 
