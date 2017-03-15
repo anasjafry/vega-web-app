@@ -122,7 +122,7 @@
                                  <div class="info-tile tile-orange" id="pendingTabButton">
                                     <div class="tile-icon"><i class="ti ti-shopping-cart-full"></i></div>
                                     <div class="tile-heading"><span>Pending Orders</span></div>
-                                    <div class="tile-body"><span>{{pending_orders.length}}</span></div>
+                                    <div class="tile-body"><span>{{pending_orders_length}}</span></div>
                                     <div class="tile-footer"><span class="text-default">To be Billed</span></div>
                                  </div>
                               </div>
@@ -132,7 +132,7 @@
                                  <div class="info-tile tile-orange" id="confirmedTabButton">
                                     <div class="tile-icon"><i class="ti ti-loop"></i></div>
                                     <div class="tile-heading"><span>Confirmed Orders</span></div>
-                                    <div class="tile-body"><span>{{confirmed_orders.length}}</span></div>
+                                    <div class="tile-body"><span>{{confirmed_orders_length}}</span></div>
                                     <div class="tile-footer"><span class="text-default">To be Delivered</span></div>
                                  </div>
                               </div>
@@ -154,15 +154,18 @@
                                        <table class="table m-n table-hover" ng-init="initializePendingOrders()">
                                           <tbody>
                                           <p ng-if="!pending_orders.length" style="padding: 20px; text-align: center">There are no pending orders.</p>
-                                             <tr ng-repeat="order in pending_orders" ng-click="showOrder(order.orderID)">
+                                             <tr ng-repeat="order in pending_orders track by $index" ng-click="showOrder(order.orderID, order.isTakeaway)">
                                                 <td>#{{$index + 1}}</td>
                                                 <td>{{order.orderID}}</td>
-                                                <td>{{order.userID}} ({{order.name}})</td>
+                                                <td ng-if="order.isTakeaway">{{order.userID}} (Take Away)</td>
+                                                <td ng-if="!order.isTakeaway">{{order.userID}} (Delivery)</td>
                                                 <td>10m ago.</td>
                                              </tr>                                            
                                           </tbody>
                                        </table>
                                     </div>
+                                    <center><label ng-if="prevflag_p" ng-click="showPrev_p(order.status)"><span class="label label-success"><i class="fa fa-chevron-left" aria-hidden="true"></i>Prev</span></label>
+                                    <label ng-if="nextflag_p" ng-click="showNext_p(order.status)"><span class="label label-success">Next<i class="fa fa-chevron-right" aria-hidden="true"></i></span></label></center>
                                  </div>
                               </div>
                               <div class="col-md-4" id="confirmedTab">
@@ -179,15 +182,18 @@
                                        <table class="table m-n table-hover" ng-init="initializePendingOrders()">
                                           <tbody>
 											<p ng-if="!confirmed_orders.length" style="padding: 20px; text-align: center">There are no confirmed orders.</p>
-                                             <tr ng-repeat="order in confirmed_orders" ng-click="showOrder(order.orderID)">
+                                             <tr ng-repeat="order in confirmed_orders track by $index" ng-click="showOrder(order.orderID, order.isTakeaway)">
                                                 <td>#{{$index + 1}}</td>
                                                 <td>{{order.orderID}}</td>
-                                                <td>{{order.userID}} ({{order.name}})</td>
+                                                <td ng-if="order.isTakeaway">{{order.userID}} (Take Away)</td>
+                                                <td ng-if="!order.isTakeaway">{{order.userID}} (Delivery)</td>
                                                 <td>10m ago.</td>
                                              </tr>                                            
                                           </tbody>
                                        </table>
                                     </div>
+                                    <center><label ng-if="prevflag_c" ng-click="showPrev_c(order.status)"><span class="label label-success"><i class="fa fa-chevron-left" aria-hidden="true"></i>Prev</span></label>
+                                    <label ng-if="nextflag_c" ng-click="showNext_c(order.status)"><span class="label label-success">Next<i class="fa fa-chevron-right" aria-hidden="true"></i></span></label></center>
                                  </div>
                               </div>
                              
@@ -211,12 +217,12 @@
                                                    </tr>
                                                 </thead>
                                                 <tbody>
-                                                   <tr ng-repeat="item in displayOrderContent.cart.items">
+                                                   <tr ng-repeat="item in displayOrderContent.cart.items track by $index">
                                                       <td align="left">{{$index+1}}</td>
                                                       <td>{{item.itemName}} <span class="text-warning" style="font-size: 11px;">{{item.itemVariety}}</span></td>
-                                                      <td>{{item.itemQuantity}}</td>
+                                                      <td>{{item.qty}}</td>
                                                       <td>{{item.itemPrice}}</td>
-                                                      <td>{{item.itemPrice*item.itemQuantity}}</td>
+                                                      <td>{{item.itemPrice*item.qty}}</td>
                                                    </tr>
                                                 </tbody>
                                              </table>
@@ -227,12 +233,11 @@
                                              <div class="col-md-6">
                                                 <div class="alert alert-info">
                                                    <h3>Delivery Details</h3>
-                                                   <p>{{displayOrderContent.name}}<br>
-                                                   {{displayOrderContent.address.line1}}<br>
-                                                   {{displayOrderContent.address.line2}}<br>
-                                                   {{displayOrderContent.address.area}}<br>
-                                                   {{displayOrderContent.address.city}}<br>
-                                                   Mob. <strong>{{displayOrderContent.address.contact}}</strong></p>
+                                                   <p>{{displayOrderContent.deliveryAddress.name}}<br>
+                                                   {{displayOrderContent.deliveryAddress.flatNo}}, {{displayOrderContent.deliveryAddress.flatName}}<br>
+                                                   {{displayOrderContent.deliveryAddress.area}}<br>
+                                                   {{displayOrderContent.deliveryAddress.landmark}}<br>
+                                                   Mob. <strong>{{displayOrderContent.deliveryAddress.contact}}</strong></p>
                                                 </div>
                                              </div>
                                           </a>
@@ -253,7 +258,8 @@
                                              <div class="btn btn-danger-alt btn-label" ng-click="rejectOrder(displayOrderID)"><i class="ti ti-close" ></i> Cancel</div>
                                           </div>
                                           <div class="col-md-3" ng-if="!isPendingDisplayed && !showDeliveryAgents">
-                                             <div class="btn btn-success-alt btn-label" ng-click="assignAgent()"><i class="ti ti-check"></i> Dispatch</div>
+                                             <div ng-if="!displayOrderType" class="btn btn-success-alt btn-label" ng-click="assignAgent()"><i class="ti ti-check"></i> Dispatch</div>
+                                             <div ng-if="displayOrderType" class="btn btn-success-alt btn-label" ng-click="dispatchOrder(displayOrderID)"><i class="ti ti-check"></i> Ready</div>
                                           </div>
 
                                           <div class="col-md-6" ng-if="!isPendingDisplayed && showDeliveryAgents">

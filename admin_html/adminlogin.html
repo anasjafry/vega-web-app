@@ -26,11 +26,11 @@
     <!-- Controller -->
       <script src="assets/js/jquery.js"></script>
       <script src="assets/js/angular.min.js"></script>
-      <script src="controllers/resources.js"></script> 
+      <script src="controllers/login.js"></script> 
 
     </head>
 
-    <body class="focused-form animated-content">
+    <body class="focused-form animated-content" ng-app="AdminLoginApp" ng-controller="adminloginController">
         
         
 <div class="container" id="login-form">
@@ -61,7 +61,7 @@
 										<span class="input-group-addon">
 											<i class="ti ti-key"></i>
 										</span>
-										<input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+										<input type="password" class="form-control" ng-model="password" placeholder="Password">
 									</div>
 		                        </div>
 							</div>
@@ -70,7 +70,7 @@
 					</div>
 					<div class="panel-footer">
 						<div class="clearfix">
-							<a href="extras-login.html" class="btn btn-primary pull-right">Login</a>
+							<a ng-click="loginadmin()" class="btn btn-primary pull-right">Login</a>
 						</div>
 					</div>
 				</div>

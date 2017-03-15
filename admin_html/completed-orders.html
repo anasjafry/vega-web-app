@@ -174,9 +174,9 @@
                                                    <tr ng-repeat="item in displayOrderContent.cart.items">
                                                       <td align="left">{{$index+1}}</td>
                                                       <td>{{item.itemName}} <span class="text-warning" style="font-size: 11px;">{{item.itemVariety}}</span></td>
-                                                      <td>{{item.itemQuantity}}</td>
+                                                      <td>{{item.qty}}</td>
                                                       <td>{{item.itemPrice}}</td>
-                                                      <td>{{item.itemPrice*item.itemQuantity}}</td>
+                                                      <td>{{item.itemPrice*item.qty}}</td>
                                                    </tr>
                                                 </tbody>
                                              </table>
@@ -187,7 +187,11 @@
                                              <div class="col-md-6">
                                                 <div class="alert alert-info">
                                                    <h3>Delivery Details</h3>
-                                                   <p>Abhijith C S<br>9043960876<br>404 Alakananda<br>IIT Madras<br>Chennai - 36</p>
+                                                   <p>{{displayOrderContent.deliveryAddress.name}}<br>
+                                                   {{displayOrderContent.deliveryAddress.flatNo}}, {{displayOrderContent.deliveryAddress.flatName}}<br>
+                                                   {{displayOrderContent.deliveryAddress.area}}<br>
+                                                   {{displayOrderContent.deliveryAddress.landmark}}<br>
+                                                   Mob. <strong>{{displayOrderContent.deliveryAddress.contact}}</strong></p>
                                                 </div>
                                              </div>
                                           </a>
