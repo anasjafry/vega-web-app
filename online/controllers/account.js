@@ -5,7 +5,6 @@ angular.module('Account', ['ngRoute'])
     $qProvider.errorOnUnhandledRejections(false);
 }])
 
-
     .controller('HistoryController', ['$scope','$http', function($scope, $http) {
 
       //Check if the user is Logged In
@@ -19,7 +18,7 @@ angular.module('Account', ['ngRoute'])
 
       $scope.init = function(){
         var data = {};
-        data.token = "QYrNZG20IzMwLFr4mU9UOjS+UozOrLquEQpqSPYETSMom4NtgZOg9/NilLnc4vrw";
+        data.token = JSON.parse(localStorage.getItem("user")).token;
 
         $http({
           method  : 'POST',
@@ -29,6 +28,7 @@ angular.module('Account', ['ngRoute'])
          })
           .then(function(response) {
               $scope.item = response.data.response;
+              console.log($scope.item)
               if(!response.data.status){
                 $scope.errorMsg = response.data.error;
                 localStorage.removeItem("user"); //Login Again
@@ -44,7 +44,7 @@ angular.module('Account', ['ngRoute'])
     .controller('UserProfileController', ['$scope','$http', function($scope, $http) {
 
         var data = {};
-        data.token = "QYrNZG20IzMwLFr4mU9UOjS+UozOrLquEQpqSPYETSMom4NtgZOg9/NilLnc4vrw";
+        data.token = JSON.parse(localStorage.getItem("user")).token;
 
         $http({
           method  : 'POST',
@@ -70,7 +70,7 @@ angular.module('Account', ['ngRoute'])
             var data = {};
             data.name = name;
             data.email = email;
-            data.token = "QYrNZG20IzMwLFr4mU9UOjS+UozOrLquEQpqSPYETSMom4NtgZOg9/NilLnc4vrw";
+            data.token = JSON.parse(localStorage.getItem("user")).token;
 
             $http({
               method  : 'POST',
@@ -80,6 +80,7 @@ angular.module('Account', ['ngRoute'])
              })
               .then(function(response) {
                 if(response.data.status){
+                  $scope.toggleFlag = 0;
                   $scope.ProfileEditMsg = "Changes saved successfully";
                 }
                 else {

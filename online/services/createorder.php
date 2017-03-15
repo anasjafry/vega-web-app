@@ -118,7 +118,7 @@ $total = 0;
 
 		$code = $items[$i]['itemCode'];
 
-		//Combo Validations - Check if the combo is availble to particular outlet
+		//Combo Validations - Check if the combo is available to particular outlet
 		if($items[$i]['isCombo']){ //ITEM IS A COMBO
 			$rowscombo = mysql_fetch_assoc(mysql_query("SELECT * FROM `z_combos` WHERE `code`='{$code}'"));
 			if($rowscombo['outlet'] != $outlet)

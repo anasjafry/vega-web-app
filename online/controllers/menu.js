@@ -13,14 +13,14 @@ angular.module('FullMenu', ['siyfion.sfTypeahead'])
 
       //Check if the user is Logged In
       if(localStorage.getItem("user")){
-        $scope.isLoggedIn = true;
+        $scope.isLoggedIn = true;        
       }
       else{
         $scope.isLoggedIn = false;
       }
 
       //Check if the location is set
-      if(localStorage.getItem("location") === null){
+      if(!localStorage.getItem("location")){
         $scope.isLocationSet = false;
       }
       else{
@@ -32,7 +32,6 @@ angular.module('FullMenu', ['siyfion.sfTypeahead'])
           $scope.isLocationSet = false;
         }
       }
-
 
       //console.log($scope.isLoggedIn);
 

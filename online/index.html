@@ -34,13 +34,92 @@
 
     <script>
 
+    // Check log in
+    function goCheckout(){
+      if(!localStorage.getItem("location")){
+        $('#warnLocation').modal('show');
+      }
+      else if(localStorage.getItem("user")){
+        window.location = "checkout.html";
+      }
+      else{
+        $('#loginWindow').modal('show');
+      }
+    }
+
+    function activateLogin() {
+      document.getElementById("otpRequest").innerHTML = "";
+      document.getElementById("loginButton").style.display = "inherit";
+      var value = document.getElementById('loginMobile').value;
+      if(value.toString().length == 10){
+          document.getElementById("loginButton").disabled = false;
+      }
+      else{
+          document.getElementById("loginButton").disabled = true;
+      }
+    }
+
+    function doLogin(){
+      var val = {};
+      val.mobile = Number(document.getElementById('loginMobile').value);
+      $.ajax({
+          type: 'POST',
+          url: 'services/userlogin.php',
+          data: JSON.stringify(val),
+          contentType: "application/json",
+          dataType: 'json',
+          success: function(data) {
+             if(data.response.isOTPSent){
+               document.getElementById("loginError").innerHTML = "";
+               document.getElementById("loginButton").style.display = "none";
+               document.getElementById("otpRequest").innerHTML = '<br><div class="col-sm-9"> <div id="remote2" style="width:100%" > <input class="typeahead" id="otpMobile" onkeyup="activateOtp()" style="width:100%" type="text" maxlength="4" placeholder="Enter the 4 digit OTP"> </div> </div> <div class="col-sm-3"> <button class="btn btn-success" style="width: 100%; border-radius: 0px" id="otpButton" onclick="doOtp()" disabled>Log In</button> </div> <p id="otpError" style="padding: 2px 15px; color: #e74c3c"></p>';
+             }
+             else{
+                document.getElementById("loginError").innerHTML = data.error;
+             }
+          }
+      });
+    }
+
+    function activateOtp() {
+      var value = document.getElementById('otpMobile').value;
+      if(value.toString().length == 4){
+          document.getElementById("otpButton").disabled = false;
+      }
+      else{
+          document.getElementById("otpButton").disabled = true;
+      }
+    }
+
+    function doOtp(){
+      var val = {};
+      val.mobile = Number(document.getElementById('loginMobile').value);
+      val.otp = Number(document.getElementById('otpMobile').value);
+      $.ajax({
+          type: 'POST',
+          url: 'services/validatelogin.php',
+          data: JSON.stringify(val),
+          contentType: "application/json",
+          dataType: 'json',
+          success: function(data) {
+             if(data.status){
+               document.getElementById("otpError").innerHTML = "";
+               localStorage.setItem("user", JSON.stringify(data.response));
+               window.location = "checkout.html";
+             }
+             else{
+                document.getElementById("otpError").innerHTML = data.error;
+             }
+          }
+      });
+    }
+
     function addToCartNow(name, code, price, choice){
 
       $('#customiseItem').modal('hide');
       var item = {};
       item.itemName = name;
       item.itemCode = code;
-      console.log(item)
 
       if(localStorage.getItem("itemsInfo") === null){
           var temp = [];
@@ -77,7 +156,6 @@
           newItem.itemPrice = price;
           oldItems.push(newItem);
           var x = JSON.parse(localStorage.getItem("itemsInfo")) ;
-          //console.log(x.itemQuantity);
           localStorage.setItem('itemsInfo', JSON.stringify(oldItems));
 
       }
@@ -89,7 +167,7 @@
 
         var row = "";
 
-        if (JSON.parse(localStorage.getItem("itemsInfo")).length != 0) // If the cart is not empty.
+        if (localStorage.getItem("itemsInfo") != null && JSON.parse(localStorage.getItem("itemsInfo")).length != 0) // If the cart is not empty.
         {
 
         var info = JSON.parse(localStorage.getItem("itemsInfo"));
@@ -112,7 +190,7 @@
              i++;
         }
 
-        document.getElementById("cartArea").innerHTML  = '<div style="max-height:300px; overflow-y:auto;" id="ScrollStyle"><table class="table table-condensed" style="margin-bottom: 0px; margin-top: -16px;"> <tbody></tbody> <colgroup> <col width="2%"> <col width="55%"> <col width="25%"> <col width="18%"> </colgroup> <tbody> '+row+' </tbody> </table></div><table class="table table-condensed" style="margin-bottom: -20px;"> <tbody> <tr> <td><grey>Cart Sub Total</grey></td> <td><grey><i class="fa fa-inr"></i> '+sub_total+'</grey></td> </tr> <tr class="shipping-cost"> <td><grey>Container Charges (7%)</grey></td> <td><grey><i class="fa fa-inr"></i>'+(Math.round(sub_total*.07))+'</grey></td> </tr> <tr> <td><red>Grand Total</red></td> <td><strong><red><span><i class="fa fa-inr"></i> '+(sub_total+(Math.round(sub_total*.07)))+'</span></red></strong></td> </tr> </tbody> </table><hr><a href="checkout.html" style="text-decoration: none"><button class="btn btn-success btn-block">Check Out</button></a>';
+        document.getElementById("cartArea").innerHTML  = '<div style="max-height:300px; overflow-y:auto;" id="ScrollStyle"><table class="table table-condensed" style="margin-bottom: 0px; margin-top: -16px;"> <tbody></tbody> <colgroup> <col width="2%"> <col width="55%"> <col width="25%"> <col width="18%"> </colgroup> <tbody> '+row+' </tbody> </table></div><table class="table table-condensed" style="margin-bottom: -20px;"> <tbody> <tr> <td><grey>Cart Sub Total</grey></td> <td><grey><i class="fa fa-inr"></i> '+sub_total+'</grey></td> </tr> <tr class="shipping-cost"> <td><grey>Container Charges (7%)</grey></td> <td><grey><i class="fa fa-inr"></i>'+(Math.round(sub_total*.07))+'</grey></td> </tr> <tr> <td><red>Grand Total</red></td> <td><strong><red><span><i class="fa fa-inr"></i> '+(sub_total+(Math.round(sub_total*.07)))+'</span></red></strong></td> </tr> </tbody> </table><hr><div onclick="goCheckout()" style="text-decoration: none"><button class="btn btn-success btn-block">Check Out</button></div>';
         document.getElementById("fullCartArea").innerHTML = "";
     }
     else{
@@ -144,7 +222,6 @@
             item.splice(flag, 1);
             localStorage.setItem("itemsInfo", JSON.stringify(item));
             renderCart();
-            console.log((JSON.parse(localStorage.getItem("itemsInfo")))[0]);
         }
         function minusFunction(code) {
             //document.getElementById("item_count_12").innerHTML  = "red";
@@ -164,19 +241,14 @@
             }
             var item = JSON.parse(localStorage.itemsInfo);
             if(item[flag].qty > 1){
-                //console.log(item[flag].itemQuantity);
                 item[flag].qty -=1;
                 localStorage.setItem("itemsInfo", JSON.stringify(item));
-                console.log((JSON.parse(localStorage.getItem("itemsInfo")))[0]);
             }
             else{
                 item.splice(flag, 1);
                 localStorage.setItem("itemsInfo", JSON.stringify(item));
-                console.log((JSON.parse(localStorage.getItem("itemsInfo")))[0]);
             }
             renderCart();
-            //document.getElementById("item_count_12").innerHTML  = "red";
-            console.log(info.length) ;
         }
         function addFunction(code) {
             var info = JSON.parse(localStorage.getItem("itemsInfo"));
@@ -194,11 +266,9 @@
                 i++;
             }
             var item = JSON.parse(localStorage.itemsInfo);
-            //console.log(item[flag].itemQuantity);
             item[flag].qty +=1;
             localStorage.setItem("itemsInfo", JSON.stringify(item));
             renderCart();
-            console.log((JSON.parse(localStorage.getItem("itemsInfo")))[0]);
 
         }
 
@@ -263,6 +333,7 @@
 
     <!-- Docs master nav -->
 
+
     <header class="navbar navbar-fixed-top bs-docs-nav" role="banner" ng-controller="MenuController">
         <div class="container">
             <div class="navbar-header" >
@@ -299,11 +370,12 @@
                     <li class="active">
                         <a href="index.html">Order Now</a>
                     </li>
-                    <li>
+                    <li ng-if="isLoggedIn">
                         <a href="account.html">My Account</a>
                     </li>
                     <li>
-                        <a href="logout.html">Logout</a>
+                        <a href="logout.html" ng-if="isLoggedIn">Logout</a>
+                        <a href="login/" ng-if="!isLoggedIn">Login</a>
                     </li>
                 </ul>
             </nav>
@@ -414,31 +486,6 @@
     </div>
 
 
-
-
-    <!-- ADD CUSTOM ITEM - Modal -->
-    <div id="customiseItem" class="modal fade" role="dialog">
-      <div class="modal-dialog">
-
-        <!-- Modal content-->
-        <div class="modal-content" style="border-radius: 0px">
-          <div class="modal-header" style="color: #27ae60">
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title" id="customOptionsTitle">Choose an Option</h4>
-          </div>
-          <div class="modal-body">
-            <ol class="rectangle-list" id="customOptionsBody">
-            </ol>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-
-
-
-
     <!-- SET LOCATION  - Modal -->
     <div id="setLocation" class="modal fade" role="dialog">
       <div class="modal-dialog">
@@ -464,6 +511,77 @@
     </div>
 
 
+
+    <!-- ADD CUSTOM ITEM - Modal -->
+    <div id="customiseItem" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content" style="border-radius: 0px">
+          <div class="modal-header" style="color: #27ae60">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title" id="customOptionsTitle">Choose an Option</h4>
+          </div>
+          <div class="modal-body">
+            <ol class="rectangle-list" id="customOptionsBody">
+            </ol>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+
+    <!-- Location Warning- Modal -->
+    <div id="warnLocation" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content" style="border-radius: 0px">
+          <div class="modal-body">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <p style="color: #e74c3c; text-align: center; font-size: 16px;">Please set your location to continue.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+
+
+
+
+
+    <!-- Login - Modal -->
+    <div id="loginWindow" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content" style="border-radius: 0px">
+          <div class="modal-header" style="color: #27ae60">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title" style="font-size: 14px; font-weight: 200;">Please Login to Continue<a class="changeCity" href="signup.html"><i class="fa fa-user-circle-o"></i> Sign Up</a></h4>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-sm-9">
+                <div id="remote" style="width:100%" >
+                  <input class="typeahead" id="loginMobile" onkeyup="activateLogin()" style="width:100%" type="text" maxlength="10" placeholder="Registered Mobile Number">
+                </div>
+              </div>
+              <div class="col-sm-3">
+                <button class="btn btn-success" style="width: 100%; border-radius: 0px" id="loginButton" onclick="doLogin()" disabled>Continue</button>
+              </div>
+              <p id="loginError" style="padding: 2px 15px; color: #e74c3c"></p>
+            </div>
+            <div class="row" id="otpRequest"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+
     <!-- JS and analytics only. -->
     <!-- Bootstrap core JavaScript
 ================================================== -->
@@ -478,7 +596,13 @@
 
     <!-- For the location typeahead -->
     <script>
-      var city = JSON.parse(localStorage.getItem("location")).city;
+      if(localStorage.getItem("location")){
+        var city = JSON.parse(localStorage.getItem("location")).city;
+      }
+      else{
+        var city = "Chennai";
+      }
+
       var areaSuggestions = new Bloodhound({
         datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
         queryTokenizer: Bloodhound.tokenizers.whitespace,
