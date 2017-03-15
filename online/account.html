@@ -3,7 +3,7 @@
 
 <head>
     <meta http-equiv="content-type" content="text/html;charset=utf-8" />
-    <title>Zaitoon-Online Order</title>
+    <title>My Zaitoon</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Angular -->
@@ -16,7 +16,7 @@
 
     <!-- Custom CSS -->
     <link href="assets/css/custom.css" rel="stylesheet">
-    
+
     <!-- Documentation extras -->
     <link href="assets/css/docs.css" rel="stylesheet">
     <link href="assets/css/art.css" rel="stylesheet">
@@ -27,41 +27,18 @@
 	  <script src="assets/js/respond.min.js"></script>
 	<![endif]-->
 
-    <!-- Favicons -->
-<!--     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/rb/layouts/bs-docs/ico/apple-touch-icon-144-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/rb/layouts/bs-docs/ico/apple-touch-icon-114-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/rb/layouts/bs-docs/ico/apple-touch-icon-72-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" href="/rb/layouts/bs-docs/ico/apple-touch-icon-57-precomposed.png">
-    <link rel="shortcut icon" href="/rb/layouts/bs-docs/ico/favicon.png"> -->
+  <!-- Favicons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/icons/apple-touch-icon-144-precomposed.png">
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/icons/apple-touch-icon-114-precomposed.png">
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="assets/icons/apple-touch-icon-72-precomposed.png">
+  <link rel="apple-touch-icon-precomposed" href="assets/icons/apple-touch-icon-57-precomposed.png">
+  <link rel="shortcut icon" href="assets/icons/favicon.png">
 
 
-
-
-
-
-  <!-- <link type="text/css" rel="stylesheet" charset="utf-8" href="/rb/layouts/bs-docs/_main.css?nFlag=201611"/> -->
-    <script type="text/javascript">
-        //<![CDATA[
-        var mbrclick = false;
-        var rooturl = 'http://redblock.co.kr/rb';
-        var rootssl = 'https://redblock.co.kr/rb';
-        var raccount = 'bs-docs';
-        var moduleid = 'home';
-        var memberid = '';
-        var is_admin = '';
-        var needlog = '로그인후에 이용하실 수 있습니다. ';
-        var neednum = '숫자만 입력해 주세요.';
-        var myagent = navigator.appName.indexOf('Explorer') != -1 ? 'ie' : 'ns';
-        //]]>
-    </script>
-    <script type="text/javascript" charset="utf-8" src="assets/js/sys.js?nFlag=201611"></script>
-    <!-- <script type="text/javascript" charset="utf-8" src="/rb/layouts/bs-docs/_main.js?nFlag=201611"></script>
-    <link type="text/css" rel="stylesheet" charset="utf-8" href="/rb/pages/_main.css?nFlag=201611" />
-    <script type="text/javascript" charset="utf-8" src="/rb/pages/_main.js?nFlag=201611"></script> -->
     <link href="dist/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet">
 </head>
- 
-<body ng-app="Account">
+
+<body ng-app="Account" ng-cloak>
     <a class="sr-only" href="#content">Skip navigation</a>
 
     <!-- Docs master nav -->
@@ -103,7 +80,7 @@
         <div class="row">
             <div class="col-md-8" role="main" ng-controller="HistoryController">
                 <div class="bs-docs-section">
-                    
+
                     <h2 class="zaitoonMenuHead">Your Orders</h2>
                     <hr style="border-top: 1px dashed #e74c3c; margin-top: 5px;">
 
@@ -120,9 +97,9 @@
                                 <td>#{{current + $index}}</td>
                                 <td>{{i.orderID}}<tag ng-if="i.status == 5"><br><span class="label label-danger">Cancelled</span></tag><tag ng-if="i.status == 1"><br><span class="label label-success">Processing</span></tag></td>
                                 <td>{{i.date}}<br><tag style="color: #95a5a6; font-size: 12px;">{{i.timePlace}}</tag></td>
-                                <td><span ng-repeat="x in i.cart.items">{{x.itemName}} ({{x.itemQuantity}}). </span></td>
-                                <td><b><i class="fa fa-inr"></i> {{i.cart.cartTotal}}</b></td>                                
-                            </tr>                            
+                                <td><span ng-repeat="x in i.cart.items">{{x.itemName}} ({{x.qty}}). </span></td>
+                                <td><b><i class="fa fa-inr"></i> {{i.cart.cartTotal}}</b></td>
+                            </tr>
                         </tbody>
                     </table>
                     <hr style="margin-top: 0px">
@@ -141,38 +118,38 @@
                     <h3 style="padding-left: 20px; font-size: 12px; color: #34495e; margin-top: 5px;">YOUR PROFILE</h3>
                     <hr style="border-top: 1px dashed #34495e; margin-top: 5px;">
                     <div style="padding: 20px; margin-top: -15px;" ng-if="toggleFlag != 2">
-                    
-                                <b class="profileTitle">{{userName}}</b>
-                                <p><br><tag class="profileSub">Mobile:</tag><br><b>{{userMobile}}</b> <i style="color: #1abc9c;" class="fa fa-check-circle" data-toggle="tooltip" data-placement="right" title="Verified Mobile Number"></i></p>
-                                <p><tag class="profileSub">Default Delivery Address:</tag><br><b>{{userAddress}}<b></p>  
+
+                                <b class="profileTitle">{{user.name}}</b>
+                                <p><br><tag class="profileSub">Mobile:</tag><br><b>{{user.mobile}}</b> <i ng-if="user.isVerified" style="color: #1abc9c;" class="fa fa-check-circle" data-toggle="tooltip" data-placement="right" title="Verified Mobile Number"></i></p>
+                                <p><tag class="profileSub">Email:</tag><br><b>{{user.email}}</b></p>
 
                     </div>
                     <div style="padding: 20px; margin-top: -15px;" ng-if="toggleFlag == 2">
-                    
+
                                 <div class="form-group">
-                                    <input type="text" value="{{userName}}" class="form-control zaitoonModalIn" id="zaitoonProfileNameEdit" placeholder="Your Name">
+                                    <input type="text" ng-model="profileName" value="{{user.name}}" class="form-control zaitoonModalIn" id="zaitoonProfileNameEdit" placeholder="Your Name">
                                 </div>
 
-                                <p><br><tag class="profileSub">Mobile:</tag><br><b>{{userMobile}}</b> <i style="color: #1abc9c;" class="fa fa-check-circle" data-toggle="tooltip" data-placement="right" title="Verified Mobile Number"></i></p>
-                                <p><tag class="profileSub">Default Delivery Address:</tag></p> 
-                                <div class="form-group" style="margin-top: -15px;">
-                                    <input type="text" value="{{userAddress}}" class="form-control zaitoonModalIn" id="zaitoonProfileAddressEdit" placeholder="Your Default Address">
+                                <p><tag class="profileSub">Mobile:</tag><br><b>{{user.mobile}}</b> <i style="color: #1abc9c;" ng-if="user.isVerified" class="fa fa-check-circle" data-toggle="tooltip" data-placement="right" title="Verified Mobile Number"></i></p>
+                                <div class="form-group">
+                                    <tag class="profileSub">Email:</tag><br>
+                                    <input type="text" ng-model="profileEmail" value="{{user.email}}" class="form-control zaitoonModalIn" id="zaitoonProfileAddressEdit" placeholder="Email">
                                 </div>
 
                                 <hr>
                                     <button type="button" class="btn btn-default zaitoonCancel" data-dismiss="modal" ng-click="swapFlag(0)">Cancel</button>
-                                    <button type="button" class="btn btn-default zaitoonSave" data-dismiss="modal">Save</button>                                   
+                                    <button type="button" class="btn btn-default zaitoonSave" data-dismiss="modal" ng-click="saveProfile(profileName, profileEmail)">Save</button>
 
-                    </div>                                                       
+                    </div>
                     </ul>
 
                                 <div ng-if="toggleFlag == 0" style="margin-top: -20px;" class="pull-right">
-                                    <span class="label label-default functionButton" ng-click="swapFlag(1)">Change Password</span>
+                                    <!-- <span class="label label-default functionButton" ng-click="swapFlag(1)">Change Password</span> -->
                                     <span class="label label-default functionButton" ng-click="swapFlag(2)">Edit Profile</span>
-                                </div>                        
+                                </div>
 
-                                <!-- Change Password Option -->                            
-                                <div class="modal-content zaitoonModal" ng-if="toggleFlag == 1">      
+                                <!-- Change Password Option -->
+                                <div class="modal-content zaitoonModal" ng-if="toggleFlag == 1">
                                   <div class="modal-body">
                                       <div class="form-group">
                                         <input type="password" class="form-control zaitoonModalIn" id="zaitoonModalPlace" placeholder="Current Password">
@@ -188,7 +165,7 @@
                                     <button type="button" class="btn btn-default zaitoonCancel" data-dismiss="modal" ng-click="swapFlag(0)">Cancel</button>
                                     <button type="button" class="btn btn-default zaitoonSave" data-dismiss="modal">Change Password</button>
                                   </div>
-                                </div>                                
+                                </div>
 
 
                 </div>
@@ -204,31 +181,15 @@
     <script src="assets/js/jquery.js"></script>
     <script src="assets/js/bootstrap.js"></script>
 
-    <script src="http://platform.twitter.com/widgets.js"></script>
     <script src="assets/js/holder.js"></script>
 
     <script src="assets/js/application.js"></script>
 
 
-
-
-
-    <div id="_box_layer_"></div>
-    <div id="_action_layer_"></div>
-    <div id="_hidden_layer_"></div>
-    <div id="_overLayer_" class="hide"></div>
-    <iframe name="_action_frame_home" width="0" height="0" frameborder="0" scrolling="no" style="display: none;"></iframe>
-    <script type="text/javascript">
-        //<![CDATA[
-        document.body.onclick = closeMemberLayer;
-        document.onkeydown = closeImgLayer;
-        //]]>
-    </script>
-
     <!-- For Verified Mobile Number -->
     <script>
     $(document).ready(function(){
-        $('[data-toggle="tooltip"]').tooltip();   
+        $('[data-toggle="tooltip"]').tooltip();
     });
     </script>
 

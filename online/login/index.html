@@ -1,0 +1,132 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Login - Zaitoon Online</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<!--[if lte IE 8]><script src="assets/js/html5shiv.js"></script><![endif]-->
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<!--[if lte IE 9]><link rel="stylesheet" href="assets/css/ie9.css" /><![endif]-->
+		<!--[if lte IE 8]><link rel="stylesheet" href="assets/css/ie8.css" /><![endif]-->
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+
+		<script>
+		function doLogin(){
+			var val = {};
+			val.mobile = Number(document.getElementById('mobileLogin').value);
+			$.ajax({
+					type: 'POST',
+					url: '../services/userlogin.php',
+					data: JSON.stringify(val),
+					contentType: "application/json",
+					dataType: 'json',
+					success: function(data) {
+						 if(data.response.isOTPSent){
+							 document.getElementById("loginError").innerHTML = "";
+							 document.getElementById("loginButton").style.display = "none";
+							 document.getElementById("otpButton").style.display = "inherit";
+
+							 document.getElementById("mobileLogin").disabled = true;
+							 document.getElementById("otpRequest").innerHTML = '<input type="text" name="otp" id="loginOtp" placeholder="Enter OTP" />';
+
+						 }
+						 else{
+								document.getElementById("loginError").innerHTML = data.error;
+						 }
+					}
+			});
+		}
+
+		function doOtp(){
+      var val = {};
+      val.mobile = Number(document.getElementById('mobileLogin').value);
+      val.otp = Number(document.getElementById('loginOtp').value);
+      $.ajax({
+          type: 'POST',
+          url: '../services/validatelogin.php',
+          data: JSON.stringify(val),
+          contentType: "application/json",
+          dataType: 'json',
+          success: function(data) {
+             if(data.status){
+               document.getElementById("otpError").innerHTML = "";
+               localStorage.setItem("user", JSON.stringify(data.response));
+               window.location = "../index.html";
+             }
+             else{
+                document.getElementById("otpError").innerHTML = data.error;
+             }
+          }
+      });
+    }
+
+		</script>
+
+
+	</head>
+	<body class="is-loading">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Main -->
+					<section id="main">
+						<header>
+							<span class="avatar"><img src="images/avatar.jpg" alt="" /></span>
+							<h1>Login</h1>
+						</header>
+
+						<form>
+							<div class="field">
+								<input type="text" name="mobile" id="mobileLogin" placeholder="Registered Mobile Number" />
+							</div>
+							<div class="field" id="otpRequest"></div>
+							<ul class="actions">
+								<li>
+									<div class="button" id="loginButton" onclick="doLogin()">Proceed</div>
+									<div class="button" style="display: none" id="otpButton" onclick="doOtp()">Login</div>
+									<p id="loginError" style="padding-top: 10px; color: #e74c3c"></p>
+									<p id="otpError" style="padding-top: 10px; color: #e74c3c"></p>
+								</li>
+							</ul>
+						</form>
+
+						<!-- <form>
+							<div class="field">
+								<input type="text" name="name" id="name" placeholder="Name" />
+							</div>
+							<div class="field">
+								<input type="text" name="mobile" id="mobile" placeholder="Mobile Number" />
+							</div>
+							<div class="field">
+								<input type="email" name="email" id="email" placeholder="Email" />
+							</div>
+							<ul class="actions">
+								<li><div class="button">Sign Up</div></li>
+							</ul>
+						</form> -->
+
+					</section>
+
+				<!-- Footer -->
+					<footer id="footer">
+						<ul class="copyright">
+							<li>Powered by Accelerate</li>
+						</ul>
+					</footer>
+
+			</div>
+
+		<!-- Scripts -->
+			<!--[if lte IE 8]><script src="assets/js/respond.min.js"></script><![endif]-->
+			<script src="../assets/js/jquery.js"></script>
+
+			<script>
+				if ('addEventListener' in window) {
+					window.addEventListener('load', function() { document.body.className = document.body.className.replace(/\bis-loading\b/, ''); });
+					document.body.className += (navigator.userAgent.match(/(MSIE|rv:11\.0)/) ? ' is-ie' : '');
+				}
+			</script>
+
+	</body>
+</html>

@@ -1,15 +1,14 @@
 <!DOCTYPE html>
-<html lang="ko">
-
+<html>
 <head>
     <meta http-equiv="content-type" content="text/html;charset=utf-8" />
-    <title>Zaitoon-Online Order</title>
+    <title>Zaitoon Online</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Bootstrap core CSS -->
     <link href="dist/css/bootstrap.css" rel="stylesheet">
-    
+
     <!-- Documentation extras -->
     <link href="assets/css/docs.css" rel="stylesheet">
     <link href="assets/css/art.css" rel="stylesheet">
@@ -19,28 +18,158 @@
 
     <link rel="stylesheet" href="assets/css/vegetarian.css" />
 
+
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
 	  <script src="assets/js/html5shiv.js"></script>
 	  <script src="assets/js/respond.min.js"></script>
-	<![endif]-->
+	  <![endif]-->
 
     <!-- Favicons -->
-<!--     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/rb/layouts/bs-docs/ico/apple-touch-icon-144-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/rb/layouts/bs-docs/ico/apple-touch-icon-114-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/rb/layouts/bs-docs/ico/apple-touch-icon-72-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" href="/rb/layouts/bs-docs/ico/apple-touch-icon-57-precomposed.png">
-    <link rel="shortcut icon" href="/rb/layouts/bs-docs/ico/favicon.png"> -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/icons/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/icons/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="assets/icons/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="assets/icons/apple-touch-icon-57-precomposed.png">
+    <link rel="shortcut icon" href="assets/icons/favicon.png">
 
     <script>
+
+    // Check log in
+    function goCheckout(){
+      if(!localStorage.getItem("location")){
+        $('#warnLocation').modal('show');
+      }
+      else if(localStorage.getItem("user")){
+        window.location = "checkout.html";
+      }
+      else{
+        $('#loginWindow').modal('show');
+      }
+    }
+
+    function activateLogin() {
+      document.getElementById("otpRequest").innerHTML = "";
+      document.getElementById("loginButton").style.display = "inherit";
+      var value = document.getElementById('loginMobile').value;
+      if(value.toString().length == 10){
+          document.getElementById("loginButton").disabled = false;
+      }
+      else{
+          document.getElementById("loginButton").disabled = true;
+      }
+    }
+
+    function doLogin(){
+      var val = {};
+      val.mobile = Number(document.getElementById('loginMobile').value);
+      $.ajax({
+          type: 'POST',
+          url: 'services/userlogin.php',
+          data: JSON.stringify(val),
+          contentType: "application/json",
+          dataType: 'json',
+          success: function(data) {
+             if(data.response.isOTPSent){
+               document.getElementById("loginError").innerHTML = "";
+               document.getElementById("loginButton").style.display = "none";
+               document.getElementById("otpRequest").innerHTML = '<br><div class="col-sm-9"> <div id="remote2" style="width:100%" > <input class="typeahead" id="otpMobile" onkeyup="activateOtp()" style="width:100%" type="text" maxlength="4" placeholder="Enter the 4 digit OTP"> </div> </div> <div class="col-sm-3"> <button class="btn btn-success" style="width: 100%; border-radius: 0px" id="otpButton" onclick="doOtp()" disabled>Log In</button> </div> <p id="otpError" style="padding: 2px 15px; color: #e74c3c"></p>';
+             }
+             else{
+                document.getElementById("loginError").innerHTML = data.error;
+             }
+          }
+      });
+    }
+
+    function activateOtp() {
+      var value = document.getElementById('otpMobile').value;
+      if(value.toString().length == 4){
+          document.getElementById("otpButton").disabled = false;
+      }
+      else{
+          document.getElementById("otpButton").disabled = true;
+      }
+    }
+
+    function doOtp(){
+      var val = {};
+      val.mobile = Number(document.getElementById('loginMobile').value);
+      val.otp = Number(document.getElementById('otpMobile').value);
+      $.ajax({
+          type: 'POST',
+          url: 'services/validatelogin.php',
+          data: JSON.stringify(val),
+          contentType: "application/json",
+          dataType: 'json',
+          success: function(data) {
+             if(data.status){
+               document.getElementById("otpError").innerHTML = "";
+               localStorage.setItem("user", JSON.stringify(data.response));
+               window.location = "checkout.html";
+             }
+             else{
+                document.getElementById("otpError").innerHTML = data.error;
+             }
+          }
+      });
+    }
+
+    function addToCartNow(name, code, price, choice){
+
+      $('#customiseItem').modal('hide');
+      var item = {};
+      item.itemName = name;
+      item.itemCode = code;
+
+      if(localStorage.getItem("itemsInfo") === null){
+          var temp = [];
+          localStorage.setItem("itemsInfo", JSON.stringify(temp));
+      }
+      var info = JSON.parse(localStorage.getItem("itemsInfo")); //getting items from localStorage
+      var i = 0;
+      var flag = -1;
+
+      while(i<info.length)
+      {
+          //checks if item aldready in cart and returns the position of that object if exists
+          if(info[i].itemCode == code)
+          {
+              if(info[i].variant == choice){
+                flag = i;
+                break;
+              }
+          }
+          i++;
+      }
+
+      if(flag != -1){
+          var items = JSON.parse(localStorage.itemsInfo);
+          items[flag].qty +=1;
+          localStorage.setItem("itemsInfo", JSON.stringify(items));
+      }
+      else{
+          var oldItems = JSON.parse(localStorage.getItem('itemsInfo')) || [];
+          var newItem = item;
+          newItem.qty = 1;
+          newItem.isCustom = true;
+          newItem.variant = choice;
+          newItem.itemPrice = price;
+          oldItems.push(newItem);
+          var x = JSON.parse(localStorage.getItem("itemsInfo")) ;
+          localStorage.setItem('itemsInfo', JSON.stringify(oldItems));
+
+      }
+
+      renderCart();
+    }
 
     function renderCart(){
 
         var row = "";
-     
-        if (JSON.parse(localStorage.getItem("itemsInfo")).length != 0) // If the cart is not empty.
+
+        if (localStorage.getItem("itemsInfo") != null && JSON.parse(localStorage.getItem("itemsInfo")).length != 0) // If the cart is not empty.
         {
-        
+
         var info = JSON.parse(localStorage.getItem("itemsInfo"));
         var sub_total = 0;
         var i = 0;
@@ -49,14 +178,19 @@
 
             //Jugaad to hide border in the first row.
             var noBorder = "";
-            if(i == 0){noBorder = 'style="border-top:none; padding-top: 20px;"'}        
+            if(i == 0){noBorder = 'style="border-top:none; padding-top: 20px;"'}
 
-             row = row +'<tr><td class="crossIcon" '+noBorder+'> <div onclick="deleteFromCart('+info[i].itemCode+')"><i class="fa fa-times-circle"></i></div> </td> <td class="cartDescription" '+noBorder+'> <p style="font-size: 14px; color: #2980b9">'+info[i].itemName+'</p> <p style="font-size: 9px; color: grey; margin-top: -10px;">'+info[i].itemVariety+'</p> </td> <td class="cart_quantity" '+noBorder+'> <div class="cartButtons"> <i class="fa fa-minus-circle zaitoonCartMenuMinus" aria-hidden="true" onclick="minusFunction('+info[i].itemCode+')"></i><span id="item_count_12"> '+info[i].itemQuantity+' </span><i class="fa fa-plus-circle zaitoonCartMenuPlus" aria-hidden="true" onclick="addFunction('+info[i].itemCode+')"></i> </div> </td> <td class="cart_price" '+noBorder+'> <p><i class="fa fa-inr"></i> <span id="item_price_12">'+info[i].itemPrice+'</span></p> </td> </tr>';
-             sub_total += (info[i].itemQuantity*info[i].itemPrice);
+             row = row +'<tr><td class="crossIcon" '+noBorder+'> <div onclick="deleteFromCart('+info[i].itemCode+')"><i class="fa fa-times-circle"></i></div> </td> <td class="cartDescription" '+noBorder+'> <p style="font-size: 14px; color: #2980b9">'+info[i].itemName+'</p>';
+             if(info[i].isCustom)
+             {
+                row = row + '<p style="font-size: 9px; color: grey; margin-top: -10px;">Choice: '+info[i].variant+'</p>';
+             }
+             row = row + '</td> <td class="cart_quantity" '+noBorder+'> <div class="cartButtons"> <i class="fa fa-minus-circle zaitoonCartMenuMinus" aria-hidden="true" onclick="minusFunction('+info[i].itemCode+')"></i><span id="item_count_12"> '+info[i].qty+' </span><i class="fa fa-plus-circle zaitoonCartMenuPlus" aria-hidden="true" onclick="addFunction('+info[i].itemCode+')"></i> </div> </td> <td class="cart_price" '+noBorder+'> <p><i class="fa fa-inr"></i> <span id="item_price_12">'+info[i].itemPrice+'</span></p> </td> </tr>';
+             sub_total += (info[i].qty*info[i].itemPrice);
              i++;
         }
-        
-        document.getElementById("cartArea").innerHTML  = '<div style="max-height:300px; overflow-y:auto;" id="ScrollStyle"><table class="table table-condensed" style="margin-bottom: 0px; margin-top: -16px;"> <tbody></tbody> <colgroup> <col width="2%"> <col width="55%"> <col width="25%"> <col width="18%"> </colgroup> <tbody> '+row+' </tbody> </table></div><table class="table table-condensed" style="margin-bottom: -20px;"> <tbody> <tr> <td><grey>Cart Sub Total</grey></td> <td><grey><i class="fa fa-inr"></i> '+sub_total+'</grey></td> </tr> <tr class="shipping-cost"> <td><grey>Container Charges (7%)</grey></td> <td><grey><i class="fa fa-inr"></i>'+(Math.round(sub_total*.07))+'</grey></td> </tr> <tr> <td><red>Grand Total</red></td> <td><strong><red><span><i class="fa fa-inr"></i> '+(sub_total+(Math.round(sub_total*.07)))+'</span></red></strong></td> </tr> </tbody> </table><hr><a href="checkout.html" style="text-decoration: none"><button class="btn btn-success btn-block">Check Out</button></a>';
+
+        document.getElementById("cartArea").innerHTML  = '<div style="max-height:300px; overflow-y:auto;" id="ScrollStyle"><table class="table table-condensed" style="margin-bottom: 0px; margin-top: -16px;"> <tbody></tbody> <colgroup> <col width="2%"> <col width="55%"> <col width="25%"> <col width="18%"> </colgroup> <tbody> '+row+' </tbody> </table></div><table class="table table-condensed" style="margin-bottom: -20px;"> <tbody> <tr> <td><grey>Cart Sub Total</grey></td> <td><grey><i class="fa fa-inr"></i> '+sub_total+'</grey></td> </tr> <tr class="shipping-cost"> <td><grey>Container Charges (7%)</grey></td> <td><grey><i class="fa fa-inr"></i>'+(Math.round(sub_total*.07))+'</grey></td> </tr> <tr> <td><red>Grand Total</red></td> <td><strong><red><span><i class="fa fa-inr"></i> '+(sub_total+(Math.round(sub_total*.07)))+'</span></red></strong></td> </tr> </tbody> </table><hr><div onclick="goCheckout()" style="text-decoration: none"><button class="btn btn-success btn-block">Check Out</button></div>';
         document.getElementById("fullCartArea").innerHTML = "";
     }
     else{
@@ -82,13 +216,12 @@
                     flag = i;
                     break;
                 }
-                i++; 
+                i++;
             }
-            var item = JSON.parse(localStorage.itemsInfo);  
+            var item = JSON.parse(localStorage.itemsInfo);
             item.splice(flag, 1);
             localStorage.setItem("itemsInfo", JSON.stringify(item));
             renderCart();
-            console.log((JSON.parse(localStorage.getItem("itemsInfo")))[0]);    
         }
         function minusFunction(code) {
             //document.getElementById("item_count_12").innerHTML  = "red";
@@ -104,23 +237,18 @@
                     flag = i;
                     break;
                 }
-                i++; 
-            } 
-            var item = JSON.parse(localStorage.itemsInfo);  
-            if(item[flag].itemQuantity > 1){
-                //console.log(item[flag].itemQuantity);
-                item[flag].itemQuantity -=1;
+                i++;
+            }
+            var item = JSON.parse(localStorage.itemsInfo);
+            if(item[flag].qty > 1){
+                item[flag].qty -=1;
                 localStorage.setItem("itemsInfo", JSON.stringify(item));
-                console.log((JSON.parse(localStorage.getItem("itemsInfo")))[0]);
             }
             else{
                 item.splice(flag, 1);
                 localStorage.setItem("itemsInfo", JSON.stringify(item));
-                console.log((JSON.parse(localStorage.getItem("itemsInfo")))[0]);    
             }
-            renderCart(); 
-            //document.getElementById("item_count_12").innerHTML  = "red";
-            console.log(info.length) ;
+            renderCart();
         }
         function addFunction(code) {
             var info = JSON.parse(localStorage.getItem("itemsInfo"));
@@ -135,40 +263,18 @@
                     flag = i;
                     break;
                 }
-                i++; 
-            } 
-            var item = JSON.parse(localStorage.itemsInfo);  
-            //console.log(item[flag].itemQuantity);
-            item[flag].itemQuantity +=1;
+                i++;
+            }
+            var item = JSON.parse(localStorage.itemsInfo);
+            item[flag].qty +=1;
             localStorage.setItem("itemsInfo", JSON.stringify(item));
             renderCart();
-            console.log((JSON.parse(localStorage.getItem("itemsInfo")))[0]);
-            
+
         }
 
     </script>
 
 
-
-   <!--  <link type="text/css" rel="stylesheet" charset="utf-8" href="/rb/layouts/bs-docs/_main.css?nFlag=201611" /> -->
-<!--     <script type="text/javascript">
-        //<![CDATA[
-        var mbrclick = false;
-        var rooturl = 'http://redblock.co.kr/rb';
-        var rootssl = 'https://redblock.co.kr/rb';
-        var raccount = 'bs-docs';
-        var moduleid = 'home';
-        var memberid = '';
-        var is_admin = '';
-        var needlog = '로그인후에 이용하실 수 있습니다. ';
-        var neednum = '숫자만 입력해 주세요.';
-        var myagent = navigator.appName.indexOf('Explorer') != -1 ? 'ie' : 'ns';
-        //]]>
-    </script> -->
-    <!-- <script type="text/javascript" charset="utf-8" src="assets/js/sys.js?nFlag=201611"></script> -->
-<!--     <script type="text/javascript" charset="utf-8" src="/rb/layouts/bs-docs/_main.js?nFlag=201611"></script>
-    <link type="text/css" rel="stylesheet" charset="utf-8" href="/rb/pages/_main.css?nFlag=201611" />
-    <script type="text/javascript" charset="utf-8" src="/rb/pages/_main.js?nFlag=201611"></script> -->
     <link href="dist/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
     <!-- Angular -->
@@ -179,14 +285,56 @@
     <script type="text/javascript" charset="utf-8" src="assets/js/angular-typeahead.js"></script>
     <script src="controllers/menu.js"></script>
 
+    <!-- For passing data to modal -->
+    <script>
+    $(document).on("click", ".open-AddCustomItemDialog", function () {
+     var item = $(this).data('id');
+     var i = 0;
+     var list = "";
+     while(i < item.custom.length){
+       list = list + '<li onclick="addToCartNow(\''+item.itemName+'\', \''+item.itemCode+'\', \''+item.custom[i].customPrice+'\', \''+item.custom[i].customName+'\')"><a>'+item.custom[i].customName+' (Rs. '+item.custom[i].customPrice+')</a></li>';
+       i++;
+     }
+     document.getElementById("customOptionsTitle").innerHTML = "Your choice for "+item.itemName;
+     document.getElementById("customOptionsBody").innerHTML = list;
+    });
+    </script>
 
-</head> 
-<body onload="renderCart()" ng-app="FullMenu" data-spy="scroll" data-target=".bs-sidebar">
+    <!-- For city selection -->
+    <script>
+      function setCity(city){
+        var temp = {};
+        temp.city = city;
+        localStorage.setItem("location", JSON.stringify(temp));
+        location.reload(true);
+      }
+
+      function changeCity(){
+        localStorage.removeItem("location");
+        location.reload(true);
+      }
+
+      function callSetLocation(){
+        if(localStorage.getItem("location")){
+          var temp = JSON.parse(localStorage.getItem("location"));
+          if(temp.city != null && temp.location == null){
+            //City is Set but not location -> Ask for Location
+            $('#setLocation').modal('show');
+          }
+        }
+      }
+    </script>
+
+
+</head>
+
+<body onload="renderCart(); callSetLocation();" ng-app="FullMenu" data-spy="scroll" data-target=".bs-sidebar" ng-cloak>
     <a class="sr-only" href="#content">Skip navigation</a>
 
     <!-- Docs master nav -->
 
-    <header class="navbar navbar-fixed-top bs-docs-nav" role="banner">
+
+    <header class="navbar navbar-fixed-top bs-docs-nav" role="banner" ng-controller="MenuController">
         <div class="container">
             <div class="navbar-header" >
                 <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
@@ -195,16 +343,39 @@
                 </button>
                 <a href="index.html" class="navbar-brand"><img src="assets/images/common/logo_small.png"></a>
             </div>
+            <div class="navbar-header" style="float:right; vertical-align: middle">
+              <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+                <ul class="nav navbar-nav">
+                    <li ng-if="isLocationSet" class="myCityA">
+                        <a href="" data-toggle="modal" data-target="#setLocation"><i class="fa fa-map-marker"></i> {{locationData.location}}, {{locationData.city}}</a>
+                    </li>
+                    <li ng-if="!isLocationSet">
+                      <div class="dropdown" style="margin-top: 9px;">
+                        <button class="btn cityButton dropdown-toggle" type="button" data-toggle="dropdown">Set Your Location
+                        <span class="caret"></span></button>
+                        <ul class="dropdown-menu">
+                          <li onclick="setCity('Bangalore')"><a href="">Bangalore</a></li>
+                          <li onclick="setCity('Chennai')"><a href="">Chennai</a></li>
+                          <li onclick="setCity('Madurai')"><a href="">Madurai</a></li>
+                        </ul>
+                      </div>
+                    </li>
+
+                </ul>
+            </nav>
+
+            </div>
             <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
                 <ul class="nav navbar-nav">
                     <li class="active">
                         <a href="index.html">Order Now</a>
                     </li>
-                    <li>
+                    <li ng-if="isLoggedIn">
                         <a href="account.html">My Account</a>
                     </li>
                     <li>
-                        <a href="logout.html">Logout</a>
+                        <a href="logout.html" ng-if="isLoggedIn">Logout</a>
+                        <a href="login/" ng-if="!isLoggedIn">Login</a>
                     </li>
                 </ul>
             </nav>
@@ -218,55 +389,39 @@
         </div>
     </div>
 
-
-    <!--
-    <div class="bs-old-docs">
-        <div class="container">
-            <strong>
-      <a href="{{ page.base_url }}2.3.2/">Looking for Bootstrap 2.3.2 docs?</a>
-    </strong> We've moved it to a new home while we push forward with Bootstrap 3. <a href="http://blog.getbootstrap.com/">Read the blog</a> for details.
-        </div>
-    </div>
-
-    -->
-    
     <div class="container bs-docs-container">
         <div class="row">
 
-            <div class="col-md-3" ng-controller="MenuController">  
+            <div class="col-md-3" ng-controller="MenuController">
 
                 <div class="bs-sidebar hidden-print affix-top" role="complementary">
-                    <ul class="nav bs-sidenav">
+                    <ul class="nav bs-sidenav" style="border-radius: 0px">
                     <h3 class="quickMenuHead">Quick Menu</h3>
-                    <hr></hr>                          
-                        <li ng-repeat="item in menu">
-                            <a href="#{{item.mainType}}">{{item.mainName}}</a>
+                    <hr></hr>
+                        <li ng-repeat="item in menu track by $index">
+                            <a href="#{{item.mainType}}" >{{item.mainName}}</a>
                             <ul class="nav">
-                                <li ng-repeat="sub in item.subCategories" class="">
-                                    <a href="#{{item.mainType}}-{{sub.subType}}">{{sub.subName}}</a>
+                                <li ng-repeat="sub in item.subCategories track by $index" class="">
+                                    <a href="#{{item.mainType}}-{{sub.subType}}" >{{sub.subName}}</a>
                                 </li>
                             </ul>
-                        </li> 
-                    </ul> 
-                    <!-- Search in Menu -->
-                    <p style="margin-top: 30px; font-size: 12px; color: #e74c3c">Just type in your taste and add it to the cart with a single click.</p>
-                    <hr style="padding: 0px; margin: 0px; margin-top: -3px; border-bottom: 1px dashed #e74c3c;">
-                    <div ng-controller="SearchMenuCtrl" style="margin-top: 20px;">
-
-                        <input class='typeahead' placeholder="Search and Quick Add" type="text" sf-typeahead options="exampleOptions" datasets="numbersDataset" ng-model="selectedNumber">
-                        <p style="color: #64B171; margin-top: 5px; font-size: 12px;">{{searchMsg}}</p>                        
-                    </div>   
+                        </li>
+                    </ul>
 
                 </div>
             </div>
             <div class="col-md-6" role="main" ng-controller="MenuController" style="margin-top: 10px;">
-       
-                <div class="bs-docs-section" ng-repeat="item in menu">
-                    
-                    <h2 id="{{item.mainType}}" class="zaitoonMenuHead">{{ item.mainName }}</h2>
+
+                <!-- Search Box -->
+                <input class="menuSearch" style="padding-top: 16px; width: 100%;" ng-model="searchKeyword" placeholder="Search" style="border: none; border-bottom: 1px solid #ABABAB">
+
+
+                <div class="bs-docs-section" ng-repeat="item in menu | filter: searchKeyword track by $index">
+
+                    <h2 id="{{item.mainType}}" class="zaitoonMenuHead" >{{ item.mainName }}</h2>
                     <hr style="border-top: 1px dashed #e74c3c; margin-top: 5px;">
 
-                    <div class="table-responsive" ng-repeat="sub in item.subCategories">
+                    <div class="table-responsive" ng-repeat="sub in item.subCategories | filter: searchKeyword track by $index">
                         <table class="table table-hover zaitoonMenuTable" id="{{item.mainType}}-{{sub.subType}}">
                             <col width="60%">
                             <col width="20%">
@@ -274,30 +429,34 @@
 
                             <thead>
                                 <tr>
-                                    <th class="zaitoonSubMenuHead">{{ sub.subName }}</th>
+                                    <th class="zaitoonSubMenuHead" >{{ sub.subName }}</th>
                                     <th></th>
                                     <th></th>
                                 </tr>
                             </thead>
-                            <tbody>                    
-                                <tr ng-repeat="i in sub.items">
+                            <tbody>
+                                <tr ng-repeat="i in sub.items | filter: searchKeyword track by $index">
 
                                     <td style="vertical-align: middle;">
 
                                         <span ng-if="i.isVeg" style="font-size: 65%; padding-right: 5px;" class="veg-indian-vegetarian"></span>
-                                        <span ng-if="!i.isVeg" style="font-size: 65%; padding-right: 5px;" class="nonveg-indian-vegetarian"></span>
-                                        
+                                        <span ng-if="!i.isVeg" style="font-size: 65%; padding-right: 5px;" class="nonveg-indian-vegetarian" ></span>
+
                                         {{ i.itemName }}
 
                                         </td>
                                     <td style="vertical-align: middle;">
-                                        <strong><i class="fa fa-inr"></i> {{ i.itemPrice }}</strong>    
+                                        <strong><i class="fa fa-inr"></i> {{ i.itemPrice }}</strong>
                                     </td>
-                                    <td style="vertical-align: middle;">
-                                        <button ng-if="i.isAvailable" class="btn btn-sm zaitoonAdd" ng-click="addToCart(i.itemCode, i.itemName, i.itemPrice, sub.subName)"> Add </button>
+                                    <td style="vertical-align: middle;" ng-if="i.isCustom">
+                                        <button ng-if="i.isAvailable" class="btn btn-sm zaitoonAdd open-AddCustomItemDialog" data-id="{{i}}" data-toggle="modal" data-target="#customiseItem"> Add </button>
                                         <div ng-if="!i.isAvailable" class=" btn-sm zaitoonNoStock">Out of Stock</div>
                                     </td>
-                                </tr>                                
+                                    <td style="vertical-align: middle;" ng-if="!i.isCustom">
+                                        <button ng-if="i.isAvailable" class="btn btn-sm zaitoonAdd" ng-click="addToCart(i)"> Add </button>
+                                        <div ng-if="!i.isAvailable" class=" btn-sm zaitoonNoStock">Out of Stock</div>
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -309,50 +468,174 @@
 
 
 
-            <div class="col-md-3" ng-controller="CartController">                        
+            <div class="col-md-3" ng-controller="CartController">
                 <div class="bs-sidebar" role="complementary">
-                    <ul class="nav bs-sidenav myCartMain">
+                    <ul class="nav bs-sidenav myCartMain" style="border-radius: 0px">
                     <h3 style="padding-left: 20px;">Your Cart</h3>
-                    <hr style="margin-bottom: 0px">                      
-                        <div id="cartArea" class="mycartArea">                             
-                        </div>  <!-- Closing cart area --> 
+                    <hr style="margin-bottom: 0px">
+                        <div id="cartArea" class="mycartArea">
+                        </div>  <!-- Closing cart area -->
                     </ul>
-                    <div id="fullCartArea">                        
+                    <div id="fullCartArea">
                     </div>
                 </div>
-                
-            </div>
-        </div> 
 
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- SET LOCATION  - Modal -->
+    <div id="setLocation" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content" style="border-radius: 0px">
+          <div class="modal-header" style="color: #27ae60">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title" style="font-size: 14px; font-weight: 200;">SET LOCATION<tag class="changeCity" onclick="changeCity()"><i class="fa fa-refresh"></i> Change City</tag></h4>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-sm-12">
+                <div id="remote" style="width:100%" >
+                  <input class="typeahead" style="width:100%" type="text" placeholder="Where do you want the food to be delivered?">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+
+
+    <!-- ADD CUSTOM ITEM - Modal -->
+    <div id="customiseItem" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content" style="border-radius: 0px">
+          <div class="modal-header" style="color: #27ae60">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title" id="customOptionsTitle">Choose an Option</h4>
+          </div>
+          <div class="modal-body">
+            <ol class="rectangle-list" id="customOptionsBody">
+            </ol>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+
+    <!-- Location Warning- Modal -->
+    <div id="warnLocation" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content" style="border-radius: 0px">
+          <div class="modal-body">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <p style="color: #e74c3c; text-align: center; font-size: 16px;">Please set your location to continue.</p>
+          </div>
+        </div>
+
+      </div>
     </div>
 
 
 
 
-    
+
+
+    <!-- Login - Modal -->
+    <div id="loginWindow" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content" style="border-radius: 0px">
+          <div class="modal-header" style="color: #27ae60">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title" style="font-size: 14px; font-weight: 200;">Please Login to Continue<a class="changeCity" href="signup.html"><i class="fa fa-user-circle-o"></i> Sign Up</a></h4>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-sm-9">
+                <div id="remote" style="width:100%" >
+                  <input class="typeahead" id="loginMobile" onkeyup="activateLogin()" style="width:100%" type="text" maxlength="10" placeholder="Registered Mobile Number">
+                </div>
+              </div>
+              <div class="col-sm-3">
+                <button class="btn btn-success" style="width: 100%; border-radius: 0px" id="loginButton" onclick="doLogin()" disabled>Continue</button>
+              </div>
+              <p id="loginError" style="padding: 2px 15px; color: #e74c3c"></p>
+            </div>
+            <div class="row" id="otpRequest"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+
     <!-- JS and analytics only. -->
     <!-- Bootstrap core JavaScript
 ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
- 
+
     <script src="assets/js/bootstrap.js"></script>
 
-    <script src="http://platform.twitter.com/widgets.js"></script>
     <script src="assets/js/holder.js"></script>
 
     <script src="assets/js/application.js"></script>
 
-    <div id="_box_layer_"></div>
-    <div id="_action_layer_"></div>
-    <div id="_hidden_layer_"></div>
-    <div id="_overLayer_" class="hide"></div>
-    <iframe name="_action_frame_home" width="0" height="0" frameborder="0" scrolling="no" style="display: none;"></iframe>
-    <script type="text/javascript">
-        //<![CDATA[
-        document.body.onclick = closeMemberLayer;
-        document.onkeydown = closeImgLayer;
-        //]]>
+
+    <!-- For the location typeahead -->
+    <script>
+      if(localStorage.getItem("location")){
+        var city = JSON.parse(localStorage.getItem("location")).city;
+      }
+      else{
+        var city = "Chennai";
+      }
+
+      var areaSuggestions = new Bloodhound({
+        datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+        queryTokenizer: Bloodhound.tokenizers.whitespace,
+        remote: {
+          url: 'http://localhost/vega-web-app/online/services/searchareas.php?city='+city+'&key=%QUERY',
+          wildcard: '%QUERY'
+        }
+      });
+
+      $('#remote .typeahead').typeahead({hint: true, highlight: true, minLength: 2}, {
+        name: 'area',
+        display: 'value',
+        limit: 10,
+        source: areaSuggestions
+      });
+
+
+      //On location set...
+      $('.typeahead').on('typeahead:selected', function(e, item) {
+        if(localStorage.getItem("location")){
+          var temp = JSON.parse(localStorage.getItem('location')) || [];
+          temp.location = item.value;
+          temp.locationCode = item.name;
+          localStorage.setItem("location", JSON.stringify(temp));
+        }
+        $('#setLocation').modal('hide');
+        window.location = "index.html";
+
+      })
+
     </script>
+
+
 
 
 
